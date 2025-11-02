@@ -1,6 +1,6 @@
 .DS_Store
 publish.yml
 test_data
-methsaturator.egg-info
+methsaturator.egg-info/
 .ruff_cache/
 seqsaturation_output/
