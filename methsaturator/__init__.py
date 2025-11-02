@@ -12,7 +12,7 @@ from .methyldackel import run_methyldackel
 from .subsample_bam import subsample_bam
 from .percentage_utils import percentage_checker
 from .coverage_utils import mincoverage_checker
-from .plot_seqstat import select_sample
+from .plot_utils.plot_curve import plot_curve
 
 __all__ = [
     "ensure_coordinated_sorted",
@@ -21,6 +21,6 @@ __all__ = [
     "subsample_bam",
     "percentage_checker",
     "mincoverage_checker",
-    "select_sample",
+    "plot_curve",
     "__version__",
 ]

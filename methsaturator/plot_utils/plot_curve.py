@@ -1,20 +1,28 @@
 import pandas as pd
 import os
-from .plot_functions import plot_reads_vs_cpgs
+from .plot_checker import plot_checker
 
 
-def select_sample(cpgs_file, reads_file, percentages, out_dir):
-    """Main routine to process each sample and generate plots."""
+def plot_curve(cpgs_file, reads_file, percentages, out_dir):
+    # Takes in input the CpGs and Reads stats dataframes and merge them
     data = pd.merge(cpgs_file, reads_file, on=["Sample", "Percentage"])
 
+    # Loop over each sample and minimum coverage value to create plots
     for sample in data["Sample"].unique():
         sample_data = data[data["Sample"] == sample]
         for min_val in sample_data["Coverage"].unique():
+
+            # Subset and sort data for plotting
             subset = sample_data[sample_data["Coverage"] == min_val].sort_values(
                 by="Percentage"
             )
+            # Create output directory for plots if not exists
             plot_dir = os.path.join(out_dir, "plots")
+
             os.makedirs(plot_dir, exist_ok=True)
+            # Define plot path
+
             plot_path = f"{plot_dir}/{sample}_{min_val}x_plot.svg"
 
-            plot_reads_vs_cpgs(subset, plot_path, percentages)
+            # Checks whether the model fits correctly, then generate plot
+            plot_checker(subset, plot_path, percentages)

@@ -4,9 +4,10 @@ from .methyldackel import run_methyldackel
 from .subsample_bam import subsample_bam
 from .percentage_utils import percentage_checker
 from .coverage_utils import mincoverage_checker
-from .plot_seqstat import select_sample
+from .plot_utils.plot_curve import plot_curve
 from .verbose_utils import vprint
 from .bam_dir_utils import import_bam_files
+from .cleanup_utils import clean_up
 import rich_click as click
 from rich.console import Console
 from rich.panel import Panel
@@ -60,6 +61,12 @@ console = Console()
     default="3",
     help="Minimum CpG coverage to estimate sequencing saturation. It can be either a single integer or a list of integers (e.g 1,3,5). Default: 3",
 )
+@click.option(
+    "--keep-temporary-files",
+    "-k",
+    is_flag=True,
+    help="If set to True, temporary files will be kept after the analysis. Default: False",
+)
 @click.option("-v", "--verbose", is_flag=True, help="Enable verbose logging.")
 def run_cli(
     bam,
@@ -69,6 +76,7 @@ def run_cli(
     genome,
     downsampling_percentages,
     minimum_coverage,
+    keep_temporary_files,
     verbose,
 ):
     """Package for sequencing saturation analysis of sequencing methylation data."""
@@ -94,7 +102,10 @@ def run_cli(
         params_text += f"[purple]Genome:[/purple] [blue]{genome}[/blue]\n"
     params_text += f"[purple]Downsampling percentages:[/purple] [blue]{downsampling_percentages}[/blue]\n"
     params_text += (
-        f"[purple]Minimum coverage values:[/purple] [blue]{minimum_coverage}[/blue]"
+        f"[purple]Minimum coverage values:[/purple] [blue]{minimum_coverage}[/blue]\n"
+    )
+    params_text += (
+        f"[purple]Keep temporary files:[/purple] [blue]{keep_temporary_files}[/blue]"
     )
     console.print(
         Panel(
@@ -188,7 +199,12 @@ def run_cli(
 
                 cpgs_df.loc[len(cpgs_df)] = results_subsampling_cov
 
-    select_sample(cpgs_df, reads_df, percentages, outdir)
+    # Save the dataframes as CSV files and plot the saturation curve
+    reads_df.to_csv(os.path.join(outdir, "reads_summary.csv"), index=False)
+    cpgs_df.to_csv(os.path.join(outdir, "cpgs_summary.csv"), index=False)
+    plot_curve(cpgs_df, reads_df, percentages, outdir)
+    if not keep_temporary_files:
+        clean_up(outdir)
 
 
 if __name__ == "__main__":

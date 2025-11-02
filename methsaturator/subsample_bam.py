@@ -14,24 +14,27 @@ def subsample_bam(bam_path, percentage, output_dir, seed=42):
         ".bam", f"_subsample_{round_pct:.1f}.bam"
     )
     output_path = os.path.join(bam_dir, base_name)
-    if not os.path.exists(output_path):
-        # samtools command
-        cmd = [
-            "samtools",
-            "view",
-            "-s",
-            str(round_pct),
-            "--subsample-seed",
-            str(seed),
-            "-b",
-            bam_path,
-            "-o",
-            output_path,
-        ]
-        subprocess.run(cmd, check=True)
-        cmd2 = ["samtools", "index", output_path]
-        subprocess.run(cmd2, check=True)
 
+    # Subsample BAM using samtools
+    cmd = [
+        "samtools",
+        "view",
+        "-s",
+        str(round_pct),
+        "--subsample-seed",
+        str(seed),
+        "-b",
+        bam_path,
+        "-o",
+        output_path,
+    ]
+    subprocess.run(cmd, check=True)
+
+    # Index the subsampled BAM
+    cmd2 = ["samtools", "index", output_path]
+    subprocess.run(cmd2, check=True)
+
+    # Count reads in the subsampled BAM
     read_count = int(
         subprocess.run(
             ["samtools", "view", "-c", output_path], capture_output=True, text=True

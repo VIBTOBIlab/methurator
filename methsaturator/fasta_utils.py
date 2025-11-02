@@ -37,7 +37,10 @@ def get_reference(genome, fasta, output_dir, verbose):
     fasta_path = os.path.join(output_dir, f"{genome}.fa")
 
     if not os.path.exists(fasta_path):
-        vprint(f"⬇️ Downloading reference genome '{genome}'...", verbose)
+        vprint(
+            f"[bold]Downloading reference genome[/bold] [green]'{genome}'...[/green]",
+            True,
+        )
         with DownloadProgressBar(
             unit="B", unit_scale=True, miniters=1, desc="Downloading"
         ) as t:

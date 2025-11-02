@@ -8,7 +8,13 @@ name = "methsaturator"
 version = "0.1.0"
 description = "Package for sequencing saturation analysis of sequencing methylation data."
 readme = "README.md"
-keywords = [ "bioinformatics", "biology", "BSseq", "methylation", "RRBS" ]
+keywords = [
+  "bioinformatics",
+  "biology",
+  "BSseq",
+  "methylation",
+  "RRBS",
+]
 license = { file = "LICENSE" }
 authors = [
   { name = "Edoardo Giuili", email = "edoardo.giuili@gmail.com" },
@@ -22,14 +28,23 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
+  "matplotlib",
+  "numpy",
   "packaging>=24",
-  "pyfaidx>=0.7",
-  "pysam>=0.22",
-  "requests>=2.31",
-  "typer>=0.9",
+  "pandas",
+  "pyfaidx",
+  "pysam",
+  "rich",
+  "rich-click",
+  "scipy",
+  "tqdm",
 ]
 
-scripts.methsaturator = "methsaturator.methsaturator:run_cli"
+urls.Changelog = "https://github.com/VIBTOBIlab/methsaturator/blob/main/CHANGELOG.md"
+urls.Documentation = "https://github.com/VIBTOBIlab/methsaturator"
+urls.Issues = "https://github.com/VIBTOBIlab/methsaturator/issues"
+urls.Repository = "https://github.com/VIBTOBIlab/methsaturator"
+urls.scripts = "methsaturator.methsaturator:run_cli"
 
 [tool.black]
 line-length = 88

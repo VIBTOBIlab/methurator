@@ -1,11 +1,14 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
+from rich.console import Console
 from .math_model import asymptotic_growth
 
 # ===============================================================
 # Plotting Functions
 # ===============================================================
+
+console = Console()
 
 
 def plot_error_data(x_data, y_data, reads, output_path, title, error):
@@ -33,10 +36,12 @@ def plot_error_data(x_data, y_data, reads, output_path, title, error):
     fig.tight_layout()
     plt.savefig(output_path)
     plt.close()
-    print(f"⚠️  Curve fitting failed. Plot saved to {output_path}")
+    console.print(
+        f"[yellow]⚠️ Curve fitting failed, but plot saved to {output_path}.[/yellow]"
+    )
 
 
-def plot_data(x_data, y_data, reads, asymptote, params, output_path, title):
+def plot_fitted_data(x_data, y_data, reads, asymptote, params, output_path, title):
     """Plot data and fitted curve for a single sample."""
     x_pred = np.append(x_data, [1.2, 1.4, 1.6, 1.8, 2.0])
     x_pred_reads = reads * x_pred
@@ -96,4 +101,4 @@ def plot_data(x_data, y_data, reads, asymptote, params, output_path, title):
     fig.tight_layout()
     plt.savefig(output_path)
     plt.close()
-    print(f"✅ Plot saved to {output_path}")
+    console.print(f"[bold]✅ Plot saved to {output_path}.[/bold]")

@@ -1,5 +1,5 @@
 .DS_Store
-publish.yml
+deploy_pypi.yml
 test_data
 methsaturator.egg-info/
 .ruff_cache/
