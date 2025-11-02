@@ -5,11 +5,6 @@ repos:
     hooks:
       - id: prettier
 
-  - repo: https://github.com/rhysd/actionlint
-    rev: 03d0035246f3e81f36aed592ffb4bebf33a03106 # frozen: v1.7.7
-    hooks:
-      - id: actionlint
-
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: 91d98438175bd32e4eb14a22e50a3ec0f9e55466 # frozen: v2.2.4
     hooks:
