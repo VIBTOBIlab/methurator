@@ -35,7 +35,7 @@ console = Console()
     "--outdir",
     type=click.Path(),
     default="seqsaturation_output",
-    help="Default output directory.",
+    help="Default seqsaturation_output directory.",
 )
 @click.option(
     "--fasta",

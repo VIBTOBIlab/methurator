@@ -1,6 +1,6 @@
-import pysam
 import subprocess
 import os
+import pysam
 import rich_click as click
 from .verbose_utils import vprint
 
