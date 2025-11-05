@@ -26,6 +26,6 @@ def ensure_coordinated_sorted(bam_path, verbose):
     cmd = ["samtools", "sort", "-o", out, bam_path]
 
     # Run samtools
-    subprocess(cmd)
+    subprocess.run(cmd)
 
     return out
