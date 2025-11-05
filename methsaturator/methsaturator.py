@@ -167,7 +167,6 @@ def run_cli(
     # Create empty dataframes to store results
     reads_df = pd.DataFrame(columns=["Sample", "Percentage", "Read_Count"])
     cpgs_df = pd.DataFrame(columns=["Sample", "Percentage", "Coverage", "CpG_Count"])
-    # file_name = os.path.basename(bam).split(".", 1)[0]
 
     # Loop over bam files, downsampling percentages and minimum coverage values
     for csorted_bam in csorted_bams:
