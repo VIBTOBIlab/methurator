@@ -50,7 +50,7 @@ jobs:
 
       - name: "Verify installations"
         run: |
-          methyldackel --version
+          MethylDackel --version
           samtools --version
 
       - name: "Install methsaturator"
