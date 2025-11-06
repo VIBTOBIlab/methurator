@@ -34,6 +34,25 @@ jobs:
           python-version: ${{ matrix.python-version }}
           allow-prereleases: true
 
+      - name: "Install MethylDackel and SAMtools"
+        run: |
+          # Install Miniconda
+          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+          bash miniconda.sh -b -p $HOME/miniconda
+          export PATH="$HOME/miniconda/bin:$PATH"
+          conda update -y conda
+
+          # Install mamba for faster installs
+          conda install -y -c conda-forge mamba
+
+          # Install MethylDackel and Samtools
+          mamba install -y -c bioconda methyldackel samtools
+
+      - name: "Verify installations"
+        run: |
+          methyldackel --version
+          samtools --version
+
       - name: "Install methsaturator"
         run: |
           pip install -e .[dev]
