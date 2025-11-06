@@ -17,7 +17,7 @@ keywords = [
 ]
 license = { file = "LICENSE" }
 authors = [
-  { name = "Edoardo Giuili", email = "edoardo.giuili@gmail.com" },
+  { name = "Edoardo Giuili", email = "edoardogiuili@gmail.com" },
 ]
 requires-python = ">=3.9"
 classifiers = [
@@ -40,11 +40,23 @@ dependencies = [
   "tqdm",
 ]
 
-urls.Changelog = "https://github.com/VIBTOBIlab/methsaturator/blob/main/CHANGELOG.md"
-urls.Documentation = "https://github.com/VIBTOBIlab/methsaturator"
-urls.Issues = "https://github.com/VIBTOBIlab/methsaturator/issues"
-urls.Repository = "https://github.com/VIBTOBIlab/methsaturator"
-urls.scripts = "methsaturator.methsaturator:run_cli"
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pysam",
+    "rich-click",
+    "pandas",
+    "unittest.mock"
+]
+
+[project.urls]
+Changelog = "https://github.com/VIBTOBIlab/methsaturator/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/VIBTOBIlab/methsaturator"
+Issues = "https://github.com/VIBTOBIlab/methsaturator/issues"
+Repository = "https://github.com/VIBTOBIlab/methsaturator"
+
+[project.scripts]
+methsaturator = "methsaturator.methsaturator:run_cli"
 
 [tool.black]
 line-length = 88
