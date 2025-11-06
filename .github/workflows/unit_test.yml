@@ -43,15 +43,14 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          python-version: 3.11
+          python-version: 3.13
           activate-environment: methyl-env
-          mamba-setup: true # enables mamba
 
-      - name: Install MethylDackel with Mamba
+      - name: Install MethylDackel and SAMtools
         run: |
-          mamba create -y -n methyl-env -c bioconda -c conda-forge methyldackel
-          source $(conda info --base)/etc/profile.d/conda.sh
           conda activate methyl-env
+          conda install samtools
+          conda install methyldackel
           echo "Samtools version: $(samtools --version | head -n 1)"
           echo "MethylDackel version: $(MethylDackel --version)"
 
