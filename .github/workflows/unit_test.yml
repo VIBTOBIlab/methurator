@@ -38,21 +38,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y samtools wget bzip2
-
-      - name: Set up Miniconda and Mamba
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-update-conda: true
-          python-version: 3.13
-          activate-environment: methyl-env
-
-      - name: Install MethylDackel and SAMtools
-        run: |
-          conda init
-          conda activate methyl-env
-          conda install methyldackel
-          echo "Samtools version: $(samtools --version | head -n 1)"
-          echo "MethylDackel version: $(MethylDackel --version)"
+          git clone https://github.com/dpryan79/MethylDackel.git
+          cd MethylDackel
+          make LIBBIGWIG="/some/path/to/libBigWig.a"
+          make install prefix=/some/installation/path
 
       - name: "Install methsaturator"
         run: |
