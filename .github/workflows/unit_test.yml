@@ -39,14 +39,13 @@ jobs:
           # Install Miniconda
           wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
           bash miniconda.sh -b -p $HOME/miniconda
-          echo "$HOME/miniconda/bin" >> $GITHUB_PATH
           conda update -y conda
 
           # Install mamba for faster installs
           conda install -y -c conda-forge mamba
 
           # Install MethylDackel and Samtools
-          mamba install -y -c bioconda methyldackel samtools
+          mamba install -y -c bioconda samtools==1.22 methyldackel==0.6.1
 
       - name: "Verify installations"
         run: |
