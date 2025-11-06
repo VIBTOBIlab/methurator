@@ -8,10 +8,10 @@ def percentage_checker(percentages):
     list_percentages = [float(x.strip()) for x in percentages.split(",")]
 
     if any(p == 0 for p in list_percentages):
-        raise click.UserError("Percentages must be between > 0.")
+        raise click.UsageError("Percentages must be between > 0.")
 
     if len(list_percentages) < 4:
-        raise click.UserError("At least four percentages must be provided.")
+        raise click.UsageError("At least four percentages must be provided.")
 
     # And now add 1 if not persent to the list
     # to calculate CpG number on original sample
