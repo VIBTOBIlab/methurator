@@ -48,8 +48,8 @@ jobs:
 
       - name: Install MethylDackel and SAMtools
         run: |
+          conda init
           conda activate methyl-env
-          conda install samtools
           conda install methyldackel
           echo "Samtools version: $(samtools --version | head -n 1)"
           echo "MethylDackel version: $(MethylDackel --version)"
