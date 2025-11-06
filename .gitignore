@@ -4,3 +4,4 @@ test_data
 methsaturator.egg-info/
 .ruff_cache/
 seqsaturation_output/
+.github/workflows/publish.yml
