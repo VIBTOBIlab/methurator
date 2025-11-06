@@ -3,13 +3,13 @@ import os
 import pandas as pd
 
 
-def run_methyldackel(bam_path, pct, fasta, outdir, min_cov):
+def run_methyldackel(bam_path, pct, fasta, outdir, min_cov, threads):
     # Use the BAM filename (without directories) as prefix
     bam_name = os.path.basename(bam_path)
     cov_dir = os.path.join(outdir, "covs")
     os.makedirs(cov_dir, exist_ok=True)
     prefix = os.path.join(cov_dir, os.path.splitext(bam_name)[0])
-    cmd = ["MethylDackel", "extract", "-o", str(prefix), fasta, bam_path]
+    cmd = ["MethylDackel", "extract", "-@", threads, "-o", str(prefix), fasta, bam_path]
 
     # Run command
     subprocess.run(cmd)

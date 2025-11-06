@@ -62,6 +62,13 @@ console = Console()
     help="Minimum CpG coverage to estimate sequencing saturation. It can be either a single integer or a list of integers (e.g 1,3,5). Default: 3",
 )
 @click.option(
+    "--threads",
+    "-@",
+    type=int,
+    default=os.cpu_count() - 2,
+    help="Number of threads to use. Default: all available threads - 2.",
+)
+@click.option(
     "--keep-temporary-files",
     "-k",
     is_flag=True,
@@ -76,6 +83,7 @@ def run_cli(
     genome,
     downsampling_percentages,
     minimum_coverage,
+    threads,
     keep_temporary_files,
     verbose,
 ):
@@ -104,6 +112,7 @@ def run_cli(
     params_text += (
         f"[purple]Minimum coverage values:[/purple] [blue]{minimum_coverage}[/blue]\n"
     )
+    params_text += f"[purple]Threads:[/purple] [blue]{threads}[/blue]\n"
     params_text += (
         f"[purple]Keep temporary files:[/purple] [blue]{keep_temporary_files}[/blue]"
     )
@@ -192,7 +201,7 @@ def run_cli(
                     verbose,
                 )
                 results_subsampling_cov = run_methyldackel(
-                    sub_bam, pct, fasta, outdir, min_cov
+                    sub_bam, pct, fasta, outdir, min_cov, threads
                 )
                 vprint("[green]✔ MethylDackel completed![/green]", verbose)
 
