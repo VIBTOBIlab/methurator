@@ -24,7 +24,7 @@ def test_subsample_when_percentage_is_one(tmp_path, monkeypatch):
 
 
 def test_subsample_when_percentage_not_one(tmp_path, monkeypatch):
-    # Specify percentage = 1 and the bam file path
+    # Specify percentage != 1 and the bam file path
     pct = 0.5
     bam = pathlib.Path(__file__).parent / "data" / "Ecoli.csorted.bam"
 
