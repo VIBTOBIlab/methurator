@@ -4,6 +4,6 @@ channels:
   - conda-forge
 dependencies:
   - python=3.10
-  - samtools
+  - samtools=1.22
   - methyldackel
   - pytest
