@@ -38,5 +38,5 @@ def test_subsample_when_percentage_not_one(tmp_path, monkeypatch):
     # Check that the output are the expected ones
     assert stats[0] == "Ecoli"
     assert stats[1] == 0.5
-    assert stats[2] == 6
+    assert stats[2] == 8  # total number of reads in the subsampled bam
     assert output == str(output_path)
