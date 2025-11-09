@@ -45,8 +45,7 @@ dev = [
     "pytest",
     "pysam",
     "rich-click",
-    "pandas",
-    "unittest.mock"
+    "pandas"
 ]
 
 [project.urls]
