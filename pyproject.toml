@@ -43,9 +43,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest",
-    "pysam",
-    "rich-click",
-    "pandas"
+    "pytest-xdist"
 ]
 
 [project.urls]
