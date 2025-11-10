@@ -3,7 +3,7 @@ import os
 from .plot_checker import plot_checker
 
 
-def plot_curve(cpgs_file, reads_file, percentages, out_dir):
+def plot_curve(cpgs_file, reads_file, configs):
     # Takes in input the CpGs and Reads stats dataframes and merge them
     data = pd.merge(cpgs_file, reads_file, on=["Sample", "Percentage"])
 
@@ -17,7 +17,7 @@ def plot_curve(cpgs_file, reads_file, percentages, out_dir):
                 by="Percentage"
             )
             # Create output directory for plots if not exists
-            plot_dir = os.path.join(out_dir, "plots")
+            plot_dir = os.path.join(configs.outdir, "plots")
 
             os.makedirs(plot_dir, exist_ok=True)
             # Define plot path
@@ -25,4 +25,4 @@ def plot_curve(cpgs_file, reads_file, percentages, out_dir):
             plot_path = f"{plot_dir}/{sample}_{min_val}x_plot.svg"
 
             # Checks whether the model fits correctly, then generate plot
-            plot_checker(subset, plot_path, percentages)
+            plot_checker(subset, plot_path, configs.percentages)

@@ -6,13 +6,6 @@ from .verbose_utils import vprint
 
 def import_bam_files(bam_dir):
 
-    # Check if directory exists
-    if not os.path.exists(bam_dir):
-        raise click.UsageError(f"Directory does not exist: {bam_dir}")
-
-    if not os.path.isdir(bam_dir):
-        raise click.UsageError(f"Path is not a directory: {bam_dir}")
-
     # Get all BAM files inside directory
     bam_files_all = sorted(glob.glob(os.path.join(bam_dir, "*.bam")))
 

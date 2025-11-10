@@ -6,3 +6,18 @@ GENOME_URLS = {
     "mm10": "https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm10.fa.gz",
     "mm39": "https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm39.fa.gz",
 }
+
+
+class ConfigFormatter:
+
+    def __init__(self, **kwargs):
+        self.bam = kwargs.get("bam")
+        self.bamdir = kwargs.get("bamdir")
+        self.outdir = kwargs.get("outdir")
+        self.fasta = kwargs.get("fasta")
+        self.genome = kwargs.get("genome")
+        self.downsampling_percentages = kwargs.get("downsampling_percentages")
+        self.minimum_coverage = kwargs.get("minimum_coverage")
+        self.threads = kwargs.get("threads")
+        self.keep_temporary_files = kwargs.get("keep_temporary_files")
+        self.verbose = kwargs.get("verbose")
