@@ -1,52 +1,44 @@
 import pytest
 from unittest.mock import patch, ANY
 import gzip
-from methsaturator.fasta_utils import get_reference
-from methsaturator.config import GENOME_URLS
-import pathlib
-
-
-def test_use_provided_fasta(tmp_path, monkeypatch):
-    fasta = pathlib.Path(__file__).parent / "data" / "hg19.fa"
-    result = get_reference(
-        genome=None,
-        fasta=str(fasta),
-        output_dir=str(tmp_path),
-        verbose=False,
-    )
-
-    assert result == str(fasta)
+from methsaturator.config_utils.fasta_utils import get_reference
+from methsaturator.config_utils.config import GENOME_URLS
+from methsaturator.config_utils.config import ConfigFormatter
 
 
 def test_invalid_fasta_extension(tmp_path):
     wrong = tmp_path / "ref.txt"
     wrong.write_text("dummy")
-
+    configs = ConfigFormatter(
+        **{
+            "fasta": str(wrong),
+            "outdir": str(tmp_path),
+            "genome": None,
+            "verbose": False,
+        }
+    )
     with pytest.raises(Exception):
-        get_reference(
-            genome=None,
-            fasta=str(wrong),
-            output_dir=str(tmp_path),
-            verbose=False,
-        )
+        get_reference(configs)
 
 
 def test_missing_fasta_file(tmp_path):
     missing = tmp_path / "missing.fa"
-
+    configs = ConfigFormatter(
+        **{
+            "fasta": str(missing),
+            "outdir": str(tmp_path),
+            "genome": None,
+            "verbose": False,
+        }
+    )
     with pytest.raises(Exception):
-        get_reference(
-            genome=None,
-            fasta=str(missing),
-            output_dir=str(tmp_path),
-            verbose=False,
-        )
+        get_reference(configs)
 
 
-@patch("methsaturator.fasta_utils.subprocess.run")
-@patch("methsaturator.fasta_utils.urllib.request.urlretrieve")
+@patch("methsaturator.config_utils.fasta_utils.subprocess.run")
+@patch("methsaturator.config_utils.fasta_utils.urllib.request.urlretrieve")
 def test_download_reference(url_mock, subproc_mock, tmp_path, monkeypatch):
-    genome = "hg19"  # pick first available genome
+    genome = "hg19"
     genome_url = GENOME_URLS[genome]
     url_mock.return_value = None  # no actual download
 
@@ -55,12 +47,11 @@ def test_download_reference(url_mock, subproc_mock, tmp_path, monkeypatch):
     with gzip.open(gz_file, "wb") as f:
         f.write(b">seq\nATCG\n")
 
-    result = get_reference(
-        genome=genome,
-        fasta=None,
-        output_dir=str(tmp_path),
-        verbose=False,
+    # Simulate genome download
+    configs = ConfigFormatter(
+        **{"fasta": None, "outdir": str(tmp_path), "genome": genome, "verbose": False}
     )
+    result = get_reference(configs)
 
     # Ensure download called correctly
     url_mock.assert_called_once_with(

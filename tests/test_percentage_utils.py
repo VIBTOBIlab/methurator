@@ -1,6 +1,6 @@
 import pytest
 import rich_click as click
-from methsaturator.percentage_utils import percentage_checker
+from methsaturator.config_utils.validate_utils import percentage_checker
 
 
 def test_valid_percentages_adds_one():
