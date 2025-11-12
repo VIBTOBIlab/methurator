@@ -41,6 +41,7 @@ dependencies = [
   "rich-click",
   "scipy",
   "tqdm",
+  "plotly"
 ]
 
 [project.optional-dependencies]
