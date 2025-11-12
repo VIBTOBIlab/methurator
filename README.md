@@ -88,10 +88,11 @@ methsaturator plot \
 
 ### 📊 `plot` command
 
-| Argument       | Description                              |
-| -------------- | ---------------------------------------- |
-| `--cpgs_file`  | Path to the CpG coverage summary file.   |
-| `--reads_file` | Path to the reads coverage summary file. |
+| Argument       | Description                              | Default    |
+| -------------- | ---------------------------------------- | ---------- |
+| `--cpgs_file`  | Path to the CpG coverage summary file.   |            |
+| `--reads_file` | Path to the reads coverage summary file. |            |
+| `--outdir`     | Output directory.                        | `./output` |
 
 ---
 
