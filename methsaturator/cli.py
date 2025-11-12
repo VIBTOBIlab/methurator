@@ -3,7 +3,7 @@ from .plot import plot
 from .downsample import downsample
 
 
-@click.group()
+@click.group(context_settings=dict(help_option_names=["-h", "--help"]))
 def entry_point():
     pass
 
