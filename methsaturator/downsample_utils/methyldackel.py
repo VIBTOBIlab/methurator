@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 
-def run_methyldackel(bam_path, pct, min_cov, configs):
+def run_methyldackel(bam_path, pct, configs, cpgs_df):
 
     # Create covs directory to store coverage files
     cov_dir = os.path.join(configs.outdir, "covs")
@@ -30,12 +30,13 @@ def run_methyldackel(bam_path, pct, min_cov, configs):
     file = prefix + "_CpG.bedGraph"
     df = pd.read_csv(file, sep="\t", header=None, skiprows=1)
 
-    # Count rows where column 5 + column 6 >= min cov param (0-based indexing in pandas)
-    num_cpgs = int(((df[4] + df[5]) >= min_cov).sum())
-
     # gzip the file and return the stats
     subprocess.run(["gzip", "-f", f"{prefix}_CpG.bedGraph"])
     sample_name = os.path.basename(bam_path).split(".", 1)[0]
-    cpgs_stats = [sample_name, pct, min_cov, num_cpgs]
+    for min_cov in configs.coverages:
+        # Count rows where column 5 + column 6 >= min cov param (0-based indexing in pandas)
+        num_cpgs = int(((df[4] + df[5]) >= min_cov).sum())
+        cpgs_stats = [sample_name, pct, min_cov, num_cpgs]
+        cpgs_df.loc[len(cpgs_df)] = cpgs_stats
 
-    return cpgs_stats
+    return cpgs_df

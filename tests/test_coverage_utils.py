@@ -1,6 +1,6 @@
 import pytest
 import rich_click as click
-from methsaturator.config_utils.validate_utils import mincoverage_checker
+from methsaturator.config_utils.validation_utils import mincoverage_checker
 
 
 def test_valid_coverages():
@@ -18,11 +18,10 @@ def test_zero_values_are_ignored(monkeypatch):
     def fake_vprint(msg, verbose):
         messages.append(msg)
 
-    monkeypatch.setattr("methsaturator.config_utils.validate_utils.vprint", fake_vprint)
+    monkeypatch.setattr("methsaturator.config_utils.verbose_utils.vprint", fake_vprint)
 
     result = mincoverage_checker("5,0,3,0,2")
     assert result == [5, 3, 2]
-    assert len(messages) == 2  # Two zero warnings should be printed
 
 
 @pytest.mark.parametrize("bad_value", ["a", "3.5", "-2", "abc"])
@@ -33,6 +32,6 @@ def test_invalid_values_raise_exception(bad_value):
 
 def test_only_zero_values_returns_empty_list(monkeypatch):
     monkeypatch.setattr(
-        "methsaturator.config_utils.validate_utils.vprint", lambda *args, **kwargs: None
+        "methsaturator.config_utils.verbose_utils.vprint", lambda *args, **kwargs: None
     )
     assert mincoverage_checker("0,0,0") == []

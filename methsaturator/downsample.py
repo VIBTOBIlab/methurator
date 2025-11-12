@@ -1,13 +1,13 @@
-from .run import downsample
-from .plot_utils.plot_curve import plot_curve
-from .cleanup_utils import clean_up
-from .config_utils.config import ConfigFormatter
+from .downsample_utils.run_processing import run_processing
+from .config_utils.config_formatter import ConfigFormatter
 from .config_utils.config_validator import validate_parameters
-from .config_utils.config_validator import bam_to_list
+from .config_utils.bam_dir_utils import bam_to_list
+from methsaturator.config_utils.verbose_utils import vprint
 import rich_click as click
 from rich.console import Console
 from rich.panel import Panel
 import os
+import shutil
 
 
 console = Console()
@@ -70,7 +70,8 @@ console = Console()
     help="If set to True, temporary files will be kept after the analysis. Default: False",
 )
 @click.option("-v", "--verbose", is_flag=True, help="Enable verbose logging.")
-def run_cli(**kwargs):
+def downsample(**kwargs):
+
     # Import the parameters and validate them
     configs = ConfigFormatter(**kwargs)
     validate_parameters(configs)
@@ -99,17 +100,12 @@ def run_cli(**kwargs):
 
     # Load bam file(s) and run the downsampling
     csorted_bams = bam_to_list(configs)
-    cpgs_df, reads_df = downsample(csorted_bams, configs)
+    cpgs_df, reads_df = run_processing(csorted_bams, configs)
     reads_df.to_csv(os.path.join(configs.outdir, "reads_summary.csv"), index=False)
     cpgs_df.to_csv(os.path.join(configs.outdir, "cpgs_summary.csv"), index=False)
-
-    # Fit the model and plot the saturation curve
-    plot_curve(cpgs_df, reads_df, configs)
+    vprint(f"[bold] ✅ Dumped summary files to {configs.outdir}.[/bold]", True)
 
     # Clean-up
     if not configs.keep_temporary_files:
-        clean_up(configs.outdir)
-
-
-if __name__ == "__main__":
-    run_cli()
+        shutil.rmtree(os.path.join(configs.outdir, "bams"))
+        shutil.rmtree(os.path.join(configs.outdir, "covs"))

@@ -3,8 +3,11 @@ import os
 from .plot_checker import plot_checker
 
 
-def plot_curve(cpgs_file, reads_file, configs):
+def plot_curve(configs):
+
     # Takes in input the CpGs and Reads stats dataframes and merge them
+    cpgs_file = pd.read_csv(configs.cpgs_file)
+    reads_file = pd.read_csv(configs.reads_file)
     data = pd.merge(cpgs_file, reads_file, on=["Sample", "Percentage"])
 
     # Loop over each sample and minimum coverage value to create plots
@@ -16,13 +19,13 @@ def plot_curve(cpgs_file, reads_file, configs):
             subset = sample_data[sample_data["Coverage"] == min_val].sort_values(
                 by="Percentage"
             )
+
             # Create output directory for plots if not exists
             plot_dir = os.path.join(configs.outdir, "plots")
-
             os.makedirs(plot_dir, exist_ok=True)
-            # Define plot path
 
+            # Define plot path
             plot_path = f"{plot_dir}/{sample}_{min_val}x_plot.svg"
 
             # Checks whether the model fits correctly, then generate plot
-            plot_checker(subset, plot_path, configs.percentages)
+            plot_checker(subset, plot_path)

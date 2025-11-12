@@ -2,6 +2,41 @@ import os
 import glob
 import rich_click as click
 from .verbose_utils import vprint
+from .validation_utils import ensure_coordinated_sorted
+
+
+def bam_to_list(configs):
+
+    # If both bamdir and bam are provided, use the bamdir parameter
+    if configs.bamdir and configs.bam:
+        vprint(
+            "[yellow]⚠️ Warning: both --bam and --bamdir were provided. Only --bamdir will be considered.[/yellow]",
+            True,
+        )
+    csorted_bams = []
+
+    # If bamdir is provided, import all bam files in the directory
+    if configs.bamdir:
+        raw_bam_files = import_bam_files(configs.bamdir)
+        vprint(
+            f"[bold]Found {len(raw_bam_files)} BAM files in directory '{configs.bamdir}'.[/bold]",
+            configs.verbose,
+        )
+        for bam in raw_bam_files:
+            # Check if bam file coordinate-sorted or sort it
+            try:
+                csorted_bam = ensure_coordinated_sorted(configs)
+                csorted_bams.append(csorted_bam)
+            except ValueError as e:
+                raise click.UsageError(f"{e}")
+    else:
+        try:
+            csorted_bam = ensure_coordinated_sorted(configs)
+            csorted_bams.append(csorted_bam)
+        except ValueError as e:
+            raise click.UsageError(f"{e}")
+
+    return csorted_bams
 
 
 def import_bam_files(bam_dir):

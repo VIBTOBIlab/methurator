@@ -1,7 +1,8 @@
+import numpy as np
+
 # ===============================================================
 # Mathematical Model
 # ===============================================================
-import numpy as np
 
 
 def asymptotic_growth(x, beta0, beta1):

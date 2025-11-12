@@ -1,6 +1,6 @@
 import pytest
-from methsaturator.config_utils.config import ConfigFormatter
-from methsaturator.config_utils.validate_utils import ensure_coordinated_sorted
+from methsaturator.config_utils.config_formatter import ConfigFormatter
+from methsaturator.config_utils.validation_utils import ensure_coordinated_sorted
 import pathlib
 
 

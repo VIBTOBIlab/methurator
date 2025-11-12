@@ -1,5 +1,0 @@
-pysam>=0.22
-requests>=2.31
-pyfaidx>=0.7
-typer>=0.9
-packaging>=24.0

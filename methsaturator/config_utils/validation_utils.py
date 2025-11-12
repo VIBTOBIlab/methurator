@@ -1,9 +1,10 @@
 import rich_click as click
 from .verbose_utils import vprint
-from .fasta_utils import get_reference
+from .download_reference import get_reference
 import os
 import subprocess
 import pysam
+import pandas as pd
 
 
 def mincoverage_checker(coverages):
@@ -104,3 +105,45 @@ def ensure_coordinated_sorted(configs):
     subprocess.run(cmd)
 
     return out
+
+
+def validate_read_summary(read_summary):
+    REQUIRED_COLUMNS = {"Sample", "Percentage", "Read_Count"}
+    # Check if file is CSV by extension
+    if not read_summary.lower().endswith(".csv"):
+        raise click.UsageError(f"The file '{read_summary}' is not a CSV file.")
+
+    # Check file exists
+    if not os.path.isfile(read_summary):
+        raise click.UsageError(f"File '{read_summary}' does not exist.")
+
+    # Try reading file
+    df = pd.read_csv(read_summary, nrows=0)
+
+    # Validate required columns
+    missing_cols = REQUIRED_COLUMNS - set(df.columns)
+    if missing_cols:
+        raise click.UsageError(
+            f"Missing required columns in the reads summary file: {', '.join(missing_cols)}"
+        )
+
+
+def validate_cpgs_summary(cpgs_summary):
+    REQUIRED_COLUMNS = {"Sample", "Percentage", "Coverage", "CpG_Count"}
+    # Check if file is CSV by extension
+    if not cpgs_summary.lower().endswith(".csv"):
+        raise click.UsageError(f"The file '{cpgs_summary}' is not a CSV file.")
+
+    # Check file exists
+    if not os.path.isfile(cpgs_summary):
+        raise click.UsageError(f"File '{cpgs_summary}' does not exist.")
+
+    # Try reading file
+    df = pd.read_csv(cpgs_summary, nrows=0)
+
+    # Validate required columns
+    missing_cols = REQUIRED_COLUMNS - set(df.columns)
+    if missing_cols:
+        raise click.UsageError(
+            f"Missing required columns in the CpGs summary file: {', '.join(missing_cols)}"
+        )

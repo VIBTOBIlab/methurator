@@ -20,4 +20,6 @@ class ConfigFormatter:
         self.minimum_coverage = kwargs.get("minimum_coverage")
         self.threads = kwargs.get("threads")
         self.keep_temporary_files = kwargs.get("keep_temporary_files")
+        self.cpgs_file = kwargs.get("cpgs_file")
+        self.reads_file = kwargs.get("reads_file")
         self.verbose = kwargs.get("verbose")

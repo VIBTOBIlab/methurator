@@ -2,34 +2,51 @@ import warnings
 import numpy as np
 from scipy.optimize import curve_fit, OptimizeWarning
 from .math_model import asymptotic_growth, find_asymptote
-from .plot_functions import plot_fitted_data, plot_error_data
+from .plot_functions import plot_fitted_data, plot_fallback
 
 
-def plot_checker(data, output_path, percentages):
+class PlotObject:
+    def __init__(self, output_path):
+        self.x_data = []
+        self.y_data = []
+        self.asymptote = str
+        self.params = []
+        self.title = str
+        self.reads = int
+        self.error_msg = None
+        self.output_path = output_path
+
+
+def plot_checker(data, output_path):
+
+    # Create the PlotObject
+    plot_obj = PlotObject(output_path)
 
     # Add the zeros at the beginning of the data to fit the model
-    x_data = np.array([0] + data["Percentage"].tolist())
-    y_data = np.array([0] + data["CpG_Count"].tolist())
+    plot_obj.x_data = np.array([0] + data["Percentage"].tolist())
+    plot_obj.y_data = np.array([0] + data["CpG_Count"].tolist())
 
     # try to fit the asymptotic growth model to the data
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("error", OptimizeWarning)
-            params, _ = curve_fit(asymptotic_growth, x_data, y_data, p0=[1, 1])
-        asymptote = find_asymptote(params)
-        fit_success = True
+            plot_obj.params, _ = curve_fit(
+                asymptotic_growth, plot_obj.x_data, plot_obj.y_data, p0=[1, 1]
+            )
+            plot_obj.asymptote = find_asymptote(plot_obj.params)
+            fit_success = True
     # If not enough data points or fitting fails, handle the exception
     except (RuntimeError, OptimizeWarning) as e:
         fit_success = False
-        params, asymptote, error_msg = None, None, str(e)
+        plot_obj.params, plot_obj.asymptote, plot_obj.error_msg = None, None, str(e)
 
     # Prepare title and reads information
-    title = data["Sample"].iloc[0]
-    reads = int(data["Read_Count"].iloc[-1])
+    plot_obj.title = data["Sample"].iloc[0]
+    plot_obj.reads = int(data["Read_Count"].iloc[-1])
 
     # If fitting was successful, plot the fitted curve;
     # otherwise, plot the dots with the error message
     if fit_success:
-        plot_fitted_data(x_data, y_data, reads, asymptote, params, output_path, title)
+        plot_fitted_data(plot_obj)
     else:
-        plot_error_data(x_data, y_data, reads, output_path, title, error_msg)
+        plot_fallback(plot_obj)

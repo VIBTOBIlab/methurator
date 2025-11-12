@@ -6,9 +6,12 @@ def subsample_bam(bam_path, percentage, output_dir, seed=42):
     """
     Subsamples a BAM file using samtools according to a percentage.
     """
+
+    # Create bams directory to store the bam files
     bam_dir = os.path.join(output_dir, "bams")
     os.makedirs(bam_dir, exist_ok=True)
 
+    # Round the downsampling percentage and init the output bam name
     round_pct = round(percentage, 2)
     output_path = bam_path
 
@@ -46,6 +49,8 @@ def subsample_bam(bam_path, percentage, output_dir, seed=42):
             ["samtools", "view", "-c", output_path], capture_output=True, text=True
         ).stdout.strip()
     )
+
+    # Extract the name and save it in the stats list
     sample_name = os.path.basename(bam_path).split(".", 1)[0]
     sample_stats = [sample_name, round_pct, read_count]
     return sample_stats, output_path

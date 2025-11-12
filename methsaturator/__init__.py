@@ -6,9 +6,11 @@ sequencing methylation data.
 
 __version__ = "0.1.0"
 
-from .plot_utils.plot_curve import plot_curve
+from .plot import plot
+from .downsample import downsample
 
 __all__ = [
-    "plot_curve",
+    "plot",
+    "downsample",
     "__version__",
 ]
