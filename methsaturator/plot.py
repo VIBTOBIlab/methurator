@@ -26,8 +26,8 @@ console = Console()
 @click.option(
     "--outdir",
     type=click.Path(),
-    default="seqsaturation_output",
-    help="Default seqsaturation_output directory.",
+    default="output",
+    help="Default output directory.",
 )
 @click.option("-v", "--verbose", is_flag=True, help="Enable verbose logging.")
 def plot(**kwargs):
