@@ -1,47 +1,132 @@
-## Methsaturator package
+# 🧬 methsaturator
 
-Welcome to methsaturator package. This Python package is intended to be used mainly for reduced-represantion bisulfite sequencing (RRBS) data, since for whole genome bisulfite sequencing data, or other whole genome methylation data (e.g. EMseq) the [Preseq](https://smithlabresearch.org/software/preseq/) package can be used. However, methsaturator should work just fine on this data as well.
+[![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![Platform](https://img.shields.io/badge/platform-Linux%20|%20macOS-lightgrey.svg)]()
 
-### Installation
+**methsaturator** is a Python package designed to estimate **sequencing saturation** for  
+**reduced-representation bisulfite sequencing (RRBS)** data.
 
-### How to run it
+Although optimized for RRBS, methsaturator can also be used for whole-genome bisulfite sequencing (WGBS)  
+or other genome-wide methylation data (e.g. **EMseq**).  
+For WGBS data, you may also consider the [Preseq](https://smithlabresearch.org/software/preseq/) package.
 
-To run the package, you need to provide in input the bam (`--bam`) file for which you want to calculate the sequencing saturation or a directory containing multiple bam files (`--bamdir`). Moreover, you need to specify either the reference genome used to align the sample (run `methsaturator -h` to check the available genomes), in which case the tool will automatically download and save it in the output directory, or directly the fasta file.
+---
 
-```python
-methsaturator --genome hg19 --bam test_data/SRX1631721.markdup.sorted.csorted.bam
+## 🧠 Dependencies and Notes
+
+- methsaturator uses [SAMtools](https://www.htslib.org/) and [MethylDackel](https://github.com/dpryan79/MethylDackel) internally for BAM subsampling.
+- When `--genome` is provided, the corresponding FASTA file will be automatically fetched and cached.
+- Temporary intermediate files are deleted by default unless `--keep-temporary-files` is specified.
+
+---
+
+## 📦 Installation
+
+```bash
+pip install methsaturator
 ```
 
-### Usage
+_(Alternatively, clone and install locally:)_
 
-`--bam`
+```bash
+git clone https://github.com/yourusername/methsaturator.git
+cd methsaturator
+pip install .
+```
 
-Path to the .bam file to compute sequencing saturation.
+---
 
-`--bamdir`
+## 🚀 Quick Start
 
-Directory containing multiple BAM files.
+### Step 1 — Downsample BAM files
 
-`--outdir`
+The `downsample` command performs BAM downsampling according to the specified percentages and coverage.
 
-Output directory. Default is **./seqsaturation_output**.
+```bash
+methsaturator downsample --genome hg19 --bam test_data/SRX1631721.markdup.sorted.csorted.bam
+```
 
-`--fasta`
+This command generates two summary files:
 
-Fasta file of the reference genome used to align the samples. If not provided, it will be downloaded according to the genome specifed in the **--genome** parameter.
+- **CpG summary** — number of unique CpGs detected in each downsampled BAM
+- **Reads summary** — number of reads in each downsampled BAM
 
-`--genome`
+Example outputs can be found in [`tests/data`](tests/data).
 
-Genome used to align the samples. Available: **[hg19|hg38|GRCh37|GRCh38|mm10|mm39]**
+---
 
-`--downsampling-percentages`
+### Step 2 — Plot the sequencing saturation curve
 
-By default, the package will subsample the bam file using [SAMtools](https://www.htslib.org/) according to the following pecentages: `0.1,0.25,0.5,0.75`. However, the user can use their own percentages with the **--downsampling-percentages** (-ds) parameter. It has to be a string of comma separated decimals between 0 and 1 (exclusive).
+Use the `plot` command to visualize sequencing saturation:
 
-`--minimum-coverage`
+```bash
+methsaturator plot \
+  --cpgs_file tests/data/cpgs_summary.csv \
+  --reads_file tests/data/reads_summary.csv
+```
 
-Minimum CpG coverage to estimate sequencing saturation. It can be either a single integer or a list of integers (e.g 1,3,5). Default: 3.
+---
 
-`--keep-temporary-files`
+## ⚙️ Command Reference
 
-If set to True, temporary files will be kept after the analysis. Default: False.
+### 🧩 `downsample` command
+
+| Argument                            | Description                                                                                                        | Default             |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
+| `--bam`                             | Path to a single `.bam` file.                                                                                      | —                   |
+| `--bamdir`                          | Directory containing multiple BAM files.                                                                           | —                   |
+| `--outdir`                          | Output directory.                                                                                                  | `./output`          |
+| `--fasta`                           | Path to the reference genome FASTA file. If not provided, it will be automatically downloaded based on `--genome`. | —                   |
+| `--genome`                          | Genome used for alignment. Available: `hg19`, `hg38`, `GRCh37`, `GRCh38`, `mm10`, `mm39`.                          | —                   |
+| `--downsampling-percentages`, `-ds` | Comma-separated list of downsampling percentages between 0 and 1 (exclusive).                                      | `0.1,0.25,0.5,0.75` |
+| `--minimum-coverage`                | Minimum CpG coverage to consider for saturation. Can be a single integer or a list (e.g. `1,3,5`).                 | `3`                 |
+| `--keep-temporary-files`            | If set, temporary files will be kept after analysis.                                                               | `False`             |
+
+---
+
+### 📊 `plot` command
+
+| Argument       | Description                              |
+| -------------- | ---------------------------------------- |
+| `--cpgs_file`  | Path to the CpG coverage summary file.   |
+| `--reads_file` | Path to the reads coverage summary file. |
+
+---
+
+## 📘 Example Workflow
+
+```bash
+# Step 1: Downsample BAM file
+methsaturator downsample --genome hg19 --bam my_sample.bam
+
+# Step 2: Plot saturation curve
+methsaturator plot \
+  --cpgs_file output/cpgs_summary.csv \
+  --reads_file output/reads_summary.csv
+```
+
+---
+
+## 🧾 Citation
+
+If you use **Methsaturator** in your research, please cite this repository:
+
+```
+Author(s). Methsaturator: A Python package for estimating sequencing saturation in RRBS data.
+https://github.com/yourusername/methsaturator
+```
+
+---
+
+## 🪪 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🧑‍💻 Author
+
+**Edoardo Giuili**
+[GitHub](https://github.com/edogiuili) • [Contact](edoardogiuili@gmail.com)
