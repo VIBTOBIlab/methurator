@@ -1,9 +1,8 @@
 # 🧬 methsaturator
 
-[![Python](https://img.shields.io/badge/python-≥3.10-blue.svg)](https://www.python.org/)
+[![Python Versions](https://img.shields.io/badge/python-≥3.10%20&%20≤3.13-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![Platform](https://img.shields.io/badge/platform-Linux%20|%20macOS-lightgrey.svg)]()
+[![Tested with pytest](https://img.shields.io/badge/tested%20with-pytest-blue.svg)](https://pytest.org/)
 
 **methsaturator** is a Python package designed to estimate **sequencing saturation** for  
 **reduced-representation bisulfite sequencing (RRBS)** data.
