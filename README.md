@@ -27,14 +27,6 @@ For WGBS data, you may also consider the [Preseq](https://smithlabresearch.org/s
 pip install methsaturator
 ```
 
-_(Alternatively, clone and install locally:)_
-
-```bash
-git clone https://github.com/yourusername/methsaturator.git
-cd methsaturator
-pip install .
-```
-
 ---
 
 ## 🚀 Quick Start
