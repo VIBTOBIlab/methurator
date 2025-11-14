@@ -3,8 +3,9 @@ build-backend = "setuptools.build_meta"
 
 requires = [ "setuptools>=61" ]
 
-[tool.setuptools]
-packages = ["methurator"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["methurator*"]
 
 [project]
 name = "methurator"
@@ -55,10 +56,6 @@ Changelog = "https://github.com/VIBTOBIlab/methurator/blob/main/CHANGELOG.md"
 Documentation = "https://github.com/VIBTOBIlab/methurator/README.md"
 Issues = "https://github.com/VIBTOBIlab/methurator/issues"
 Repository = "https://github.com/VIBTOBIlab/methurator"
-
-[tool.setuptools.packages.find]
-where = ["methurator"]
-namespaces = false
 
 [project.scripts]
 methurator = "methurator.cli:entry_point"
