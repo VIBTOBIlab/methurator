@@ -8,7 +8,7 @@ packages = ["methurator"]
 
 [project]
 name = "methurator"
-version = "0.1.1"
+version = "0.1.2"
 description = "Package for sequencing saturation analysis of sequencing methylation data."
 readme = "README.md"
 keywords = [
