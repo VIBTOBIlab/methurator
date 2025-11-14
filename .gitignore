@@ -4,7 +4,6 @@ test_data
 methurator.egg-info/
 .ruff_cache/
 seqsaturation_output/
-.github/workflows/publish.yml
 __pycache__
 .pytest_cache/
 output/
