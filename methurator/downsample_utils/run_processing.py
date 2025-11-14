@@ -1,5 +1,5 @@
-from .methyldackel import run_methyldackel
-from .subsample_bam import subsample_bam
+from methurator.downsample_utils.methyldackel import run_methyldackel
+from methurator.downsample_utils.subsample_bam import subsample_bam
 from methurator.config_utils.verbose_utils import vprint
 from rich.console import Console
 from rich.panel import Panel

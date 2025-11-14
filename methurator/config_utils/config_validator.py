@@ -1,12 +1,12 @@
 import rich_click as click
 import os
-from .validation_utils import (
+from methurator.config_utils.validation_utils import (
     mincoverage_checker,
     percentage_checker,
     validate_reference,
     validate_bamdir,
 )
-from .verbose_utils import vprint
+from methurator.config_utils.verbose_utils import vprint
 
 
 def validate_parameters(configs):

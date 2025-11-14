@@ -1,8 +1,8 @@
 import os
 import glob
 import rich_click as click
-from .verbose_utils import vprint
-from .validation_utils import ensure_coordinated_sorted
+from methurator.config_utils.verbose_utils import vprint
+from methurator.config_utils.validation_utils import ensure_coordinated_sorted
 
 
 def bam_to_list(configs):

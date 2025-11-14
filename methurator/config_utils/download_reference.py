@@ -1,9 +1,9 @@
 import os
 import urllib.request
 import subprocess
-from .config_formatter import GENOME_URLS
+from methurator.config_utils.config_formatter import GENOME_URLS
 from tqdm import tqdm
-from .verbose_utils import vprint
+from methurator.config_utils.verbose_utils import vprint
 
 
 class DownloadProgressBar(tqdm):

@@ -1,6 +1,6 @@
 import numpy as np
 from rich.console import Console
-from .math_model import asymptotic_growth
+from methurator.plot_utils.math_model import asymptotic_growth
 import plotly.graph_objs as go
 
 # ===============================================================

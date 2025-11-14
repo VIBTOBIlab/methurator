@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from .plot_checker import plot_checker
+from methurator.plot_utils.plot_checker import plot_checker
 
 
 def plot_curve(configs):

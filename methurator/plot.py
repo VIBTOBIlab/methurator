@@ -1,7 +1,10 @@
-from .plot_utils.plot_curve import plot_curve
+from methurator.plot_utils.plot_curve import plot_curve
 import rich_click as click
-from .config_utils.config_formatter import ConfigFormatter
-from .config_utils.validation_utils import validate_read_summary, validate_cpgs_summary
+from methurator.config_utils.config_formatter import ConfigFormatter
+from methurator.config_utils.validation_utils import (
+    validate_read_summary,
+    validate_cpgs_summary,
+)
 from rich.console import Console
 from rich.panel import Panel
 

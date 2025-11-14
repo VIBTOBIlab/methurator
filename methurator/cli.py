@@ -1,6 +1,6 @@
 import rich_click as click
-from .plot import plot
-from .downsample import downsample
+from methurator.plot import plot
+from methurator.downsample import downsample
 
 
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))

@@ -1,6 +1,6 @@
 import rich_click as click
-from .verbose_utils import vprint
-from .download_reference import get_reference
+from methurator.config_utils.verbose_utils import vprint
+from methurator.config_utils.download_reference import get_reference
 import os
 import subprocess
 import pysam

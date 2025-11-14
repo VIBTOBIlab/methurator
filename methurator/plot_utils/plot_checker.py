@@ -1,8 +1,8 @@
 import warnings
 import numpy as np
 from scipy.optimize import curve_fit, OptimizeWarning
-from .math_model import asymptotic_growth, find_asymptote
-from .plot_functions import plot_fitted_data, plot_fallback
+from methurator.plot_utils.math_model import asymptotic_growth, find_asymptote
+from methurator.plot_utils.plot_functions import plot_fitted_data, plot_fallback
 
 
 class PlotObject:
