@@ -7,15 +7,13 @@
 **methurator** is a Python package designed to estimate **sequencing saturation** for  
 **reduced-representation bisulfite sequencing (RRBS)** data.
 
-Although optimized for RRBS, methurator can also be used for whole-genome bisulfite sequencing (WGBS)  
-or other genome-wide methylation data (e.g. **EMseq**).  
-For WGBS data, you may also consider the [Preseq](https://smithlabresearch.org/software/preseq/) package.
+Although optimized for RRBS, methurator can also be used for whole-genome bisulfite sequencing (WGBS)or other genome-wide methylation data (e.g. **EMseq**). However, for whole-genome methylation data we advise you to use [Preseq](https://smithlabresearch.org/software/preseq/) package.
 
 ---
 
 ## 🧠 Dependencies and Notes
 
-- methurator uses [SAMtools](https://www.htslib.org/) and [MethylDackel](https://github.com/dpryan79/MethylDackel) internally for BAM subsampling.
+- methurator uses [SAMtools](https://www.htslib.org/) and [MethylDackel](https://github.com/dpryan79/MethylDackel) internally for BAM subsampling, thus they need to be installed.
 - When `--genome` is provided, the corresponding FASTA file will be automatically fetched and cached.
 - Temporary intermediate files are deleted by default unless `--keep-temporary-files` is specified.
 

@@ -9,8 +9,8 @@ include = ["methurator*"]
 
 [project]
 name = "methurator"
-version = "0.1.2"
-description = "Package for sequencing saturation analysis of sequencing methylation data."
+version = "0.1.3"
+description = "Python package designed to estimate sequencing saturation for reduced-representation bisulfite sequencing (RRBS) data."
 readme = "README.md"
 keywords = [
   "bioinformatics",
