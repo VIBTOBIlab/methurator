@@ -56,6 +56,10 @@ Documentation = "https://github.com/VIBTOBIlab/methurator/README.md"
 Issues = "https://github.com/VIBTOBIlab/methurator/issues"
 Repository = "https://github.com/VIBTOBIlab/methurator"
 
+[tool.setuptools.packages.find]
+where = ["methurator"]
+namespaces = false
+
 [project.scripts]
 methurator = "methurator.cli:entry_point"
 
