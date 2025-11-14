@@ -4,4 +4,4 @@
 
 ### 🎉 Initial Release
 
-**Methsaturator** — a Python package for estimating sequencing saturation in bisulfite sequencing data. Read the [README file](README.md) for more information.
+**methurator** — a Python package for estimating sequencing saturation in bisulfite sequencing data. Read the [README file](README.md) for more information.

@@ -1,6 +1,6 @@
 import pytest
 import rich_click as click
-from methsaturator.config_utils.validation_utils import mincoverage_checker
+from methurator.config_utils.validation_utils import mincoverage_checker
 
 
 def test_valid_coverages():

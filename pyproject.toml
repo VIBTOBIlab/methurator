@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 requires = [ "setuptools>=61" ]
 
 [tool.setuptools]
-packages = ["methsaturator"]
+packages = ["methurator"]
 
 [project]
-name = "methsaturator"
+name = "methurator"
 version = "0.1.0"
 description = "Package for sequencing saturation analysis of sequencing methylation data."
 readme = "README.md"
@@ -51,13 +51,13 @@ dev = [
 ]
 
 [project.urls]
-Changelog = "https://github.com/VIBTOBIlab/methsaturator/blob/main/CHANGELOG.md"
-Documentation = "https://github.com/VIBTOBIlab/methsaturator"
-Issues = "https://github.com/VIBTOBIlab/methsaturator/issues"
-Repository = "https://github.com/VIBTOBIlab/methsaturator"
+Changelog = "https://github.com/VIBTOBIlab/methurator/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/VIBTOBIlab/methurator/README.md"
+Issues = "https://github.com/VIBTOBIlab/methurator/issues"
+Repository = "https://github.com/VIBTOBIlab/methurator"
 
 [project.scripts]
-methsaturator = "methsaturator.cli:entry_point"
+methurator = "methurator.cli:entry_point"
 
 [tool.black]
 line-length = 88

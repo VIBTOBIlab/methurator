@@ -1,13 +1,13 @@
-# 🧬 methsaturator
+# 🧬 methurator
 
 [![Python Versions](https://img.shields.io/badge/python-≥3.10%20&%20≤3.13-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tested with pytest](https://img.shields.io/badge/tested%20with-pytest-blue.svg)](https://pytest.org/)
 
-**methsaturator** is a Python package designed to estimate **sequencing saturation** for  
+**methurator** is a Python package designed to estimate **sequencing saturation** for  
 **reduced-representation bisulfite sequencing (RRBS)** data.
 
-Although optimized for RRBS, methsaturator can also be used for whole-genome bisulfite sequencing (WGBS)  
+Although optimized for RRBS, methurator can also be used for whole-genome bisulfite sequencing (WGBS)  
 or other genome-wide methylation data (e.g. **EMseq**).  
 For WGBS data, you may also consider the [Preseq](https://smithlabresearch.org/software/preseq/) package.
 
@@ -15,7 +15,7 @@ For WGBS data, you may also consider the [Preseq](https://smithlabresearch.org/s
 
 ## 🧠 Dependencies and Notes
 
-- methsaturator uses [SAMtools](https://www.htslib.org/) and [MethylDackel](https://github.com/dpryan79/MethylDackel) internally for BAM subsampling.
+- methurator uses [SAMtools](https://www.htslib.org/) and [MethylDackel](https://github.com/dpryan79/MethylDackel) internally for BAM subsampling.
 - When `--genome` is provided, the corresponding FASTA file will be automatically fetched and cached.
 - Temporary intermediate files are deleted by default unless `--keep-temporary-files` is specified.
 
@@ -24,7 +24,7 @@ For WGBS data, you may also consider the [Preseq](https://smithlabresearch.org/s
 ## 📦 Installation
 
 ```bash
-pip install methsaturator
+pip install methurator
 ```
 
 ---
@@ -36,7 +36,7 @@ pip install methsaturator
 The `downsample` command performs BAM downsampling according to the specified percentages and coverage.
 
 ```bash
-methsaturator downsample --genome hg19 --bam test_data/SRX1631721.markdup.sorted.csorted.bam
+methurator downsample --genome hg19 --bam test_data/SRX1631721.markdup.sorted.csorted.bam
 ```
 
 This command generates two summary files:
@@ -53,7 +53,7 @@ Example outputs can be found in [`tests/data`](tests/data).
 Use the `plot` command to visualize sequencing saturation:
 
 ```bash
-methsaturator plot \
+methurator plot \
   --cpgs_file tests/data/cpgs_summary.csv \
   --reads_file tests/data/reads_summary.csv
 ```
@@ -91,10 +91,10 @@ methsaturator plot \
 
 ```bash
 # Step 1: Downsample BAM file
-methsaturator downsample --genome hg19 --bam my_sample.bam
+methurator downsample --genome hg19 --bam my_sample.bam
 
 # Step 2: Plot saturation curve
-methsaturator plot \
+methurator plot \
   --cpgs_file output/cpgs_summary.csv \
   --reads_file output/reads_summary.csv
 ```
@@ -103,11 +103,11 @@ methsaturator plot \
 
 ## 🧾 Citation
 
-If you use **Methsaturator** in your research, please cite this repository:
+If you use **methurator** in your research, please cite this repository:
 
 ```
-Author(s). Methsaturator: A Python package for estimating sequencing saturation in RRBS data.
-https://github.com/yourusername/methsaturator
+Author(s). methurator: A Python package for estimating sequencing saturation in RRBS data.
+https://github.com/yourusername/methurator
 ```
 
 ---

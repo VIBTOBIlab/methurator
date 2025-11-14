@@ -1,7 +1,7 @@
 .DS_Store
 deploy_pypi.yml
 test_data
-methsaturator.egg-info/
+methurator.egg-info/
 .ruff_cache/
 seqsaturation_output/
 .github/workflows/publish.yml

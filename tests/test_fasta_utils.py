@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import patch, ANY
 import gzip
-from methsaturator.config_utils.download_reference import get_reference
-from methsaturator.config_utils.config_formatter import GENOME_URLS
-from methsaturator.config_utils.config_formatter import ConfigFormatter
+from methurator.config_utils.download_reference import get_reference
+from methurator.config_utils.config_formatter import GENOME_URLS
+from methurator.config_utils.config_formatter import ConfigFormatter
 
 
 def test_invalid_fasta_extension(tmp_path):
@@ -35,8 +35,8 @@ def test_missing_fasta_file(tmp_path):
         get_reference(configs)
 
 
-@patch("methsaturator.config_utils.download_reference.subprocess.run")
-@patch("methsaturator.config_utils.download_reference.urllib.request.urlretrieve")
+@patch("methurator.config_utils.download_reference.subprocess.run")
+@patch("methurator.config_utils.download_reference.urllib.request.urlretrieve")
 def test_download_reference(url_mock, subproc_mock, tmp_path, monkeypatch):
     genome = "hg19"
     genome_url = GENOME_URLS[genome]

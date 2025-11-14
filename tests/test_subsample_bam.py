@@ -1,6 +1,6 @@
 import os
 import pathlib
-from methsaturator.downsample_utils.subsample_bam import subsample_bam
+from methurator.downsample_utils.subsample_bam import subsample_bam
 
 
 def test_subsample_when_percentage_is_one(tmp_path, monkeypatch):

@@ -2,7 +2,7 @@ from .downsample_utils.run_processing import run_processing
 from .config_utils.config_formatter import ConfigFormatter
 from .config_utils.config_validator import validate_parameters
 from .config_utils.bam_dir_utils import bam_to_list
-from methsaturator.config_utils.verbose_utils import vprint
+from methurator.config_utils.verbose_utils import vprint
 import rich_click as click
 from rich.console import Console
 from rich.panel import Panel

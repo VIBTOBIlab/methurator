@@ -1,6 +1,6 @@
 from .methyldackel import run_methyldackel
 from .subsample_bam import subsample_bam
-from methsaturator.config_utils.verbose_utils import vprint
+from methurator.config_utils.verbose_utils import vprint
 from rich.console import Console
 from rich.panel import Panel
 import pandas as pd

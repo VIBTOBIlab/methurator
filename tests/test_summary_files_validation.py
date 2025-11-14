@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 import click
-from methsaturator.config_utils.validation_utils import (
+from methurator.config_utils.validation_utils import (
     validate_read_summary,
     validate_cpgs_summary,
 )
