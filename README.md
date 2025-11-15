@@ -41,7 +41,7 @@ This command generates two summary files:
 - **CpG summary** — number of unique CpGs detected in each downsampled BAM
 - **Reads summary** — number of reads in each downsampled BAM
 
-Example outputs can be found in [`tests/data`](https://github.com/VIBTOBIlab/methurator/tree/main/tests).
+Example outputs can be found in [`tests/data`](https://github.com/VIBTOBIlab/methurator/tree/main/tests/data).
 
 ---
 
