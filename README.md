@@ -4,10 +4,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tested with pytest](https://img.shields.io/badge/tested%20with-pytest-blue.svg)](https://pytest.org/)
 
-**methurator** is a Python package designed to estimate **sequencing saturation** for  
-**reduced-representation bisulfite sequencing (RRBS)** data.
+**Methurator** is a Python package designed to estimate **sequencing saturation** for **reduced-representation bisulfite sequencing (RRBS)** data.
 
-Although optimized for RRBS, methurator can also be used for whole-genome bisulfite sequencing (WGBS)or other genome-wide methylation data (e.g. **EMseq**). However, for whole-genome methylation data we advise you to use [Preseq](https://smithlabresearch.org/software/preseq/) package.
+Although optimized for RRBS, **methurator** can also be used for whole-genome bisulfite sequencing (**WGBS**) or other genome-wide methylation data (e.g. **EMseq**). However, this data we advise you to use [Preseq package](https://smithlabresearch.org/software/preseq/).
 
 ---
 
@@ -19,7 +18,7 @@ Although optimized for RRBS, methurator can also be used for whole-genome bisulf
 
 ---
 
-## 📦 Installation
+## 📦 Pip installation
 
 ```bash
 pip install methurator
@@ -42,7 +41,7 @@ This command generates two summary files:
 - **CpG summary** — number of unique CpGs detected in each downsampled BAM
 - **Reads summary** — number of reads in each downsampled BAM
 
-Example outputs can be found in [`tests/data`](tests/data).
+Example outputs can be found in [`tests/data`](https://github.com/VIBTOBIlab/methurator/tree/main/tests).
 
 ---
 
@@ -96,27 +95,3 @@ methurator plot \
   --cpgs_file output/cpgs_summary.csv \
   --reads_file output/reads_summary.csv
 ```
-
----
-
-## 🧾 Citation
-
-If you use **methurator** in your research, please cite this repository:
-
-```
-Author(s). methurator: A Python package for estimating sequencing saturation in RRBS data.
-https://github.com/yourusername/methurator
-```
-
----
-
-## 🪪 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🧑‍💻 Author
-
-**Edoardo Giuili**
-[GitHub](https://github.com/edogiuili) • [Contact](edoardogiuili@gmail.com)
