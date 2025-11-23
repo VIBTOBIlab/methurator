@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v0.1.5](https://github.com/VIBTOBIlab/methurator/tree/v0.1.5) — 2025-11-14
+
+- Expanded and updated documentation.
+
 ## [v0.1.4](https://github.com/VIBTOBIlab/methurator/tree/v0.1.4) — 2025-11-14
 
 - Slightly changed the README and LICENSE files.

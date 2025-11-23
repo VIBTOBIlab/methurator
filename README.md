@@ -10,7 +10,22 @@ Although optimized for RRBS, **methurator** can also be used for whole-genome bi
 
 ---
 
-## 🧠 Dependencies and Notes
+## 📑 Table of Contents
+
+- [1. Dependencies and Notes](#1-dependencies-and-notes)
+- [2. Pip installation](#2-pip-installation)
+- [3. Quick Start](#3-quick-start)
+  - [Step 1 — Downsample BAM files](#step-1--downsample-bam-files)
+  - [Step 2 — Plot the sequencing saturation curve](#step-2--plot-the-sequencing-saturation-curve)
+- [4. Command Reference](#4-command-reference)
+  - [`downsample` command](#downsample-command)
+  - [`plot` command](#plot-command)
+- [5. Example Workflow](#5-example-workflow)
+- [6. How do we compute the sequencing saturation?](#6-how-do-we-compute-the-sequencing-saturation)
+
+---
+
+## 1. Dependencies and Notes
 
 - methurator uses [SAMtools](https://www.htslib.org/) and [MethylDackel](https://github.com/dpryan79/MethylDackel) internally for BAM subsampling, thus they need to be installed.
 - When `--genome` is provided, the corresponding FASTA file will be automatically fetched and cached.
@@ -18,7 +33,7 @@ Although optimized for RRBS, **methurator** can also be used for whole-genome bi
 
 ---
 
-## 📦 Pip installation
+## 2. Pip installation
 
 ```bash
 pip install methurator
@@ -26,7 +41,7 @@ pip install methurator
 
 ---
 
-## 🚀 Quick Start
+## 3. Quick Start
 
 ### Step 1 — Downsample BAM files
 
@@ -57,9 +72,9 @@ methurator plot \
 
 ---
 
-## ⚙️ Command Reference
+## 4. Command Reference
 
-### 🧩 `downsample` command
+### `downsample` command
 
 | Argument                            | Description                                                                                                        | Default             |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
@@ -74,7 +89,7 @@ methurator plot \
 
 ---
 
-### 📊 `plot` command
+### `plot` command
 
 | Argument       | Description                              | Default    |
 | -------------- | ---------------------------------------- | ---------- |
@@ -84,7 +99,7 @@ methurator plot \
 
 ---
 
-## 📘 Example Workflow
+## 5. Example Workflow
 
 ```bash
 # Step 1: Downsample BAM file
@@ -95,3 +110,28 @@ methurator plot \
   --cpgs_file output/cpgs_summary.csv \
   --reads_file output/reads_summary.csv
 ```
+
+## 6. How do we compute the sequencing saturation?
+
+To calculate the **sequencing saturation** of an RRBS sample, we adopt the following strategy. For each sample, we downsample it according to 4 different percentages (default: `0.1,0.25,0.5,0.75`). Then, we compute the number of **unique CpGs covered by at least 3 reads** and the **number of reads** at each downsampling percentage.
+
+We then fit the following curve using the `scipy.optimize.curve_fit` function:
+
+$$
+y = \beta_0 \cdot \arctan(\beta_1 \cdot x)
+$$
+
+We chose the **arctangent function** because it exhibits an **asymptotic growth** similar to sequencing saturation.
+For large values of $x$ (as $x \to \infty$), the asymptote corresponds to the theoretical maximum number of **unique CpGs covered by at least 3 reads** and can be computed as:
+
+$$
+\text{asymptote} = \beta_0 \cdot \frac{\pi}{2}
+$$
+
+Finally, the **sequencing saturation value** can be calculated as following:
+
+$$
+\text{Saturation} = \frac{\text{Number of unique CpGs (≥3 counts)}}{\text{Asymptote}}
+$$
+
+This approach allows estimation of the theoretical **maximum number of CpGs** that can be detected given an infinite sequencing depth, and quantifies how close the sample is to reaching sequencing saturation.
