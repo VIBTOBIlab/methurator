@@ -28,6 +28,7 @@ console = Console()
 )
 @click.option(
     "--outdir",
+    "-o",
     type=click.Path(),
     default="output",
     help="Default ./output directory.",
@@ -69,7 +70,7 @@ console = Console()
     is_flag=True,
     help="If set to True, temporary files will be kept after the analysis. Default: False",
 )
-@click.option("-v", "--verbose", is_flag=True, help="Enable verbose logging.")
+@click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 def downsample(**kwargs):
 
     # Import the parameters and validate them
