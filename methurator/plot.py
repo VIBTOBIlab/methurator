@@ -12,8 +12,7 @@ import importlib.metadata
 console = Console()
 
 
-@click.group(context_settings=dict(help_option_names=["-h", "--help"]))
-@click.version_option(importlib.metadata.version("methurator"))
+@click.command(context_settings=dict(help_option_names=["-h", "--help"]))
 @click.option(
     "--cpgs_file",
     "-c",
@@ -34,7 +33,8 @@ console = Console()
     default="output",
     help="Default output directory.",
 )
-@click.option("-v", "--verbose", is_flag=True, help="Enable verbose logging.")
+@click.option("--verbose", is_flag=True, help="Enable verbose logging.")
+@click.version_option(importlib.metadata.version("methurator"))
 def plot(**kwargs):
 
     # Import and validate params

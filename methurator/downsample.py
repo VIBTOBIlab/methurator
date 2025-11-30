@@ -13,8 +13,7 @@ import importlib.metadata
 console = Console()
 
 
-@click.group(context_settings=dict(help_option_names=["-h", "--help"]))
-@click.version_option(importlib.metadata.version("methurator"))
+@click.command(context_settings=dict(help_option_names=["-h", "--help"]))
 @click.option(
     "--bam",
     type=click.Path(exists=True),
@@ -72,6 +71,7 @@ console = Console()
     help="If set to True, temporary files will be kept after the analysis. Default: False",
 )
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
+@click.version_option(importlib.metadata.version("methurator"))
 def downsample(**kwargs):
 
     # Import the parameters and validate them
