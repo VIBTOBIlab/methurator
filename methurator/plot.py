@@ -7,11 +7,13 @@ from methurator.config_utils.validation_utils import (
 )
 from rich.console import Console
 from rich.panel import Panel
+import importlib.metadata
 
 console = Console()
 
 
-@click.command(context_settings=dict(help_option_names=["-h", "--help"]))
+@click.group(context_settings=dict(help_option_names=["-h", "--help"]))
+@click.version_option(importlib.metadata.version("methurator"))
 @click.option(
     "--cpgs_file",
     "-c",

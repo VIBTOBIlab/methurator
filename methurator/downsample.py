@@ -8,12 +8,13 @@ from rich.console import Console
 from rich.panel import Panel
 import os
 import shutil
-
+import importlib.metadata
 
 console = Console()
 
 
-@click.command(context_settings=dict(help_option_names=["-h", "--help"]))
+@click.group(context_settings=dict(help_option_names=["-h", "--help"]))
+@click.version_option(importlib.metadata.version("methurator"))
 @click.option(
     "--bam",
     type=click.Path(exists=True),
