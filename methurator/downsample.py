@@ -17,14 +17,9 @@ console = Console()
 @click.option(
     "--bam",
     type=click.Path(exists=True),
-    required=False,
+    required=True,
+    multiple=True,
     help="BAM input file to compute methylation saturation.",
-)
-@click.option(
-    "--bamdir",
-    type=click.Path(exists=True, file_okay=False, dir_okay=True),
-    required=False,
-    help="Directory containing multiple BAM files.",
 )
 @click.option(
     "--outdir",
