@@ -81,25 +81,25 @@ def validate_bamdir(bam_dir):
         raise click.UsageError(f"Path is not a directory: {bam_dir}")
 
 
-def ensure_coordinated_sorted(configs):
+def ensure_coordinated_sorted(bam_file, configs):
 
     # Check if file exists
-    if not os.path.exists(configs.bam):
-        raise click.UsageError(f"The file '{configs.bam}' does not exist.")
+    if not os.path.exists(bam_file):
+        raise click.UsageError(f"The file '{bam_file}' does not exist.")
 
     # Check if file ends with .bam
-    if not configs.bam.endswith(".bam"):
+    if not bam_file.endswith(".bam"):
         raise click.UsageError("The input file must end with .bam")
 
-    with pysam.AlignmentFile(configs.bam, "rb") as bam:
+    with pysam.AlignmentFile(bam_file, "rb") as bam:
         sort_order = bam.header.get("HD", {}).get("SO", None)
 
     if sort_order == "coordinate":
-        return configs.bam
+        return bam_file
 
     vprint("🔄 BAM file is not coordinate-sorted. Sorting now...", configs.verbose)
-    out = configs.bam.replace(".bam", ".csorted.bam")
-    cmd = ["samtools", "sort", "-o", out, configs.bam]
+    out = bam_file.replace(".bam", ".csorted.bam")
+    cmd = ["samtools", "sort", "-o", out, bam_file]
 
     # Run samtools
     subprocess.run(cmd)
