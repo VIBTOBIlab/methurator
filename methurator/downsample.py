@@ -19,7 +19,7 @@ console = Console()
     type=click.Path(exists=True),
     required=True,
     multiple=True,
-    help="BAM input file to compute methylation saturation.",
+    help="Path to a single .bam file or to multiple ones (e.g. files/*.bam).",
 )
 @click.option(
     "--outdir",
