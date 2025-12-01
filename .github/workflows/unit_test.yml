@@ -23,7 +23,6 @@ jobs:
 
     env:
       worker_cores: 4
-      MAMBA_NO_LOW_SPEED_LIMIT: 1
 
     steps:
       - uses: actions/checkout@v4
