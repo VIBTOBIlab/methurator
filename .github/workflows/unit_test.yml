@@ -34,6 +34,7 @@ jobs:
           cache-downloads: true
           create-args: >-
             python=${{ matrix.python-version }}
+            --network-timeout 300
 
       - name: Run unit tests
         run: |
