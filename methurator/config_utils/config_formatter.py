@@ -18,6 +18,7 @@ class ConfigFormatter:
         self.genome = kwargs.get("genome")
         self.downsampling_percentages = kwargs.get("downsampling_percentages")
         self.minimum_coverage = kwargs.get("minimum_coverage")
+        self.rrbs = kwargs.get("rrbs")
         self.threads = kwargs.get("threads")
         self.keep_temporary_files = kwargs.get("keep_temporary_files")
         self.cpgs_file = kwargs.get("cpgs_file")

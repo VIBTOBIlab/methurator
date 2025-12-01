@@ -17,6 +17,7 @@ def run_methyldackel(bam_path, pct, configs, cpgs_df):
         "extract",
         "-@",
         str(configs.threads),
+        "--keepDupes",
         "-o",
         str(prefix),
         configs.fasta,
