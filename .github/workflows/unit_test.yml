@@ -28,8 +28,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up micromamba
-        uses: mamba-org/setup-micromamba@v1
+      - name: Set up conda
+        uses: conda-incubator/setup-miniconda@v3
         with:
           environment-file: environment.yml
           cache-downloads: true
@@ -38,7 +38,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          eval "$(micromamba shell hook --shell=bash)"
-          micromamba activate test-env
+          eval "$(conda shell hook --shell=bash)"
+          conda activate test-env
           pip install -e .[dev]
           pytest -vv -n ${{ env.worker_cores }}
