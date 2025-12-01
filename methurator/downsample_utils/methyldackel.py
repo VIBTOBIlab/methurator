@@ -17,12 +17,15 @@ def run_methyldackel(bam_path, pct, configs, cpgs_df):
         "extract",
         "-@",
         str(configs.threads),
-        "--keepDupes",
         "-o",
         str(prefix),
         configs.fasta,
         bam_path,
     ]
+
+    # Add RRBS-specific argument if config.rrbs is True
+    if configs.rrbs:
+        cmd.append("--keepDupes")
 
     # Run command
     subprocess.run(cmd)
