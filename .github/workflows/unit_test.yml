@@ -23,6 +23,7 @@ jobs:
 
     env:
       worker_cores: 4
+      MAMBA_MAX_RETRIES: 5 # retry failed downloads
 
     steps:
       - uses: actions/checkout@v4
