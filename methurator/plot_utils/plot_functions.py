@@ -78,8 +78,8 @@ def plot_fitted_data(plot_obj):
 
     n_obs = len(plot_obj.x_data) - 1
 
-    obs = slice(None, n_obs + 1)
-    pred = slice(n_obs, None)
+    obs = slice(None, n_obs + 2)
+    pred = slice(n_obs + 1, None)
     fig = make_base_plot(plot_obj.title)
 
     # Observed
