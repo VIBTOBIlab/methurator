@@ -33,6 +33,7 @@ jobs:
         with:
           environment-file: environment.yml
           python-version: ${{ matrix.python-version }}
+          activate-environment: test-env
 
       - name: Run unit tests
         run: |
