@@ -17,13 +17,13 @@ jobs:
     name: "Python ${{ matrix.python-version }} on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: ["ubuntu-latest", "macos-latest"]
         python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     env:
       worker_cores: 4
-      MAMBA_MAX_RETRIES: 5 # retry failed downloads
 
     steps:
       - uses: actions/checkout@v4
