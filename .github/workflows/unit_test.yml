@@ -36,7 +36,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          eval "$(conda shell hook --shell=bash)"
+          source $CONDA/etc/profile.d/conda.sh
           conda activate test-env
           pip install -e .[dev]
           pytest -vv -n ${{ env.worker_cores }}
