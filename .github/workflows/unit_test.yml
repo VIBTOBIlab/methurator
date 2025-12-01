@@ -22,7 +22,7 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     env:
-      worker_cores: 2
+      worker_cores: 4
       MAMBA_NO_LOW_SPEED_LIMIT: 1
 
     steps:
