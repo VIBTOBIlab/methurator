@@ -29,6 +29,7 @@ console = Console()
 )
 @click.option(
     "--outdir",
+    "-o",
     type=click.Path(),
     default="output",
     help="Default output directory.",
