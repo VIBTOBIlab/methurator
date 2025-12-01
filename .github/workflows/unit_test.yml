@@ -17,27 +17,27 @@ jobs:
     name: "Python ${{ matrix.python-version }} on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: ["ubuntu-latest", "macos-latest"]
         python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     env:
       worker_cores: 4
-      MAMBA_NO_LOW_SPEED_LIMIT: 1
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up conda
-        uses: conda-incubator/setup-miniconda@v3
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
         with:
           environment-file: environment.yml
-          python-version: ${{ matrix.python-version }}
-          activate-environment: test-env
+          create-args: >-
+            python=${{ matrix.python-version }}
 
       - name: Run unit tests
         run: |
-          source $CONDA/etc/profile.d/conda.sh
-          conda activate test-env
+          eval "$(micromamba shell hook --shell=bash)"
+          micromamba activate test-env
           pip install -e .[dev]
           pytest -vv -n ${{ env.worker_cores }}

@@ -114,14 +114,14 @@ methurator plot \
 
 ### `plot` command
 
-| Argument        | Description                              | Default    |
-| --------------- | ---------------------------------------- | ---------- |
-| `--cpgs_file`   | Path to the CpG coverage summary file.   |            |
-| `--reads_file`  | Path to the reads coverage summary file. |            |
-| `--outdir`      | Output directory.                        | `./output` |
-| `--verbose`     | Enable verbose logging.                  | `False`    |
-| `--help` , `-h` | Print the help message and exit.         |            |
-| `--version`     | Print the package version.               |            |
+| Argument         | Description                              | Default    |
+| ---------------- | ---------------------------------------- | ---------- |
+| `--cpgs_file`    | Path to the CpG coverage summary file.   |            |
+| `--reads_file`   | Path to the reads coverage summary file. |            |
+| `--outdir`, `-o` | Output directory.                        | `./output` |
+| `--verbose`      | Enable verbose logging.                  | `False`    |
+| `--help` , `-h`  | Print the help message and exit.         |            |
+| `--version`      | Print the package version.               |            |
 
 ---
 
@@ -137,7 +137,7 @@ methurator plot \
   --reads_file output/reads_summary.csv
 ```
 
-Finally, you will get withing the output/plot directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](assets/example.html)):
+Finally, you will get (within the output/plots) directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](assets/example.html)):
 
 ![Plot preview](assets/example.png)
 
