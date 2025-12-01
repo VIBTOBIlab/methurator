@@ -33,7 +33,6 @@ jobs:
         with:
           environment-file: environment.yml
           cache-downloads: true
-          cache-environment: true
           create-args: >-
             python=${{ matrix.python-version }}
 
