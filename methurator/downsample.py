@@ -8,7 +8,7 @@ from rich.console import Console
 from rich.panel import Panel
 import os
 import shutil
-
+import importlib.metadata
 
 console = Console()
 
@@ -17,17 +17,13 @@ console = Console()
 @click.option(
     "--bam",
     type=click.Path(exists=True),
-    required=False,
-    help="BAM input file to compute methylation saturation.",
-)
-@click.option(
-    "--bamdir",
-    type=click.Path(exists=True, file_okay=False, dir_okay=True),
-    required=False,
-    help="Directory containing multiple BAM files.",
+    required=True,
+    multiple=True,
+    help="Path to a single .bam file or to multiple ones (e.g. files/*.bam).",
 )
 @click.option(
     "--outdir",
+    "-o",
     type=click.Path(),
     default="output",
     help="Default ./output directory.",
@@ -47,7 +43,7 @@ console = Console()
 @click.option(
     "--downsampling-percentages",
     "-ds",
-    default="0.1,0.25,0.5,0.75",
+    default="0.1,0.2,0.4,0.6,0.8",
     help="Percentages used to downsample the .bam file. Default: 0.1,0.25,0.5,0.75",
 )
 @click.option(
@@ -55,6 +51,12 @@ console = Console()
     "-mc",
     default="3",
     help="Minimum CpG coverage to estimate sequencing saturation. It can be either a single integer or a list of integers (e.g 1,3,5). Default: 3",
+)
+@click.option(
+    "--rrbs",
+    is_flag=True,
+    default=True,
+    help="If set to True, MethylDackel extract will consider the RRBS nature of the data adding the --keepDupes flag. Default: True",
 )
 @click.option(
     "--threads",
@@ -69,7 +71,8 @@ console = Console()
     is_flag=True,
     help="If set to True, temporary files will be kept after the analysis. Default: False",
 )
-@click.option("-v", "--verbose", is_flag=True, help="Enable verbose logging.")
+@click.option("--verbose", is_flag=True, help="Enable verbose logging.")
+@click.version_option(importlib.metadata.version("methurator"))
 def downsample(**kwargs):
 
     # Import the parameters and validate them
@@ -87,6 +90,7 @@ def downsample(**kwargs):
         params_text += f"[purple]Genome:[/purple] [blue]{configs.genome}[/blue]\n"
     params_text += f"[purple]Downsampling percentages:[/purple] [blue]{configs.downsampling_percentages}[/blue]\n"
     params_text += f"[purple]Minimum coverage values:[/purple] [blue]{configs.minimum_coverage}[/blue]\n"
+    params_text += f"[purple]rrbs:[/purple] [blue]{configs.rrbs}[/blue]\n"
     params_text += f"[purple]Threads:[/purple] [blue]{configs.threads}[/blue]\n"
     params_text += f"[purple]Keep temporary files:[/purple] [blue]{configs.keep_temporary_files}[/blue]"
     console.print(

@@ -7,6 +7,7 @@ from methurator.config_utils.validation_utils import (
 )
 from rich.console import Console
 from rich.panel import Panel
+import importlib.metadata
 
 console = Console()
 
@@ -32,7 +33,8 @@ console = Console()
     default="output",
     help="Default output directory.",
 )
-@click.option("-v", "--verbose", is_flag=True, help="Enable verbose logging.")
+@click.option("--verbose", is_flag=True, help="Enable verbose logging.")
+@click.version_option(importlib.metadata.version("methurator"))
 def plot(**kwargs):
 
     # Import and validate params

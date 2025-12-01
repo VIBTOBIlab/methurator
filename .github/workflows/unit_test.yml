@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
     paths-ignore:
       - "docs/**"
       - "*.md"
@@ -12,33 +13,31 @@ on:
       - "docs/**"
       - "*.md"
 jobs:
-  unit_tests_linux:
-    name: "Python ${{ matrix.python-version }}"
-    runs-on: ubuntu-latest
+  unit_tests:
+    name: "Python ${{ matrix.python-version }} on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: ["ubuntu-latest", "macos-latest"]
         python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     env:
-      # GitHub currently has 4 cores available for Linux runners
-      # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
       worker_cores: 4
+      MAMBA_NO_LOW_SPEED_LIMIT: 1
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up micromamba
-        uses: mamba-org/setup-micromamba@v1
+      - name: Set up conda
+        uses: conda-incubator/setup-miniconda@v3
         with:
           environment-file: environment.yml
-          cache-env: true
-          cache-downloads: true
-          create-args: >-
-            python=${{ matrix.python-version }}
+          python-version: ${{ matrix.python-version }}
+          activate-environment: test-env
 
       - name: Run unit tests
         run: |
-          eval "$(micromamba shell hook --shell=bash)"
-          micromamba activate test-env
+          source $CONDA/etc/profile.d/conda.sh
+          conda activate test-env
           pip install -e .[dev]
           pytest -vv -n ${{ env.worker_cores }}

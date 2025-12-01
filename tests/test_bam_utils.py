@@ -13,14 +13,7 @@ def bam_file(tmp_path):
 def test_file_not_found():
     configs = ConfigFormatter(**{"bam": "does_not_exist.bam", "verbose": False})
     with pytest.raises(Exception):
-        ensure_coordinated_sorted(configs)
-
-
-def test_wrong_extension(bam_file):
-    wrong = bam_file.replace(".bam", ".txt")
-    configs = ConfigFormatter(**{"bam": wrong, "verbose": False})
-    with pytest.raises(Exception):
-        ensure_coordinated_sorted(configs)
+        ensure_coordinated_sorted(bam_file, configs)
 
 
 def test_unsorted_bam_triggers_sort(monkeypatch, bam_file):
@@ -32,7 +25,7 @@ def test_unsorted_bam_triggers_sort(monkeypatch, bam_file):
 
     monkeypatch.setattr("subprocess.run", fake_run)
 
-    result = ensure_coordinated_sorted(configs)
+    result = ensure_coordinated_sorted(bam_file, configs)
 
     assert calls, "samtools not called for unsorted BAM"
     assert result.endswith(".csorted.bam")

@@ -3,6 +3,8 @@
 [![Python Versions](https://img.shields.io/badge/python-≥3.10%20&%20≤3.13-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tested with pytest](https://img.shields.io/badge/tested%20with-pytest-blue.svg)](https://pytest.org/)
+[![Install with BioConda](https://img.shields.io/badge/bioconda-methurator-brightgreen.svg?logo=anaconda)](https://anaconda.org/bioconda/methurator)
+[![BioContainer](https://img.shields.io/badge/biocontainer-methurator-0A7BBB.svg?logo=docker)](https://quay.io/repository/biocontainers/methurator)
 
 **Methurator** is a Python package designed to estimate **sequencing saturation** for **reduced-representation bisulfite sequencing (RRBS)** data.
 
@@ -13,7 +15,7 @@ Although optimized for RRBS, **methurator** can also be used for whole-genome bi
 ## 📑 Table of Contents
 
 - [1. Dependencies and Notes](#1-dependencies-and-notes)
-- [2. Pip installation](#2-pip-installation)
+- [2. Installation](#2-installation)
 - [3. Quick Start](#3-quick-start)
   - [Step 1 — Downsample BAM files](#step-1--downsample-bam-files)
   - [Step 2 — Plot the sequencing saturation curve](#step-2--plot-the-sequencing-saturation-curve)
@@ -33,10 +35,28 @@ Although optimized for RRBS, **methurator** can also be used for whole-genome bi
 
 ---
 
-## 2. Pip installation
+## 2. Installation
+
+You can install **methurator** in several ways:
+
+### **Option 1: Install via pip**
 
 ```bash
 pip install methurator
+```
+
+### **Option 2: Install via BioConda**
+
+```bash
+conda create -n methurator_env bioconda::methurator
+conda activate methurator_env
+```
+
+### **Option 3: Use the BioContainer**
+
+```bash
+docker pull quay.io/biocontainers/methurator:0.1.5--pyhdfd78af_0
+docker run quay.io/biocontainers/methurator:0.1.5--pyhdfd78af_0 methurator -h
 ```
 
 ---
@@ -78,24 +98,30 @@ methurator plot \
 
 | Argument                            | Description                                                                                                        | Default             |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
-| `--bam`                             | Path to a single `.bam` file.                                                                                      | —                   |
-| `--bamdir`                          | Directory containing multiple BAM files.                                                                           | —                   |
-| `--outdir`                          | Output directory.                                                                                                  | `./output`          |
+| `--bam`                             | Path to a single `.bam` file or to multiple ones (e.g. `files/*.bam`).                                             | —                   |
+| `--outdir, -o`                      | Output directory.                                                                                                  | `./output`          |
 | `--fasta`                           | Path to the reference genome FASTA file. If not provided, it will be automatically downloaded based on `--genome`. | —                   |
 | `--genome`                          | Genome used for alignment. Available: `hg19`, `hg38`, `GRCh37`, `GRCh38`, `mm10`, `mm39`.                          | —                   |
 | `--downsampling-percentages`, `-ds` | Comma-separated list of downsampling percentages between 0 and 1 (exclusive).                                      | `0.1,0.25,0.5,0.75` |
-| `--minimum-coverage`                | Minimum CpG coverage to consider for saturation. Can be a single integer or a list (e.g. `1,3,5`).                 | `3`                 |
+| `--minimum-coverage`, `-mc`         | Minimum CpG coverage to consider for saturation. Can be a single integer or a list (e.g. `1,3,5`).                 | `3`                 |
+| `--rrbs`                            | If set to True, MethylDackel extract will consider the RRBS nature of the data adding the --keepDupes flag.        | True                |
 | `--keep-temporary-files`            | If set, temporary files will be kept after analysis.                                                               | `False`             |
+| `--verbose`                         | Enable verbose logging.                                                                                            | `False`             |
+| `--help` , `-h`                     | Print the help message and exit.                                                                                   |                     |
+| `--version`                         | Print the package version.                                                                                         |                     |
 
 ---
 
 ### `plot` command
 
-| Argument       | Description                              | Default    |
-| -------------- | ---------------------------------------- | ---------- |
-| `--cpgs_file`  | Path to the CpG coverage summary file.   |            |
-| `--reads_file` | Path to the reads coverage summary file. |            |
-| `--outdir`     | Output directory.                        | `./output` |
+| Argument        | Description                              | Default    |
+| --------------- | ---------------------------------------- | ---------- |
+| `--cpgs_file`   | Path to the CpG coverage summary file.   |            |
+| `--reads_file`  | Path to the reads coverage summary file. |            |
+| `--outdir`      | Output directory.                        | `./output` |
+| `--verbose`     | Enable verbose logging.                  | `False`    |
+| `--help` , `-h` | Print the help message and exit.         |            |
+| `--version`     | Print the package version.               |            |
 
 ---
 
@@ -111,6 +137,10 @@ methurator plot \
   --reads_file output/reads_summary.csv
 ```
 
+Finally, you will get withing the output/plot directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](assets/example.html)):
+
+![Plot preview](assets/example.png)
+
 ## 6. How do we compute the sequencing saturation?
 
 To calculate the **sequencing saturation** of an RRBS sample, we adopt the following strategy. For each sample, we downsample it according to 4 different percentages (default: `0.1,0.25,0.5,0.75`). Then, we compute the number of **unique CpGs covered by at least 3 reads** and the **number of reads** at each downsampling percentage.
@@ -122,7 +152,7 @@ y = \beta_0 \cdot \arctan(\beta_1 \cdot x)
 $$
 
 We chose the **arctangent function** because it exhibits an **asymptotic growth** similar to sequencing saturation.
-For large values of $x$ (as $x \to \infty$), the asymptote corresponds to the theoretical maximum number of **unique CpGs covered by at least 3 reads** and can be computed as:
+For large values of $\text{x}$ (as $\text{x} \to \infty$), the asymptote corresponds to the theoretical maximum number of **unique CpGs covered by at least 3 reads** and can be computed as:
 
 $$
 \text{asymptote} = \beta_0 \cdot \frac{\pi}{2}

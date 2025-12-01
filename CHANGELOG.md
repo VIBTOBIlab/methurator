@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v0.1.6](https://github.com/VIBTOBIlab/methurator/tree/v0.1.6) — 2025-12-01
+
+- Removed `--bamdir` option: if you want to specify more than 1 bam file within a directory you can now simply use the same `--bam` option, specifying all bam files (e.g. --bam files/\*.bam)
+- Added Bioconda and Biocontainer instructions on the README.
+- Added the --rrbs parameter: if specified (by default), it will add the --keepDups flag to MethylDackel to avoid removal of duplicates.
+
 ## [v0.1.5](https://github.com/VIBTOBIlab/methurator/tree/v0.1.5) — 2025-11-23
 
 - Expanded and updated documentation.

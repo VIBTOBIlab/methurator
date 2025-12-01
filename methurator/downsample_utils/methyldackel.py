@@ -23,6 +23,10 @@ def run_methyldackel(bam_path, pct, configs, cpgs_df):
         bam_path,
     ]
 
+    # Add RRBS-specific argument if config.rrbs is True
+    if configs.rrbs:
+        cmd.append("--keepDupes")
+
     # Run command
     subprocess.run(cmd)
 
