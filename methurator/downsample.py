@@ -3,6 +3,7 @@ from methurator.config_utils.config_formatter import ConfigFormatter
 from methurator.config_utils.config_validator import validate_parameters
 from methurator.config_utils.bam_dir_utils import bam_to_list
 from methurator.config_utils.verbose_utils import vprint
+from methurator.config_utils.validation_utils import validate_dependencies
 import rich_click as click
 from rich.console import Console
 from rich.panel import Panel
@@ -101,6 +102,9 @@ def downsample(**kwargs):
             expand=False,
         )
     )
+
+    # Check that required external tools are installed
+    validate_dependencies()
 
     # Load bam file(s) and run the downsampling
     csorted_bams = bam_to_list(configs)
