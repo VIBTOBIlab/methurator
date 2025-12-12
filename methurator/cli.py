@@ -7,6 +7,7 @@ import importlib.metadata
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
 @click.version_option(importlib.metadata.version("methurator"))
 def entry_point():
+    """Estimate sequencing saturation for reduced-representation bisulfite sequencing (RRBS) data."""
     pass
 
 
