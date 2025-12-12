@@ -17,6 +17,7 @@ def get_reference(configs):
 
     # Download the reference genome
     url = GENOME_URLS[configs.genome]
+    os.makedirs(configs.outdir, exist_ok=True)
     gz_path = os.path.join(configs.outdir, f"{configs.genome}.fa.gz")
     fasta_path = os.path.join(configs.outdir, f"{configs.genome}.fa")
 
