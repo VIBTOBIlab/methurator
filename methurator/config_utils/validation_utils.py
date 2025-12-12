@@ -2,9 +2,37 @@ import rich_click as click
 from methurator.config_utils.verbose_utils import vprint
 from methurator.config_utils.download_reference import get_reference
 import os
+import shutil
 import subprocess
+import sys
 import pysam
 import pandas as pd
+from rich.console import Console
+from rich.panel import Panel
+
+
+def validate_dependencies():
+    """Check that required external tools (samtools, MethylDackel) are installed."""
+    console = Console()
+    missing = []
+
+    if shutil.which("samtools") is None:
+        missing.append("samtools")
+
+    if shutil.which("MethylDackel") is None:
+        missing.append("MethylDackel")
+
+    if missing:
+        tools_list = ", ".join(missing)
+        console.print(
+            Panel(
+                f"[red bold]Missing required dependencies: {tools_list}[/red bold]",
+                title="[red]Dependency Error[/red]",
+                border_style="red",
+                expand=False,
+            )
+        )
+        sys.exit(1)
 
 
 def mincoverage_checker(coverages):
