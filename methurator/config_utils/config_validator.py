@@ -18,10 +18,8 @@ def validate_parameters(configs):
         )
 
     # Enforce that at least one of --bam or --bamdir is provided
-    if configs.bam is None and configs.bamdir is None:
-        raise click.UsageError(
-            "Error: you must provide in input either --bam or --bamdir"
-        )
+    if configs.bam is None or len(configs.bam) == 0:
+        raise click.UsageError("Error: you must provide at least one BAM file")
 
     # Check that downsampling percentages and minimum coverage values are valid
     try:
