@@ -4,6 +4,7 @@ from methurator.config_utils.config_formatter import ConfigFormatter
 from methurator.config_utils.config_validator import validate_parameters
 from methurator.config_utils.bam_dir_utils import bam_to_list
 from methurator.config_utils.verbose_utils import vprint
+from methurator.config_utils.validation_utils import validate_dependencies
 import rich_click as click
 from rich.console import Console
 from rich.panel import Panel
@@ -77,7 +78,7 @@ console = Console()
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 @click.version_option(importlib.metadata.version("methurator"))
 def downsample(**kwargs):
-
+    """Downsample BAM files and compute CpG coverage at each percentage."""
     # Import the parameters and validate them
     configs = ConfigFormatter(**kwargs)
     validate_parameters(configs)
@@ -104,6 +105,9 @@ def downsample(**kwargs):
             expand=False,
         )
     )
+
+    # Check that required external tools are installed
+    validate_dependencies()
 
     # Load bam file(s) and run the downsampling
     csorted_bams = bam_to_list(configs)

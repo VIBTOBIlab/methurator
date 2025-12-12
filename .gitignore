@@ -1,3 +1,4 @@
+tests/data/bams
 .DS_Store
 deploy_pypi.yml
 test_data
