@@ -19,7 +19,7 @@ def test_methurator_downsample(tmp_path):
     ]
 
     # Run the command
-    subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True)
 
     # Paths of the expected outputs
     cpgs_summary = os.path.join(tmp_path, "methurator_cpgs_summary.csv")
@@ -27,9 +27,10 @@ def test_methurator_downsample(tmp_path):
     yaml_summary = os.path.join(tmp_path, "methurator_summary.yml")
 
     # Assert that output files exist
-    assert os.path.exists(cpgs_summary), f"{cpgs_summary} not found"
-    assert os.path.exists(reads_summary), f"{reads_summary} not found"
-    assert os.path.exists(yaml_summary), f"{yaml_summary} not found"
+    error_info = f"\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+    assert os.path.exists(cpgs_summary), f"{cpgs_summary} not found{error_info}"
+    assert os.path.exists(reads_summary), f"{reads_summary} not found{error_info}"
+    assert os.path.exists(yaml_summary), f"{yaml_summary} not found{error_info}"
 
     # Validate YAML structure
     with open(yaml_summary) as f:
@@ -76,5 +77,10 @@ def test_methurator_downsample(tmp_path):
         assert isinstance(first_cpgs_entry, dict)
         sample_name = list(first_cpgs_entry.keys())[0]
         assert isinstance(first_cpgs_entry[sample_name], list)
-        # Each entry should be [percentage, coverage, cpg_count]
-        assert len(first_cpgs_entry[sample_name][0]) == 3
+        # Each entry should be a dict with minimum_coverage and data keys
+        first_coverage_entry = first_cpgs_entry[sample_name][0]
+        assert isinstance(first_coverage_entry, dict)
+        assert "minimum_coverage" in first_coverage_entry
+        assert "data" in first_coverage_entry
+        # Each data entry should be [percentage, cpg_count]
+        assert len(first_coverage_entry["data"][0]) == 2

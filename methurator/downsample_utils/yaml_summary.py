@@ -53,6 +53,20 @@ def build_saturation_analysis(reads_df, cpgs_df):
                 beta0, beta1 = fit_result["params"]
                 asymptote = fit_result["asymptote"]
 
+                # Check for invalid asymptote values
+                if not np.isfinite(asymptote) or asymptote <= 0:
+                    # Treat as fit failure if asymptote is invalid
+                    for x, y in zip(x_data, y_data):
+                        data_points.append([float(x), int(y), None, False])
+                    coverage_entry = {
+                        "minimum_coverage": int(coverage),
+                        "fit_success": False,
+                        "fit_error": "Invalid asymptote value",
+                        "data": data_points,
+                    }
+                    coverage_list.append(coverage_entry)
+                    continue
+
                 # Add observed data points
                 for x, y in zip(x_data, y_data):
                     saturation_pct = float(round((y / asymptote) * 100, 1))
@@ -62,6 +76,9 @@ def build_saturation_analysis(reads_df, cpgs_df):
                 predicted_x = np.linspace(1.2, 2.0, 5)
                 predicted_y = asymptotic_growth(predicted_x, beta0, beta1)
                 for x, y in zip(predicted_x, predicted_y):
+                    # Skip invalid predicted values
+                    if not np.isfinite(y):
+                        continue
                     saturation_pct = float(round((y / asymptote) * 100, 1))
                     data_points.append([float(x), int(round(y)), saturation_pct, True])
 
