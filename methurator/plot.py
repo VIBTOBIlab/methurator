@@ -37,7 +37,7 @@ console = Console()
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 @click.version_option(importlib.metadata.version("methurator"))
 def plot(**kwargs):
-
+    """Plot the sequencing saturation curve from downsampling results."""
     # Import and validate params
     configs = ConfigFormatter(**kwargs)
     validate_cpgs_summary(configs.cpgs_file)
