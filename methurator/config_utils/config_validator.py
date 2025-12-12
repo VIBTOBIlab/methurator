@@ -4,7 +4,6 @@ from methurator.config_utils.validation_utils import (
     mincoverage_checker,
     percentage_checker,
     validate_reference,
-    validate_bamdir,
 )
 from methurator.config_utils.verbose_utils import vprint
 
@@ -17,7 +16,7 @@ def validate_parameters(configs):
             "Error: you must provide in input either --fasta or --genome"
         )
 
-    # Enforce that at least one of --bam or --bamdir is provided
+    # Enforce that at least one of bam file is provided
     if configs.bam is None or len(configs.bam) == 0:
         raise click.UsageError("Error: you must provide at least one BAM file")
 
@@ -36,10 +35,6 @@ def validate_parameters(configs):
         configs.fasta = validate_reference(configs)
     except ValueError as e:
         raise click.UsageError(f"{e}")
-
-    # Run check on the bam directory if provided
-    if configs.bamdir:
-        validate_bamdir(configs.bamdir)
 
     # Create output directory if it doesn't exist
     if not os.path.exists(configs.outdir):
