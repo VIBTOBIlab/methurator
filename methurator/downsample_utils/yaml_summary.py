@@ -151,7 +151,7 @@ def generate_yaml_summary(reads_df, cpgs_df, configs, bam_files):
         "fasta": str(configs.fasta) if configs.fasta else None,
         "genome": configs.genome,
         "downsampling_percentages": configs.percentages,
-        "minimum_coverage": configs.min_covs,
+        "minimum_coverage": configs.coverages,
         "rrbs": configs.rrbs,
         "threads": configs.threads,
         "keep_temporary_files": configs.keep_temporary_files,
