@@ -75,7 +75,7 @@ console = Console()
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 @click.version_option(importlib.metadata.version("methurator"))
 def downsample(**kwargs):
-
+    """Downsample BAM files and compute CpG coverage at each percentage."""
     # Import the parameters and validate them
     configs = ConfigFormatter(**kwargs)
     validate_parameters(configs)
