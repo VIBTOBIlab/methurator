@@ -38,6 +38,7 @@ dependencies = [
   "pandas",
   "pyfaidx",
   "pysam",
+  "pyyaml",
   "rich",
   "rich-click",
   "scipy",
