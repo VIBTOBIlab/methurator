@@ -32,7 +32,16 @@ def run_methyldackel(bam_path, pct, configs, cpgs_df):
 
     # Read the file dumped by MethylDackel
     file = prefix + "_CpG.bedGraph"
-    df = pd.read_csv(file, sep="\t", header=None, skiprows=1)
+    
+    # Check if file has data (more than just header)
+    try:
+        df = pd.read_csv(file, sep="\t", header=None, skiprows=1)
+        if df.empty:
+            raise pd.errors.EmptyDataError("MethylDackel output file is empty")
+    except pd.errors.EmptyDataError:
+        print(f"Warning: MethylDackel produced no data for {bam_path}. This may be due to chromosome mismatch with reference genome.")
+        print(f"Skipping sample: {os.path.basename(bam_path)}")
+        return cpgs_df
 
     # gzip the file and return the stats
     subprocess.run(["gzip", "-f", f"{prefix}_CpG.bedGraph"])
