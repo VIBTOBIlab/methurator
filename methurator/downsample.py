@@ -19,6 +19,7 @@ console = Console()
     type=click.Path(exists=True),
     nargs=-1,
     required=True,
+    help="Path to one or more .bam files (e.g. files/*.bam).",
 )
 @click.option(
     "--outdir",
@@ -73,7 +74,6 @@ console = Console()
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 @click.version_option(importlib.metadata.version("methurator"))
 def downsample(**kwargs):
-
     # Import the parameters and validate them
     configs = ConfigFormatter(**kwargs)
     validate_parameters(configs)
