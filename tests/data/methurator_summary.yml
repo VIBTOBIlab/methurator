@@ -1,0 +1,42 @@
+methurator_summary:
+  metadata:
+    date_generated: '2024-01-15T10:30:00.000000'
+    methurator_version: 0.1.6
+    command: methurator downsample
+    options:
+      bam_files:
+      - tests/data/SRX1631721.bam
+      outdir: output
+      fasta: tests/data/genome.fa
+      genome: null
+      downsampling_percentages:
+      - 0.1
+      - 0.25
+      - 0.5
+      - 0.75
+      - 1.0
+      minimum_coverage:
+      - 1
+      - 3
+      rrbs: true
+      threads: 8
+      keep_temporary_files: false
+  reads_summary:
+  - SRX1631721:
+    - [0.1, 2810148]
+    - [0.25, 7021874]
+    - [0.5, 14048420]
+    - [0.75, 21069604]
+    - [1.0, 28094582]
+  cpgs_summary:
+  - SRX1631721:
+    - [0.1, 1, 560378]
+    - [0.1, 3, 962]
+    - [0.25, 1, 1355444]
+    - [0.25, 3, 4475]
+    - [0.5, 1, 2585254]
+    - [0.5, 3, 23503]
+    - [0.75, 1, 3705085]
+    - [0.75, 3, 65929]
+    - [1.0, 1, 4722591]
+    - [1.0, 3, 135634]
