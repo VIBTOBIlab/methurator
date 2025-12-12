@@ -7,7 +7,14 @@ import importlib.metadata
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
 @click.version_option(importlib.metadata.version("methurator"))
 @click.command_panel("Commands")
+@click.option_panel("Arguments")
 @click.option_panel("Options")
+@click.rich_config(
+    {
+        "options_table_column_types": ["opt_long", "opt_short", "help"],
+        "options_table_help_sections": ["help", "metavar", "required", "default"],
+    }
+)
 def entry_point():
     """Estimate sequencing saturation for reduced-representation bisulfite sequencing (RRBS) data."""
     pass
