@@ -36,7 +36,7 @@ def run_methyldackel(bam_path, pct, configs, cpgs_df):
 
     # Read the file dumped by MethylDackel
     file = prefix + "_CpG.bedGraph"
-    
+
     # Check if file has data (more than just header)
     try:
         df = pd.read_csv(file, sep="\t", header=None, skiprows=1)
