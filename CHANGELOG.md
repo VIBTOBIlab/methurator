@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v0.1.7](https://github.com/VIBTOBIlab/methurator/tree/v0.1.7) — 2025-12-01
+
+- Made bam input files positional arguments.
+- Slightly changed the sequencing saturation plot.
+
 ## [v0.1.6](https://github.com/VIBTOBIlab/methurator/tree/v0.1.6) — 2025-12-01
 
 - Removed `--bamdir` option: if you want to specify more than 1 bam file within a directory you can now simply use the same `--bam` option, specifying all bam files (e.g. --bam files/\*.bam)
