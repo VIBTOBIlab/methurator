@@ -1,12 +1,12 @@
 methurator_summary:
   metadata:
-    date_generated: '2024-01-15T10:30:00.000000'
+    date_generated: '2025-01-01T00:00:00'
     methurator_version: 0.1.6
     command: methurator downsample
     options:
       bam_files:
-      - tests/data/SRX1631721.bam
-      outdir: output
+      - tests/data/test.bam
+      outdir: tests/data
       fasta: tests/data/genome.fa
       genome: null
       downsampling_percentages:
@@ -15,9 +15,7 @@ methurator_summary:
       - 0.5
       - 0.75
       - 1.0
-      minimum_coverage:
-      - 1
-      - 3
+      minimum_coverage: [1, 3]
       rrbs: true
       threads: 8
       keep_temporary_files: false
@@ -30,13 +28,47 @@ methurator_summary:
     - [1.0, 28094582]
   cpgs_summary:
   - SRX1631721:
-    - [0.1, 1, 560378]
-    - [0.1, 3, 962]
-    - [0.25, 1, 1355444]
-    - [0.25, 3, 4475]
-    - [0.5, 1, 2585254]
-    - [0.5, 3, 23503]
-    - [0.75, 1, 3705085]
-    - [0.75, 3, 65929]
-    - [1.0, 1, 4722591]
-    - [1.0, 3, 135634]
+    - minimum_coverage: 1
+      data:
+      - [0.1, 560378]
+      - [0.25, 1355444]
+      - [0.5, 2585254]
+      - [0.75, 3705085]
+      - [1.0, 4722591]
+    - minimum_coverage: 3
+      data:
+      - [0.1, 962]
+      - [0.25, 4475]
+      - [0.5, 23503]
+      - [0.75, 65929]
+      - [1.0, 135634]
+  saturation_analysis:
+  - SRX1631721:
+    - minimum_coverage: 1
+      fit_success: true
+      beta0: 7791603.580460751
+      beta1: 0.6910436060458282
+      asymptote: 12239022
+      data:
+      - [0.0, 0, 0.0, false]
+      - [0.1, 560378, 4.6, false]
+      - [0.25, 1355444, 11.1, false]
+      - [0.5, 2585254, 21.1, false]
+      - [0.75, 3705085, 30.3, false]
+      - [1.0, 4722591, 38.6, false]
+      - [1.2, 5394322, 44.1, true]
+      - [1.4, 5990661, 48.9, true]
+      - [1.6, 6510193, 53.2, true]
+      - [1.8, 6963039, 56.9, true]
+      - [2.0, 7358730, 60.1, true]
+    - minimum_coverage: 3
+      fit_success: false
+      fit_error: 'Optimal parameters not found: Number of calls to function has reached
+        maxfev = 600.'
+      data:
+      - [0.0, 0, null, false]
+      - [0.1, 962, null, false]
+      - [0.25, 4475, null, false]
+      - [0.5, 23503, null, false]
+      - [0.75, 65929, null, false]
+      - [1.0, 135634, null, false]
