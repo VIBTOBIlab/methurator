@@ -105,8 +105,8 @@ def downsample(**kwargs):
     # Load bam file(s) and run the downsampling
     csorted_bams = bam_to_list(configs)
     cpgs_df, reads_df = run_processing(csorted_bams, configs)
-    reads_df.to_csv(os.path.join(configs.outdir, "reads_summary.csv"), index=False)
-    cpgs_df.to_csv(os.path.join(configs.outdir, "cpgs_summary.csv"), index=False)
+    reads_df.to_csv(os.path.join(configs.outdir, "methurator_reads_summary.csv"), index=False)
+    cpgs_df.to_csv(os.path.join(configs.outdir, "methurator_cpgs_summary.csv"), index=False)
     vprint(f"[bold] ✅ Dumped summary files to {configs.outdir}.[/bold]", True)
 
     # Clean-up

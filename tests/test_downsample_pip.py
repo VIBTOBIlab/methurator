@@ -21,8 +21,8 @@ def test_methurator_downsample(tmp_path):
     subprocess.run(cmd, capture_output=True, text=True)
 
     # Paths of the expected outputs
-    cpgs_summary = os.path.join(tmp_path, "cpgs_summary.csv")
-    reads_summary = os.path.join(tmp_path, "reads_summary.csv")
+    cpgs_summary = os.path.join(tmp_path, "methurator_cpgs_summary.csv")
+    reads_summary = os.path.join(tmp_path, "methurator_reads_summary.csv")
 
     # Assert that output files exist
     assert os.path.exists(cpgs_summary), f"{cpgs_summary} not found"

@@ -86,8 +86,8 @@ Use the `plot` command to visualize sequencing saturation:
 
 ```bash
 methurator plot \
-  --cpgs_file tests/data/cpgs_summary.csv \
-  --reads_file tests/data/reads_summary.csv
+  --cpgs_file tests/data/methurator_cpgs_summary.csv \
+  --reads_file tests/data/methurator_reads_summary.csv
 ```
 
 ---
@@ -133,8 +133,8 @@ methurator downsample --genome hg19 --bam my_sample.bam
 
 # Step 2: Plot saturation curve
 methurator plot \
-  --cpgs_file output/cpgs_summary.csv \
-  --reads_file output/reads_summary.csv
+  --cpgs_file output/methurator_cpgs_summary.csv \
+  --reads_file output/methurator_reads_summary.csv
 ```
 
 Finally, you will get (within the output/plots) directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](assets/example.html)):
