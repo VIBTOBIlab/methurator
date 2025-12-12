@@ -100,15 +100,6 @@ def validate_reference(configs):
         return fasta_file
 
 
-def validate_bamdir(bam_dir):
-    # Check if directory exists
-    if not os.path.exists(bam_dir):
-        raise click.UsageError(f"Directory does not exist: {bam_dir}")
-
-    if not os.path.isdir(bam_dir):
-        raise click.UsageError(f"Path is not a directory: {bam_dir}")
-
-
 def ensure_coordinated_sorted(bam_file, configs):
 
     # Check if file exists

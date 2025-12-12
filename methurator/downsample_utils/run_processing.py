@@ -1,11 +1,17 @@
 from methurator.downsample_utils.methyldackel import run_methyldackel
 from methurator.downsample_utils.subsample_bam import subsample_bam
-from methurator.config_utils.verbose_utils import vprint
-from rich.console import Console
-from rich.panel import Panel
+from rich.progress import (
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    BarColumn,
+    TaskProgressColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+    MofNCompleteColumn,
+)
 import pandas as pd
-
-console = Console()
+import os
 
 
 def run_processing(csorted_bams, configs):
@@ -14,27 +20,61 @@ def run_processing(csorted_bams, configs):
     reads_df = pd.DataFrame(columns=["Sample", "Percentage", "Read_Count"])
     cpgs_df = pd.DataFrame(columns=["Sample", "Percentage", "Coverage", "CpG_Count"])
 
-    # Loop over bam files, downsampling percentages and minimum coverage values
-    for bam in csorted_bams:
+    # Calculate total steps for progress tracking
+    total_bams = len(csorted_bams)
+    total_percentages = len(configs.percentages)
 
-        console.print(
-            Panel(
-                f"[bold white]🚀 Running saturation analysis on {bam}[/bold white]",
-                border_style="green",
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[bold blue]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        MofNCompleteColumn(),
+        TimeElapsedColumn(),
+        TimeRemainingColumn(),
+        refresh_per_second=10,
+    ) as progress:
+
+        # Loop over bam files
+        for bam_idx, bam in enumerate(csorted_bams):
+            bam_name = os.path.basename(bam)
+
+            # BAM file progress task
+            bam_task = progress.add_task(
+                f"[green]BAM {bam_idx + 1}/{total_bams}: {bam_name}",
+                total=total_percentages,
             )
-        )
-        for pct in configs.percentages:
-            vprint(
-                f"[bold]Subsampling BAM file at[/bold] [cyan]{pct}...[/cyan]",
-                configs.verbose,
-            )
-            results_subsampling_bam, sub_bam = subsample_bam(bam, pct, configs.outdir)
-            reads_df.loc[len(reads_df)] = results_subsampling_bam
-            vprint("[green]✔ Subsampling completed![/green]", configs.verbose)
 
-            vprint("[bold]Running MethylDackel...[/bold]", configs.verbose)
+            for pct in configs.percentages:
+                # Update description to show current subsample level
+                progress.update(
+                    bam_task,
+                    description=f"[green]BAM {bam_idx + 1}/{total_bams}: {bam_name} @ {pct:.0%}",
+                )
 
-            cpgs_df = run_methyldackel(sub_bam, pct, configs, cpgs_df)
-            vprint("[green]✔ MethylDackel completed![/green]", configs.verbose)
+                # Subsampling step
+                subsample_task = progress.add_task(
+                    "  [yellow]Subsampling...",
+                    total=None,  # Indeterminate
+                )
+                results_subsampling_bam, sub_bam = subsample_bam(
+                    bam, pct, configs.outdir
+                )
+                reads_df.loc[len(reads_df)] = results_subsampling_bam
+                progress.remove_task(subsample_task)
+
+                # MethylDackel step
+                methyldackel_task = progress.add_task(
+                    "  [magenta]Running MethylDackel...",
+                    total=None,  # Indeterminate
+                )
+                cpgs_df = run_methyldackel(sub_bam, pct, configs, cpgs_df)
+                progress.remove_task(methyldackel_task)
+
+                # Update progress
+                progress.advance(bam_task)
+
+            # Mark BAM as complete and remove its task
+            progress.remove_task(bam_task)
 
     return cpgs_df, reads_df

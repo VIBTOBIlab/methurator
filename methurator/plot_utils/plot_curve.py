@@ -25,7 +25,7 @@ def plot_curve(configs):
             os.makedirs(plot_dir, exist_ok=True)
 
             # Define plot path
-            plot_path = f"{plot_dir}/{sample}_{min_val}x_plot.svg"
+            plot_path = f"{plot_dir}/{sample}_{min_val}x_plot.html"
 
             # Checks whether the model fits correctly, then generate plot
             plot_checker(subset, plot_path)

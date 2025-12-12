@@ -12,7 +12,6 @@ class ConfigFormatter:
 
     def __init__(self, **kwargs):
         self.bam = kwargs.get("bam")
-        self.bamdir = kwargs.get("bamdir")
         self.outdir = kwargs.get("outdir")
         self.fasta = kwargs.get("fasta")
         self.genome = kwargs.get("genome")
