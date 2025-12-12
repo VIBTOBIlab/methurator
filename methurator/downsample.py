@@ -14,11 +14,11 @@ console = Console()
 
 
 @click.command(context_settings=dict(help_option_names=["-h", "--help"]))
-@click.option(
-    "--bam",
+@click.argument(
+    "bams",
     type=click.Path(exists=True),
     required=True,
-    multiple=True,
+    nargs=-1,
     help="Path to a single .bam file or to multiple ones (e.g. files/*.bam).",
 )
 @click.option(
@@ -73,9 +73,10 @@ console = Console()
 )
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 @click.version_option(importlib.metadata.version("methurator"))
-def downsample(**kwargs):
+def downsample(bams, **kwargs):
 
     # Import the parameters and validate them
+    kwargs["bam"] = bams
     configs = ConfigFormatter(**kwargs)
     validate_parameters(configs)
 
