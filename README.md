@@ -68,7 +68,7 @@ docker run quay.io/biocontainers/methurator:0.1.5--pyhdfd78af_0 methurator -h
 The `downsample` command performs BAM downsampling according to the specified percentages and coverage.
 
 ```bash
-methurator downsample --genome hg19 --bam test_data/SRX1631721.markdup.sorted.csorted.bam
+methurator downsample --genome hg19 test_data/SRX1631721.markdup.sorted.csorted.bam
 ```
 
 This command generates two summary files:
@@ -98,7 +98,7 @@ methurator plot \
 
 | Argument                            | Description                                                                                                        | Default             |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
-| `--bam`                             | Path to a single `.bam` file or to multiple ones (e.g. `files/*.bam`).                                             | —                   |
+| `BAM` (positional)                  | Path to one or more `.bam` files (e.g. `sample.bam` or `files/*.bam`).                                             | —                   |
 | `--outdir, -o`                      | Output directory.                                                                                                  | `./output`          |
 | `--fasta`                           | Path to the reference genome FASTA file. If not provided, it will be automatically downloaded based on `--genome`. | —                   |
 | `--genome`                          | Genome used for alignment. Available: `hg19`, `hg38`, `GRCh37`, `GRCh38`, `mm10`, `mm39`.                          | —                   |
@@ -129,7 +129,7 @@ methurator plot \
 
 ```bash
 # Step 1: Downsample BAM file
-methurator downsample --genome hg19 --bam my_sample.bam
+methurator downsample --genome hg19 my_sample.bam
 
 # Step 2: Plot saturation curve
 methurator plot \

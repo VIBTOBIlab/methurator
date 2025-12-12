@@ -14,12 +14,11 @@ console = Console()
 
 
 @click.command(context_settings=dict(help_option_names=["-h", "--help"]))
-@click.option(
-    "--bam",
+@click.argument(
+    "bam",
     type=click.Path(exists=True),
+    nargs=-1,
     required=True,
-    multiple=True,
-    help="Path to a single .bam file or to multiple ones (e.g. files/*.bam).",
 )
 @click.option(
     "--outdir",

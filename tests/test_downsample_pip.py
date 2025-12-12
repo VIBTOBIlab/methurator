@@ -9,7 +9,6 @@ def test_methurator_downsample(tmp_path):
     cmd = [
         "methurator",
         "downsample",
-        "--bam",
         "tests/data/Ecoli.csorted.bam",
         "--fasta",
         "tests/data/genome.fa",
