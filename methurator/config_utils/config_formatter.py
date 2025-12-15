@@ -20,6 +20,5 @@ class ConfigFormatter:
         self.rrbs = kwargs.get("rrbs")
         self.threads = kwargs.get("threads")
         self.keep_temporary_files = kwargs.get("keep_temporary_files")
-        self.cpgs_file = kwargs.get("cpgs_file")
-        self.reads_file = kwargs.get("reads_file")
+        self.summary = kwargs.get("summary")
         self.verbose = kwargs.get("verbose")
