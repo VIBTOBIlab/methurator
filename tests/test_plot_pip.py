@@ -9,9 +9,9 @@ def test_methurator_plot(tmp_path):
         "methurator",
         "plot",
         "-c",
-        "tests/data/cpgs_summary.csv",
+        "tests/data/methurator_cpgs_summary.csv",
         "-r",
-        "tests/data/reads_summary.csv",
+        "tests/data/methurator_reads_summary.csv",
         "--outdir",
         str(tmp_path),
     ]

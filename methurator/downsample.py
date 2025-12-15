@@ -1,4 +1,5 @@
 from methurator.downsample_utils.run_processing import run_processing
+from methurator.downsample_utils.yaml_summary import generate_yaml_summary
 from methurator.config_utils.config_formatter import ConfigFormatter
 from methurator.config_utils.config_validator import validate_parameters
 from methurator.config_utils.bam_utils import bam_to_list
@@ -51,13 +52,15 @@ console = Console()
     "--minimum-coverage",
     "-mc",
     default="3",
-    help="Minimum CpG coverage to estimate sequencing saturation. It can be either a single integer or a list of integers (e.g 1,3,5). Default: 3",
+    help="Minimum CpG coverage to estimate sequencing saturation. "
+    "It can be either a single integer or a list of integers (e.g 1,3,5). Default: 3",
 )
 @click.option(
     "--rrbs",
     is_flag=True,
     default=True,
-    help="If set to True, MethylDackel extract will consider the RRBS nature of the data adding the --keepDupes flag. Default: True",
+    help="If set to True, MethylDackel extract will consider the RRBS nature of the data "
+    "adding the --keepDupes flag. Default: True",
 )
 @click.option(
     "--threads",
@@ -110,8 +113,13 @@ def downsample(bams, **kwargs):
     # Load bam file(s) and run the downsampling
     csorted_bams = bam_to_list(configs)
     cpgs_df, reads_df = run_processing(csorted_bams, configs)
-    reads_df.to_csv(os.path.join(configs.outdir, "reads_summary.csv"), index=False)
-    cpgs_df.to_csv(os.path.join(configs.outdir, "cpgs_summary.csv"), index=False)
+    reads_df.to_csv(
+        os.path.join(configs.outdir, "methurator_reads_summary.csv"), index=False
+    )
+    cpgs_df.to_csv(
+        os.path.join(configs.outdir, "methurator_cpgs_summary.csv"), index=False
+    )
+    generate_yaml_summary(reads_df, cpgs_df, configs, configs.bam)
     vprint(f"[bold] ✅ Dumped summary files to {configs.outdir}.[/bold]", True)
 
     # Clean-up

@@ -1,6 +1,10 @@
 import subprocess
 import os
 import pandas as pd
+from rich.console import Console
+from rich.panel import Panel
+
+console = Console()
 
 
 def run_methyldackel(bam_path, pct, configs, cpgs_df):
@@ -32,7 +36,22 @@ def run_methyldackel(bam_path, pct, configs, cpgs_df):
 
     # Read the file dumped by MethylDackel
     file = prefix + "_CpG.bedGraph"
-    df = pd.read_csv(file, sep="\t", header=None, skiprows=1)
+
+    # Check if file has data (more than just header)
+    try:
+        df = pd.read_csv(file, sep="\t", header=None, skiprows=1)
+        if df.empty:
+            raise pd.errors.EmptyDataError("MethylDackel output file is empty")
+    except pd.errors.EmptyDataError:
+        warning_message = (
+            f"[bold red]⚠ MethylDackel Error[/bold red]\n\n"
+            f"MethylDackel produced no data for:\n"
+            f"[yellow]{bam_path}[/yellow]\n\n"
+            f"[dim]This may be due to chromosome mismatch with reference genome.[/dim]\n"
+            f"[bold]Skipping sample: {os.path.basename(bam_path)}[/bold]"
+        )
+        console.print(Panel(warning_message, border_style="red", expand=False))
+        return cpgs_df
 
     # gzip the file and return the stats
     subprocess.run(["gzip", "-f", f"{prefix}_CpG.bedGraph"])
