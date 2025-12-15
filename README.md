@@ -68,7 +68,7 @@ docker run quay.io/biocontainers/methurator:0.1.7--pyhdfd78af_0 methurator -h
 The `downsample` command performs BAM downsampling according to the specified percentages and coverage.
 
 ```bash
-methurator downsample --genome hg19 test_data/SRX1631721.markdup.sorted.csorted.bam
+methurator downsample --fasta tests/data/genome.fa tests/data/Ecoli.csorted.bam
 ```
 
 This command generates two summary files:
