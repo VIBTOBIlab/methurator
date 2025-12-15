@@ -51,7 +51,8 @@ def build_saturation_analysis(reads_df, cpgs_df):
 
             if fit_result["fit_success"]:
                 beta0, beta1 = fit_result["params"]
-                asymptote = fit_result["asymptote"]
+                # Round it to nearest integer (more realistic for CpG counts)
+                asymptote = round(fit_result["asymptote"])
 
                 # Check for invalid asymptote values
                 if not np.isfinite(asymptote) or asymptote <= 0:
@@ -71,6 +72,7 @@ def build_saturation_analysis(reads_df, cpgs_df):
                 for x, y in zip(x_data, y_data):
                     saturation_pct = float(round((y / asymptote) * 100, 1))
                     data_points.append([float(x), int(y), saturation_pct, False])
+                saturation_value_at_100 = saturation_pct
 
                 # Add predicted data points (same x values as plot_functions.py)
                 predicted_x = np.linspace(1.2, 2.0, 5)
@@ -88,6 +90,7 @@ def build_saturation_analysis(reads_df, cpgs_df):
                     "beta0": float(beta0),
                     "beta1": float(beta1),
                     "asymptote": int(round(asymptote)),
+                    "saturation": saturation_value_at_100,
                     "data": data_points,
                 }
             else:
