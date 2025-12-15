@@ -137,9 +137,9 @@ methurator plot \
   --reads_file output/methurator_reads_summary.csv
 ```
 
-Finally, you will get (within the output/plots) directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](assets/example.html)):
+Finally, you will get (within the output/plots) directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](docs/images/example.html)):
 
-![Plot preview](assets/example.png)
+![Plot preview](docs/images/example.png)
 
 ## 6. How do we compute the sequencing saturation?
 
