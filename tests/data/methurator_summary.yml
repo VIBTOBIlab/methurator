@@ -1,74 +1,86 @@
 methurator_summary:
   metadata:
-    date_generated: '2025-01-01T00:00:00'
-    methurator_version: 0.1.6
+    date_generated: '2025-12-15T11:17:19.544154'
+    methurator_version: 0.1.7
     command: methurator downsample
     options:
       bam_files:
-      - tests/data/test.bam
-      outdir: tests/data
+      - tests/data/Ecoli.csorted.bam
+      outdir: output/ecoli_output
       fasta: tests/data/genome.fa
       genome: null
       downsampling_percentages:
       - 0.1
-      - 0.25
-      - 0.5
-      - 0.75
-      - 1.0
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 1
       minimum_coverage: [1, 3]
       rrbs: true
-      threads: 8
+      threads: 6
       keep_temporary_files: false
   reads_summary:
-  - SRX1631721:
-    - [0.1, 2810148]
-    - [0.25, 7021874]
-    - [0.5, 14048420]
-    - [0.75, 21069604]
-    - [1.0, 28094582]
+  - Ecoli:
+    - [0.1, 2]
+    - [0.2, 4]
+    - [0.4, 6]
+    - [0.6, 6]
+    - [0.8, 8]
+    - [1.0, 10]
   cpgs_summary:
-  - SRX1631721:
+  - Ecoli:
     - minimum_coverage: 1
       data:
-      - [0.1, 560378]
-      - [0.25, 1355444]
-      - [0.5, 2585254]
-      - [0.75, 3705085]
-      - [1.0, 4722591]
+      - [0.1, 11]
+      - [0.2, 18]
+      - [0.4, 21]
+      - [0.6, 21]
+      - [0.8, 32]
+      - [1.0, 41]
     - minimum_coverage: 3
       data:
-      - [0.1, 962]
-      - [0.25, 4475]
-      - [0.5, 23503]
-      - [0.75, 65929]
-      - [1.0, 135634]
+      - [0.1, 0]
+      - [0.2, 0]
+      - [0.4, 0]
+      - [0.6, 0]
+      - [0.8, 0]
+      - [1.0, 0]
   saturation_analysis:
-  - SRX1631721:
+  - Ecoli:
     - minimum_coverage: 1
       fit_success: true
-      beta0: 7791603.580460751
-      beta1: 0.6910436060458282
-      asymptote: 12239022
+      beta0: 32.03862722586334
+      beta1: 2.07723659313063
+      asymptote: 50
       data:
       - [0.0, 0, 0.0, false]
-      - [0.1, 560378, 4.6, false]
-      - [0.25, 1355444, 11.1, false]
-      - [0.5, 2585254, 21.1, false]
-      - [0.75, 3705085, 30.3, false]
-      - [1.0, 4722591, 38.6, false]
-      - [1.2, 5394322, 44.1, true]
-      - [1.4, 5990661, 48.9, true]
-      - [1.6, 6510193, 53.2, true]
-      - [1.8, 6963039, 56.9, true]
-      - [2.0, 7358730, 60.1, true]
+      - [0.1, 11, 21.9, false]
+      - [0.2, 18, 35.8, false]
+      - [0.4, 21, 41.7, false]
+      - [0.6, 21, 41.7, false]
+      - [0.8, 32, 63.6, false]
+      - [1.0, 41, 81.5, false]
+      - [1.2, 38, 75.7, true]
+      - [1.4, 40, 78.9, true]
+      - [1.6, 41, 81.4, true]
+      - [1.8, 42, 83.4, true]
+      - [2.0, 43, 85.0, true]
     - minimum_coverage: 3
-      fit_success: false
-      fit_error: 'Optimal parameters not found: Number of calls to function has reached
-        maxfev = 600.'
+      fit_success: true
+      beta0: 2.681482979140092e-33
+      beta1: 0.9999999277913418
+      asymptote: 0
       data:
-      - [0.0, 0, null, false]
-      - [0.1, 962, null, false]
-      - [0.25, 4475, null, false]
-      - [0.5, 23503, null, false]
-      - [0.75, 65929, null, false]
-      - [1.0, 135634, null, false]
+      - [0.0, 0, 0.0, false]
+      - [0.1, 0, 0.0, false]
+      - [0.2, 0, 0.0, false]
+      - [0.4, 0, 0.0, false]
+      - [0.6, 0, 0.0, false]
+      - [0.8, 0, 0.0, false]
+      - [1.0, 0, 0.0, false]
+      - [1.2, 0, 55.8, true]
+      - [1.4, 0, 60.5, true]
+      - [1.6, 0, 64.4, true]
+      - [1.8, 0, 67.7, true]
+      - [2.0, 0, 70.5, true]
