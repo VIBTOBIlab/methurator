@@ -108,3 +108,15 @@ def test_methurator_downsample(tmp_path):
         assert first_coverage_entry["asymptote"] in [50, 51]
         assert first_coverage_entry["beta0"] >= 32
         assert first_coverage_entry["beta1"] >= 2
+
+        # Corresponds to minimum_coverage == 3
+        second_coverage_entry = first_saturation_entry[sample_name][1]
+        assert isinstance(second_coverage_entry, dict)
+        assert "minimum_coverage" in second_coverage_entry
+        assert "fit_success" in second_coverage_entry
+        assert "data" in second_coverage_entry
+        # Each data entry should be
+        # [downsampling_percentage, reads, saturation, fit_success]
+        assert len(second_coverage_entry["data"][0]) == 4
+        assert second_coverage_entry["minimum_coverage"] == 3
+        assert second_coverage_entry["fit_success"] is False
