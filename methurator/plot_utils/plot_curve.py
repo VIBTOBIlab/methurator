@@ -1,31 +1,155 @@
 import pandas as pd
 import os
-from methurator.plot_utils.plot_checker import plot_checker
+import yaml
+import numpy as np
+from methurator.plot_utils.plot_functions import plot_fitted_data, plot_fallback
+
+
+class PlotObject:
+    def __init__(self, output_path):
+        self.x_data = []
+        self.y_data = []
+        self.asymptote = str
+        self.params = []
+        self.title = str
+        self.reads = int
+        self.error_msg = None
+        self.output_path = output_path
+
+
+def load_yaml(path):
+    with open(path) as f:
+        return yaml.safe_load(f)
+
+
+def reads_to_df(reads_summary):
+    """
+    Convert the reads summary section from YAML into a pandas DataFrame.
+    """
+    rows = []
+    for sample_block in reads_summary:
+        for sample, values in sample_block.items():
+            for percentage, reads in values:
+                rows.append(
+                    {"Sample": sample, "Percentage": percentage, "Read_Count": reads}
+                )
+
+    return pd.DataFrame(rows)
+
+
+def cpgs_to_df(cpgs_summary):
+    """
+    Convert the CpGs summary section from YAML into a pandas DataFrame.
+    """
+    rows = []
+    for sample_block in cpgs_summary:
+        for sample, coverages in sample_block.items():
+            for cov_block in coverages:
+                cov = cov_block["minimum_coverage"]
+
+                for percentage, cpgs in cov_block["data"]:
+                    rows.append(
+                        {
+                            "Sample": sample,
+                            "Coverage": cov,
+                            "Percentage": percentage,
+                            "CpG_Count": cpgs,
+                        }
+                    )
+
+    return pd.DataFrame(rows)
+
+
+def build_saturation_lookup(saturation_summary):
+    """
+    Build a lookup dictionary for saturation model parameters,
+    indexed by (sample, minimum_coverage).
+    """
+    lookup = {}
+    for sample_block in saturation_summary:
+        for sample, coverages in sample_block.items():
+            for cov_block in coverages:
+                cov = cov_block["minimum_coverage"]
+
+                lookup[(sample, cov)] = {
+                    "fit_success": cov_block.get("fit_success"),
+                    "beta0": cov_block.get("beta0"),
+                    "beta1": cov_block.get("beta1"),
+                    "asymptote": cov_block.get("asymptote"),
+                    "fit_error": cov_block.get("fit_error"),
+                }
+
+    return lookup
 
 
 def plot_curve(configs):
+    """
+    Main plotting function.
+    Reads summary statistics, merges data, and generates saturation plots
+    per sample and coverage level.
+    """
 
-    # Takes in input the CpGs and Reads stats dataframes and merge them
-    cpgs_file = pd.read_csv(configs.cpgs_file)
-    reads_file = pd.read_csv(configs.reads_file)
-    data = pd.merge(cpgs_file, reads_file, on=["Sample", "Percentage"])
+    # Load YAML summary
+    summary = load_yaml(configs.summary)["methurator_summary"]
 
-    # Loop over each sample and minimum coverage value to create plots
+    # Convert YAML summaries to DataFrames
+    reads_df = reads_to_df(summary["reads_summary"])
+    cpgs_df = cpgs_to_df(summary["cpgs_summary"])
+
+    # Merge CpGs and Reads data on Sample and Percentage
+    data = pd.merge(cpgs_df, reads_df, on=["Sample", "Percentage"])
+
+    # Build saturation model lookup table
+    sat_lookup = build_saturation_lookup(summary["saturation_analysis"])
+
+    # Iterate over samples
     for sample in data["Sample"].unique():
         sample_data = data[data["Sample"] == sample]
+
+        # Iterate over coverage values
         for min_val in sample_data["Coverage"].unique():
 
-            # Subset and sort data for plotting
+            # Subset data for the current sample and coverage
             subset = sample_data[sample_data["Coverage"] == min_val].sort_values(
                 by="Percentage"
             )
 
-            # Create output directory for plots if not exists
+            # Retrieve saturation fit information
+            sat_info = sat_lookup.get((sample, min_val), {})
+            fit_success = sat_info.get("fit_success")
+            if fit_success:
+                beta0 = sat_info["beta0"]
+                beta1 = sat_info["beta1"]
+                asymptote = sat_info["asymptote"]
+                fit_error = None
+            else:
+                beta0 = beta1 = asymptote = None
+                fit_error = sat_info["fit_error"]
+
+            # Create output directory for plots if it does not exist
             plot_dir = os.path.join(configs.outdir, "plots")
             os.makedirs(plot_dir, exist_ok=True)
 
-            # Define plot path
+            # Define output plot path
             plot_path = f"{plot_dir}/{sample}_{min_val}x_plot.html"
 
-            # Checks whether the model fits correctly, then generate plot
-            plot_checker(subset, plot_path)
+            # Initialize PlotObject
+            plot_obj = PlotObject(plot_path)
+
+            # Add a zero point to data
+            plot_obj.x_data = np.array([0] + subset["Percentage"].tolist())
+            plot_obj.y_data = np.array([0] + subset["CpG_Count"].tolist())
+
+            # Store fit parameters and metadata in the plot object
+            # and set plot title and read count
+            plot_obj.params = beta0, beta1
+            plot_obj.asymptote = asymptote
+            plot_obj.error_msg = fit_error
+            plot_obj.title = data["Sample"].iloc[0]
+            plot_obj.reads = int(data["Read_Count"].iloc[-1])
+
+            # Generate plot depending on fit success
+            if fit_success:
+                plot_fitted_data(plot_obj)
+            else:
+                plot_fallback(plot_obj)
