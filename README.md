@@ -71,10 +71,11 @@ The `downsample` command performs BAM downsampling according to the specified pe
 methurator downsample --fasta tests/data/genome.fa tests/data/Ecoli.csorted.bam
 ```
 
-This command generates two summary files:
+This command generates three summary files:
 
 - **CpG summary** — number of unique CpGs detected in each downsampled BAM
 - **Reads summary** — number of reads in each downsampled BAM
+- **Summary yml** - a YAML file which contains all data above in a single file. It also contains run metadata for the sake of reproducibility.
 
 Example outputs can be found in [`tests/data`](https://github.com/VIBTOBIlab/methurator/tree/main/tests/data).
 
@@ -86,8 +87,7 @@ Use the `plot` command to visualize sequencing saturation:
 
 ```bash
 methurator plot \
-  --cpgs_file tests/data/methurator_cpgs_summary.csv \
-  --reads_file tests/data/methurator_reads_summary.csv
+  --summary tests/data/methurator_summary.yml
 ```
 
 ---
@@ -114,14 +114,13 @@ methurator plot \
 
 ### `plot` command
 
-| Argument         | Description                              | Default    |
-| ---------------- | ---------------------------------------- | ---------- |
-| `--cpgs_file`    | Path to the CpG coverage summary file.   |            |
-| `--reads_file`   | Path to the reads coverage summary file. |            |
-| `--outdir`, `-o` | Output directory.                        | `./output` |
-| `--verbose`      | Enable verbose logging.                  | `False`    |
-| `--help` , `-h`  | Print the help message and exit.         |            |
-| `--version`      | Print the package version.               |            |
+| Argument          | Description                      | Default    |
+| ----------------- | -------------------------------- | ---------- |
+| `--summary`, `-s` | Path to the YML summary file.    |            |
+| `--outdir`, `-o`  | Output directory.                | `./output` |
+| `--verbose`       | Enable verbose logging.          | `False`    |
+| `--help` , `-h`   | Print the help message and exit. |            |
+| `--version`       | Print the package version.       |            |
 
 ---
 
@@ -133,8 +132,7 @@ methurator downsample --genome hg19 my_sample.bam
 
 # Step 2: Plot saturation curve
 methurator plot \
-  --cpgs_file output/methurator_cpgs_summary.csv \
-  --reads_file output/methurator_reads_summary.csv
+  --summary output/methurator_summary.yml
 ```
 
 Finally, you will get (within the output/plots) directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](docs/images/example.html)):
