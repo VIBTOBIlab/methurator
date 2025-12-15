@@ -8,10 +8,8 @@ def test_methurator_plot(tmp_path):
     cmd = [
         "methurator",
         "plot",
-        "-c",
-        "tests/data/methurator_cpgs_summary.csv",
-        "-r",
-        "tests/data/methurator_reads_summary.csv",
+        "-s",
+        "tests/data/methurator_summary.yml",
         "--outdir",
         str(tmp_path),
     ]
