@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 import yaml
-import numpy as np
 from methurator.plot_utils.plot_functions import plot_fitted_data, plot_fallback
 
 
@@ -9,7 +8,10 @@ class PlotObject:
     def __init__(self, output_path):
         self.x_data = []
         self.y_data = []
+        self.observed_y = []
         self.asymptote = str
+        self.saturations = []
+        self.is_predicted = []
         self.params = []
         self.title = str
         self.reads = int
@@ -77,6 +79,7 @@ def build_saturation_lookup(saturation_summary):
                     "beta1": cov_block.get("beta1"),
                     "asymptote": cov_block.get("asymptote"),
                     "fit_error": cov_block.get("fit_error"),
+                    "data": cov_block.get("data"),
                 }
 
     return lookup
@@ -117,6 +120,7 @@ def plot_curve(configs):
             # Retrieve saturation fit information
             sat_info = sat_lookup.get((sample, min_val), {})
             fit_success = sat_info.get("fit_success")
+            data_points = sat_info.get("data")
             if fit_success:
                 beta0 = sat_info["beta0"]
                 beta1 = sat_info["beta1"]
@@ -137,8 +141,11 @@ def plot_curve(configs):
             plot_obj = PlotObject(plot_path)
 
             # Add a zero point to data
-            plot_obj.x_data = np.array([0] + subset["Percentage"].tolist())
-            plot_obj.y_data = np.array([0] + subset["CpG_Count"].tolist())
+            plot_obj.x_data = [x[0] for x in data_points]
+            plot_obj.y_data = [y[1] for y in data_points]
+            plot_obj.observed_y = [0] + subset.CpG_Count.tolist()
+            plot_obj.saturations = [sat[2] for sat in data_points]
+            plot_obj.is_predicted = [pred[3] for pred in data_points]
 
             # Store fit parameters and metadata in the plot object
             # and set plot title and read count
@@ -146,7 +153,7 @@ def plot_curve(configs):
             plot_obj.asymptote = asymptote
             plot_obj.error_msg = fit_error
             plot_obj.title = data["Sample"].iloc[0]
-            plot_obj.reads = int(data["Read_Count"].iloc[-1])
+            plot_obj.reads = int(subset["Read_Count"].iloc[-1])
 
             # Generate plot depending on fit success
             if fit_success:
