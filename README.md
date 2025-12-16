@@ -137,7 +137,7 @@ methurator plot \
 
 Finally, you will get (within the output/plots) directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](https://github.com/VIBTOBIlab/methurator/tree/main/docs/images/example.html)):
 
-![Plot preview](https://github.com/VIBTOBIlab/methurator/tree/main/docs/images/example.png)
+![Plot preview](https://raw.githubusercontent.com/VIBTOBIlab/methurator/main/docs/images/example.png)
 
 ## 6. How do we compute the sequencing saturation?
 
