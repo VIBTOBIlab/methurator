@@ -1,6 +1,5 @@
 import numpy as np
 from rich.console import Console
-from methurator.plot_utils.math_model import asymptotic_growth
 import plotly.graph_objs as go
 
 # ===============================================================
@@ -33,7 +32,7 @@ def make_base_plot(title, xaxis="Number of reads", yaxis="Number of CpGs"):
         width=950,
         height=620,
         template="plotly_white",
-        legend=dict(yanchor="bottom", y=0.01, xanchor="right", x=0.99),
+        showlegend=False,
     )
     return fig
 
@@ -52,6 +51,7 @@ def plot_fallback(plot_obj):
             name="Observed data",
             customdata=np.column_stack((y_cpgs, plot_obj.x_data)),
             hovertemplate=(
+                "<b>Observed</b><br>"
                 "Number of reads: %{x}<br>"
                 "Number CpGs: %{customdata[0]}<br>"
                 "Downsampling: %{customdata[1]}"
@@ -60,41 +60,55 @@ def plot_fallback(plot_obj):
         )
     )
 
-    html_path = plot_obj.output_path.replace(".svg", ".html")
-    fig.write_html(html_path)
-    print(f"⚠️ Curve fitting failed but plot saved anyway to: {html_path}.")
+    fig.write_html(plot_obj.output_path)
+    print(f"⚠️ Curve fitting failed but plot saved anyway to: {plot_obj.output_path}.")
 
 
 def plot_fitted_data(plot_obj):
-    """Plot observed and predicted CpG values based on fitted asymptotic growth."""
-    # Extended x-data for predictions
-    x_all = np.append(plot_obj.x_data, np.linspace(1.2, 2.0, 5))
-    y_all = asymptotic_growth(x_all, *plot_obj.params)
+    """Plot observed and predicted CpG values based on fitted asymptotic growth.
+    Arguments:
+        plot_obj: PlotObject containing all necessary data for plotting.
+        x_all: List of downsampling percentages (going from 0.0 to 2.0).
+        x_all_obs: List of observed downsampling percentages (going from 0.0 to 1.0).
+        y_all: List of CpG counts corresponding to x_all.
+        y_all_obs: List of observed CpG counts (corresponding to x_all_obs). While y_all
+        contains only predicted values even for the observed points, y_all_obs contains
+        the actual observed CpG counts.
+        reads_all_fmt: list of number of reads that correspond to x_all, formatted to
+        human-readable strings.
+        n_obs: Number of observed data points.
+    """
+    # Extract data from plot object
+    x_all = plot_obj.x_data
+    x_all_obs = [x for x in x_all if x <= 1.0]
+    y_all = plot_obj.y_data
+    y_all_obs = plot_obj.observed_y
 
-    reads_all = [x * plot_obj.reads for x in x_all]
-    reads_fmt = fmt_list(reads_all)
-    cpgs_fmt = fmt_list(y_all)
-    saturation = np.round((y_all / plot_obj.asymptote) * 100, 0)
-
-    n_obs = len(plot_obj.x_data) - 1
-
-    obs = slice(None, n_obs + 2)
-    pred = slice(n_obs + 1, None)
-    fig = make_base_plot(plot_obj.title)
+    # Format the data to human-readable strings
+    y_all_fmt = fmt_list(y_all)
+    y_all_obs_fmt = fmt_list(y_all_obs)
+    reads_all_fmt = fmt_list([x * plot_obj.reads for x in x_all])
+    n_obs = plot_obj.is_predicted.count(False)
 
     # Observed
+    fig = make_base_plot(plot_obj.title)
     fig.add_trace(
         go.Scatter(
-            x=reads_fmt[obs],
-            y=y_all[obs],
-            mode="lines",
+            x=reads_all_fmt[0:n_obs],
+            y=y_all_obs,
+            mode="markers",
             name="Observed data",
-            customdata=np.column_stack((cpgs_fmt[obs], saturation[obs], x_all[obs])),
+            marker=dict(
+                size=9,
+                color="#d62728",
+                line=dict(width=1, color="white"),
+            ),
+            customdata=np.column_stack((y_all_obs_fmt, x_all_obs)),
             hovertemplate=(
+                "<b>Observed</b><br>"
                 "Number of reads: %{x}<br>"
                 "Number CpGs: %{customdata[0]}<br>"
-                "Saturation: %{customdata[1]}%<br>"
-                "Downsampling: %{customdata[2]}"
+                "Downsampling: %{customdata[1]}"
                 "<extra></extra>"
             ),
         )
@@ -103,29 +117,35 @@ def plot_fitted_data(plot_obj):
     # Predicted
     fig.add_trace(
         go.Scatter(
-            x=reads_fmt[pred],
-            y=y_all[pred],
-            mode="lines+markers",
+            x=reads_all_fmt,
+            y=y_all,
+            mode="lines",
             name="Predicted data",
-            customdata=np.column_stack((cpgs_fmt[pred], saturation[pred])),
+            customdata=np.column_stack((y_all_fmt, plot_obj.saturations)),
             hovertemplate=(
+                "<b>Predicted</b><br>"
                 "Number of reads: %{x}<br>"
                 "Number CpGs: %{customdata[0]}<br>"
-                "Saturation: %{customdata[1]}%"
+                "Saturation: %{customdata[1]}%<br>"
                 "<extra></extra>"
             ),
-            line=dict(dash="dash"),
+            line=dict(color="#1f77b4"),
         )
     )
 
-    # Asymptote line
+    # Asymptote line: corresponds to theoretical maximum CpG count
+    cpgs_found_index = n_obs - 1
+    asympt_sat = plot_obj.saturations[cpgs_found_index]
     fig.add_hline(
         y=plot_obj.asymptote,
         line_dash="dash",
-        annotation_text=f"Asymptote = {human_readable(plot_obj.asymptote)} CpGs",
-        annotation_position="bottom right",
+        annotation_text=(
+            f"Asymptote = {human_readable(plot_obj.asymptote)} CpGs "
+            f"(Saturation = {asympt_sat}%)"
+        ),
+        annotation_position="top right",
+        annotation_yshift=10,  # push slightly above
     )
 
-    html_path = plot_obj.output_path.replace(".svg", ".html")
-    fig.write_html(html_path)
-    print(f"✅ Plot saved to: {html_path}")
+    fig.write_html(plot_obj.output_path)
+    print(f"✅ Plot saved to: {plot_obj.output_path}")

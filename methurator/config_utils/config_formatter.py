@@ -12,7 +12,6 @@ class ConfigFormatter:
 
     def __init__(self, **kwargs):
         self.bam = kwargs.get("bam")
-        self.bamdir = kwargs.get("bamdir")
         self.outdir = kwargs.get("outdir")
         self.fasta = kwargs.get("fasta")
         self.genome = kwargs.get("genome")
@@ -21,6 +20,5 @@ class ConfigFormatter:
         self.rrbs = kwargs.get("rrbs")
         self.threads = kwargs.get("threads")
         self.keep_temporary_files = kwargs.get("keep_temporary_files")
-        self.cpgs_file = kwargs.get("cpgs_file")
-        self.reads_file = kwargs.get("reads_file")
+        self.summary = kwargs.get("summary")
         self.verbose = kwargs.get("verbose")

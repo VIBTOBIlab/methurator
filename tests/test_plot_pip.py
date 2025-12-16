@@ -8,10 +8,8 @@ def test_methurator_plot(tmp_path):
     cmd = [
         "methurator",
         "plot",
-        "-c",
-        "tests/data/cpgs_summary.csv",
-        "-r",
-        "tests/data/reads_summary.csv",
+        "-s",
+        "tests/data/methurator_summary.yml",
         "--outdir",
         str(tmp_path),
     ]
@@ -25,7 +23,9 @@ def test_methurator_plot(tmp_path):
     ), f"Command failed:\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
 
     # Path of expected output
-    plot = tmp_path / "plots/SRX1631721_1x_plot.html"
+    plot1 = tmp_path / "plots/Ecoli_1x_plot.html"
+    plot2 = tmp_path / "plots/Ecoli_3x_plot.html"
 
     # Assert that the plot was created
-    assert plot.exists(), f"{plot} not found"
+    assert plot1.exists(), f"{plot1} not found"
+    assert plot2.exists(), f"{plot2} not found"

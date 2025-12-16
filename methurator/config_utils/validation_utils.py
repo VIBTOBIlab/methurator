@@ -2,9 +2,37 @@ import rich_click as click
 from methurator.config_utils.verbose_utils import vprint
 from methurator.config_utils.download_reference import get_reference
 import os
+import shutil
 import subprocess
+import sys
 import pysam
-import pandas as pd
+from rich.console import Console
+from rich.panel import Panel
+import yaml
+
+
+def validate_dependencies():
+    """Check that required external tools (samtools, MethylDackel) are installed."""
+    console = Console()
+    missing = []
+
+    if shutil.which("samtools") is None:
+        missing.append("samtools")
+
+    if shutil.which("MethylDackel") is None:
+        missing.append("MethylDackel")
+
+    if missing:
+        tools_list = ", ".join(missing)
+        console.print(
+            Panel(
+                f"[red bold]Missing required dependencies: {tools_list}[/red bold]",
+                title="[red]Dependency Error[/red]",
+                border_style="red",
+                expand=False,
+            )
+        )
+        sys.exit(1)
 
 
 def mincoverage_checker(coverages):
@@ -72,15 +100,6 @@ def validate_reference(configs):
         return fasta_file
 
 
-def validate_bamdir(bam_dir):
-    # Check if directory exists
-    if not os.path.exists(bam_dir):
-        raise click.UsageError(f"Directory does not exist: {bam_dir}")
-
-    if not os.path.isdir(bam_dir):
-        raise click.UsageError(f"Path is not a directory: {bam_dir}")
-
-
 def ensure_coordinated_sorted(bam_file, configs):
 
     # Check if file exists
@@ -107,43 +126,65 @@ def ensure_coordinated_sorted(bam_file, configs):
     return out
 
 
-def validate_read_summary(read_summary):
-    REQUIRED_COLUMNS = {"Sample", "Percentage", "Read_Count"}
-    # Check if file is CSV by extension
-    if not read_summary.lower().endswith(".csv"):
-        raise click.UsageError(f"The file '{read_summary}' is not a CSV file.")
+def validate_summary_yaml(yaml_path):
+    """
+    Validate that the summary YAML file follows the expected structure.
+    """
+    required_top_keys = ["methurator_summary"]
+    required_metadata_keys = [
+        "date_generated",
+        "methurator_version",
+        "command",
+        "options",
+    ]
+    required_options_keys = [
+        "bam_files",
+        "outdir",
+        "fasta",
+        "genome",
+        "downsampling_percentages",
+        "minimum_coverage",
+        "rrbs",
+        "threads",
+        "keep_temporary_files",
+    ]
 
-    # Check file exists
-    if not os.path.isfile(read_summary):
-        raise click.UsageError(f"File '{read_summary}' does not exist.")
+    with open(yaml_path) as f:
+        content = yaml.safe_load(f)
 
-    # Try reading file
-    df = pd.read_csv(read_summary, nrows=0)
-
-    # Validate required columns
-    missing_cols = REQUIRED_COLUMNS - set(df.columns)
-    if missing_cols:
+    # Top-level key
+    if not all(k in content for k in required_top_keys):
         raise click.UsageError(
-            f"Missing required columns in the reads summary file: {', '.join(missing_cols)}"
+            f"YAML file must contain top-level keys: {required_top_keys}"
         )
 
-
-def validate_cpgs_summary(cpgs_summary):
-    REQUIRED_COLUMNS = {"Sample", "Percentage", "Coverage", "CpG_Count"}
-    # Check if file is CSV by extension
-    if not cpgs_summary.lower().endswith(".csv"):
-        raise click.UsageError(f"The file '{cpgs_summary}' is not a CSV file.")
-
-    # Check file exists
-    if not os.path.isfile(cpgs_summary):
-        raise click.UsageError(f"File '{cpgs_summary}' does not exist.")
-
-    # Try reading file
-    df = pd.read_csv(cpgs_summary, nrows=0)
-
-    # Validate required columns
-    missing_cols = REQUIRED_COLUMNS - set(df.columns)
-    if missing_cols:
+    # Metadata
+    summary = content["methurator_summary"]
+    metadata = summary.get("metadata")
+    if not metadata:
+        raise click.UsageError("Missing 'metadata' section in methurator_summary")
+    if not all(k in metadata for k in required_metadata_keys):
         raise click.UsageError(
-            f"Missing required columns in the CpGs summary file: {', '.join(missing_cols)}"
+            f"'metadata' must contain keys: {required_metadata_keys}"
         )
+
+    options = metadata.get("options", {})
+    if not all(k in options for k in required_options_keys):
+        raise click.UsageError(
+            f"'metadata.options' must contain keys: {required_options_keys}"
+        )
+
+    # Reads summary
+    reads_summary = summary.get("reads_summary")
+    if reads_summary is None:
+        raise click.UsageError("Missing 'reads_summary' section")
+
+    # cpgs summary
+    cpgs_summary = summary.get("cpgs_summary")
+    if cpgs_summary is None:
+        raise click.UsageError("Missing 'cpgs_summary' section")
+
+    # Saturation analysis
+    saturation_analysis = summary.get("saturation_analysis")
+    if saturation_analysis is None:
+        raise click.UsageError("Missing 'saturation_analysis' section")

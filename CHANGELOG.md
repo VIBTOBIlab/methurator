@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [v0.1.7](https://github.com/VIBTOBIlab/methurator/tree/v0.1.7) — 2025-12-01
+
+- Made BAM input files positional arguments.
+- Slightly updated the sequencing saturation plot.
+- Thanks to @ewels for adding a new YAML output file which contains all data in a single file. It also contains run metadata: date, tool version, options etc. for reproducibility and future MultiQC support. An example [here](tests/data/methurator_summary.yml).
+- Thanks to @ewels again for some CLI teaks: docstrings for CLI functions, to give intro text; metavars in the help string, to avoid wide column due to --genome options; moved the tool subcommands above --help and --version. Finally, replaced static panel with dynamic Rich progress bar.
+- Due to the restructuring above, now `methurator plot` command takes in input the methurator_summary.yml file, to avoid calculating again the sequencing saturation curve.
+
 ## [v0.1.6](https://github.com/VIBTOBIlab/methurator/tree/v0.1.6) — 2025-12-01
 
 - Removed `--bamdir` option: if you want to specify more than 1 bam file within a directory you can now simply use the same `--bam` option, specifying all bam files (e.g. --bam files/\*.bam)
