@@ -4,7 +4,10 @@ import importlib.metadata
 import numpy as np
 import pandas as pd
 from datetime import datetime
-from methurator.plot_utils.math_model import asymptotic_growth, fit_saturation_model
+from methurator.downsample_utils.math_model import (
+    asymptotic_growth,
+    fit_saturation_model,
+)
 
 
 def _represent_compact_list(dumper, data):
@@ -26,7 +29,7 @@ def build_saturation_analysis(reads_df, cpgs_df):
     """
     # Merge reads and cpgs data
     data = pd.merge(cpgs_df, reads_df, on=["Sample", "Percentage"])
-
+    print(data)
     saturation_data = []
 
     for sample in data["Sample"].unique():
@@ -52,6 +55,7 @@ def build_saturation_analysis(reads_df, cpgs_df):
             if fit_result["fit_success"]:
                 beta0, beta1 = fit_result["params"]
                 # Round it to nearest integer (more realistic for CpG counts)
+                # Calculate saturation value at 0% downsampling
                 asymptote = round(fit_result["asymptote"])
 
                 # Check for invalid asymptote values
@@ -68,21 +72,21 @@ def build_saturation_analysis(reads_df, cpgs_df):
                     coverage_list.append(coverage_entry)
                     continue
 
-                # Add observed data points
-                for x, y in zip(x_data, y_data):
-                    saturation_pct = float(round((y / asymptote) * 100, 1))
-                    data_points.append([float(x), int(y), saturation_pct, False])
-                saturation_value_at_100 = saturation_pct
-
                 # Add predicted data points (same x values as plot_functions.py)
                 predicted_x = np.linspace(1.2, 2.0, 5)
-                predicted_y = asymptotic_growth(predicted_x, beta0, beta1)
-                for x, y in zip(predicted_x, predicted_y):
+                x_all = np.concatenate([x_data, predicted_x])
+                predicted_y = asymptotic_growth(x_all, beta0, beta1)
+                for x, y in zip(x_all, predicted_y):
                     # Skip invalid predicted values
                     if not np.isfinite(y):
                         continue
                     saturation_pct = float(round((y / asymptote) * 100, 1))
-                    data_points.append([float(x), int(round(y)), saturation_pct, True])
+                    if x == 1:
+                        saturation_value_at_100 = saturation_pct
+                    is_predicted = False if x in x_data else True
+                    data_points.append(
+                        [float(x), int(round(y)), saturation_pct, is_predicted]
+                    )
 
                 coverage_entry = {
                     "minimum_coverage": int(coverage),
