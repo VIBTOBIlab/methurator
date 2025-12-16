@@ -95,11 +95,9 @@ def plot_curve(configs):
     # Load YAML summary
     summary = load_yaml(configs.summary)["methurator_summary"]
 
-    # Convert YAML summaries to DataFrames
+    # Convert YAML summaries to DataFrames and merge them
     reads_df = reads_to_df(summary["reads_summary"])
     cpgs_df = cpgs_to_df(summary["cpgs_summary"])
-
-    # Merge CpGs and Reads data on Sample and Percentage
     data = pd.merge(cpgs_df, reads_df, on=["Sample", "Percentage"])
 
     # Build saturation model lookup table
@@ -117,7 +115,8 @@ def plot_curve(configs):
                 by="Percentage"
             )
 
-            # Retrieve saturation fit information
+            # Retrieve saturation fit information from methurator_summary.yml
+            # saturation_analysis section
             sat_info = sat_lookup.get((sample, min_val), {})
             fit_success = sat_info.get("fit_success")
             data_points = sat_info.get("data")
@@ -137,22 +136,21 @@ def plot_curve(configs):
             # Define output plot path
             plot_path = f"{plot_dir}/{sample}_{min_val}x_plot.html"
 
-            # Initialize PlotObject
+            # Initialize PlotObject and populate it with data
             plot_obj = PlotObject(plot_path)
-
-            # Add a zero point to data
             plot_obj.x_data = [x[0] for x in data_points]
             plot_obj.y_data = [y[1] for y in data_points]
+            # observed_y contains only the observed CpG counts
+            # while y_data contains predicted CpG counts for all points
+            # even the observed ones
             plot_obj.observed_y = [0] + subset.CpG_Count.tolist()
             plot_obj.saturations = [sat[2] for sat in data_points]
             plot_obj.is_predicted = [pred[3] for pred in data_points]
-
-            # Store fit parameters and metadata in the plot object
-            # and set plot title and read count
             plot_obj.params = beta0, beta1
             plot_obj.asymptote = asymptote
             plot_obj.error_msg = fit_error
             plot_obj.title = data["Sample"].iloc[0]
+            # Total number of reads at 0% downsampling (raw bam file)
             plot_obj.reads = int(subset["Read_Count"].iloc[-1])
 
             # Generate plot depending on fit success
