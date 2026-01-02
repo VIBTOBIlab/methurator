@@ -29,7 +29,6 @@ def build_saturation_analysis(reads_df, cpgs_df):
     """
     # Merge reads and cpgs data
     data = pd.merge(cpgs_df, reads_df, on=["Sample", "Percentage"])
-    print(data)
     saturation_data = []
 
     for sample in data["Sample"].unique():
