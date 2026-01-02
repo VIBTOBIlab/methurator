@@ -55,8 +55,8 @@ conda activate methurator_env
 ### **Option 3: Use the BioContainer**
 
 ```bash
-docker pull quay.io/biocontainers/methurator:0.1.7--pyhdfd78af_0
-docker run quay.io/biocontainers/methurator:0.1.7--pyhdfd78af_0 methurator -h
+docker pull quay.io/biocontainers/methurator:0.1.8--pyhdfd78af_0
+docker run quay.io/biocontainers/methurator:0.1.8--pyhdfd78af_0 methurator -h
 ```
 
 ---
@@ -86,8 +86,7 @@ Example outputs can be found in [`tests/data`](https://github.com/VIBTOBIlab/met
 Use the `plot` command to visualize sequencing saturation:
 
 ```bash
-methurator plot \
-  --summary tests/data/methurator_summary.yml
+methurator plot --summary tests/data/methurator_summary.yml
 ```
 
 ---
@@ -96,19 +95,20 @@ methurator plot \
 
 ### `downsample` command
 
-| Argument                            | Description                                                                                                        | Default             |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
-| `BAM (positional)`                  | Path to a single `.bam` file or to multiple ones (e.g. `files/*.bam`).                                             | —                   |
-| `--outdir, -o`                      | Output directory.                                                                                                  | `./output`          |
-| `--fasta`                           | Path to the reference genome FASTA file. If not provided, it will be automatically downloaded based on `--genome`. | —                   |
-| `--genome`                          | Genome used for alignment. Available: `hg19`, `hg38`, `GRCh37`, `GRCh38`, `mm10`, `mm39`.                          | —                   |
-| `--downsampling-percentages`, `-ds` | Comma-separated list of downsampling percentages between 0 and 1 (exclusive).                                      | `0.1,0.25,0.5,0.75` |
-| `--minimum-coverage`, `-mc`         | Minimum CpG coverage to consider for saturation. Can be a single integer or a list (e.g. `1,3,5`).                 | `3`                 |
-| `--rrbs`                            | If set to True, MethylDackel extract will consider the RRBS nature of the data adding the --keepDupes flag.        | True                |
-| `--keep-temporary-files`            | If set, temporary files will be kept after analysis.                                                               | `False`             |
-| `--verbose`                         | Enable verbose logging.                                                                                            | `False`             |
-| `--help` , `-h`                     | Print the help message and exit.                                                                                   |                     |
-| `--version`                         | Print the package version.                                                                                         |                     |
+| Argument                            | Description                                                                                                        | Default                     |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------------- |
+| `BAM (positional)`                  | Path to a single `.bam` file or to multiple ones (e.g. `files/*.bam`).                                             | —                           |
+| `--outdir, -o`                      | Output directory.                                                                                                  | `./output`                  |
+| `--fasta`                           | Path to the reference genome FASTA file. If not provided, it will be automatically downloaded based on `--genome`. | —                           |
+| `--genome`                          | Genome used for alignment. Available: `hg19`, `hg38`, `GRCh37`, `GRCh38`, `mm10`, `mm39`.                          | —                           |
+| `--downsampling-percentages`, `-ds` | Comma-separated list of downsampling percentages between 0 and 1 (exclusive).                                      | `0.1,0.2,0.4,0.6,0.8`       |
+| `--minimum-coverage`, `-mc`         | Minimum CpG coverage to consider for saturation. Can be a single integer or a list (e.g. `1,3,5`).                 | `3`                         |
+| `--rrbs`                            | If set to True, MethylDackel extract will consider the RRBS nature of the data adding the --keepDupes flag.        | True                        |
+| `--threads`, `-@`                   | Number of threads to use while downsampling                                                                        | Number of available threads |
+| `--keep-temporary-files`            | If set, temporary files will be kept after analysis.                                                               | `False`                     |
+| `--verbose`                         | Enable verbose logging.                                                                                            | `False`                     |
+| `--help` , `-h`                     | Print the help message and exit.                                                                                   |                             |
+| `--version`                         | Print the package version.                                                                                         |                             |
 
 ---
 
@@ -131,8 +131,7 @@ methurator plot \
 methurator downsample --genome hg19 my_sample.bam
 
 # Step 2: Plot saturation curve
-methurator plot \
-  --summary output/methurator_summary.yml
+methurator plot --summary output/methurator_summary.yml
 ```
 
 Finally, you will get (within the output/plots) directory an html file containing the sequencing saturation plot, similarly to the following example (also available as interactive html file [here](https://github.com/VIBTOBIlab/methurator/tree/main/docs/images/example.html)):
@@ -141,7 +140,7 @@ Finally, you will get (within the output/plots) directory an html file containin
 
 ## 6. How do we compute the sequencing saturation?
 
-To calculate the **sequencing saturation** of an RRBS sample, we adopt the following strategy. For each sample, we downsample it according to 4 different percentages (default: `0.1,0.25,0.5,0.75`). Then, we compute the number of **unique CpGs covered by at least 3 reads** and the **number of reads** at each downsampling percentage.
+To calculate the **sequencing saturation** of an RRBS sample, we adopt the following strategy. For each sample, we downsample it according to 4 different percentages (default: `0.1,0.2,0.4,0.6,0.8`). Then, we compute the number of **unique CpGs covered by at least 3 reads** and the **number of reads** at each downsampling percentage.
 
 We then fit the following curve using the `scipy.optimize.curve_fit` function:
 
