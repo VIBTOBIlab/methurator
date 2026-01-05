@@ -43,3 +43,14 @@ def validate_parameters(configs):
             f"[bold]Created output directory {configs.outdir}...[/bold]",
             configs.verbose,
         )
+
+
+def available_cpus():
+    try:
+        # Linux-only: returns the set of CPU IDs this process
+        # is allowed to run on (respects SLURM / cgroups / taskset)
+        return len(os.sched_getaffinity(0))
+    except AttributeError:
+        # Fallback for non-Linux systems or Python builds
+        # without sched_getaffinity support
+        return os.cpu_count()

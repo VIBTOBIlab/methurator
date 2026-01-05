@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v0.1.8](https://github.com/VIBTOBIlab/methurator/tree/v0.1.8) — 2026-01-03
+
+- Fixed a bug in the plot title naming logic that resulted in all plots having as title the first sample name present in the summary file.
+- Fixed some typos in the README.
+- Fixed the default number of threads that was not correctly working for HPC environments.
+
 ## [v0.1.7](https://github.com/VIBTOBIlab/methurator/tree/v0.1.7) — 2025-12-01
 
 - Made BAM input files positional arguments.

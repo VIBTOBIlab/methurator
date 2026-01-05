@@ -149,7 +149,7 @@ def plot_curve(configs):
             plot_obj.params = beta0, beta1
             plot_obj.asymptote = asymptote
             plot_obj.error_msg = fit_error
-            plot_obj.title = data["Sample"].iloc[0]
+            plot_obj.title = sample
             # Total number of reads at 0% downsampling (raw bam file)
             plot_obj.reads = int(subset["Read_Count"].iloc[-1])
 

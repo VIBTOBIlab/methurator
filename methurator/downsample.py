@@ -1,7 +1,7 @@
 from methurator.downsample_utils.run_processing import run_processing
 from methurator.downsample_utils.yaml_summary import generate_yaml_summary
 from methurator.config_utils.config_formatter import ConfigFormatter
-from methurator.config_utils.config_validator import validate_parameters
+from methurator.config_utils.config_validator import validate_parameters, available_cpus
 from methurator.config_utils.bam_utils import bam_to_list
 from methurator.config_utils.verbose_utils import vprint
 from methurator.config_utils.validation_utils import validate_dependencies
@@ -66,7 +66,7 @@ console = Console()
     "--threads",
     "-@",
     type=int,
-    default=os.cpu_count() - 2,
+    default=lambda: max(1, available_cpus() - 2),
     help="Number of threads to use. Default: all available threads - 2.",
 )
 @click.option(
