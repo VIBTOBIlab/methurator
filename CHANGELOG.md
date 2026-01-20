@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v0.1.9](https://github.com/VIBTOBIlab/methurator/tree/v0.1.9) —
+
+- Add `--no-rrbs` flag to set it on false when running the tool on non RRBS samples.
+
 ## [v0.1.8](https://github.com/VIBTOBIlab/methurator/tree/v0.1.8) — 2026-01-03
 
 - Fixed a bug in the plot title naming logic that resulted in all plots having as title the first sample name present in the summary file.

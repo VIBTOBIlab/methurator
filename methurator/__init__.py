@@ -4,7 +4,7 @@ Package for sequencing saturation analysis of
 sequencing methylation data.
 """
 
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 
 from .plot import plot
 from .downsample import downsample

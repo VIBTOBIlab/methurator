@@ -103,7 +103,7 @@ methurator plot --summary tests/data/methurator_summary.yml
 | `--genome`                          | Genome used for alignment. Available: `hg19`, `hg38`, `GRCh37`, `GRCh38`, `mm10`, `mm39`.                          | —                           |
 | `--downsampling-percentages`, `-ds` | Comma-separated list of downsampling percentages between 0 and 1 (exclusive).                                      | `0.1,0.2,0.4,0.6,0.8`       |
 | `--minimum-coverage`, `-mc`         | Minimum CpG coverage to consider for saturation. Can be a single integer or a list (e.g. `1,3,5`).                 | `3`                         |
-| `--rrbs`                            | If set to True, MethylDackel extract will consider the RRBS nature of the data adding the --keepDupes flag.        | True                        |
+| `--rrbs/--no-rrbs`                  | If set to True, MethylDackel extract will consider the RRBS nature of the data adding the --keepDupes flag.        | True                        |
 | `--threads`, `-@`                   | Number of threads to use while downsampling                                                                        | Number of available threads |
 | `--keep-temporary-files`            | If set, temporary files will be kept after analysis.                                                               | `False`                     |
 | `--verbose`                         | Enable verbose logging.                                                                                            | `False`                     |
