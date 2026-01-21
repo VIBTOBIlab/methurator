@@ -19,8 +19,7 @@ console = Console()
 @click.option(
     "--minimum-coverage",
     "-mc",
-    type=int,
-    default=1,
+    default="1",
     help="Minimum CpG coverage to estimate sequencing saturation. "
     "It can be either a single integer or a list of integers (e.g 1,3,5). Default: 3",
 )
@@ -30,15 +29,46 @@ console = Console()
     help="Step size taken when predicting future unique CpGs at increasing depth. Default: 0.05",
 )
 @click.option(
-    "--k-max",
-    default=27,
-    help="Maximum number of frequencies to consider when predicting future unique CpGs at increasing depth. Default: 27",
+    "--t-max",
+    type=float,
+    default=10.0,
+    help="Maximum value of t for prediction. Default: 10.0",
+)
+@click.option(
+    "--compute_ci",
+    is_flag=True,
+    help="Compute confidence intervals. Default: False",
 )
 @click.option(
     "--bootstrap-replicates",
     "-b",
-    default=100,
-    help="Number of bootstrap replicates. Default: 100",
+    type=int,
+    default=30,
+    help="Number of bootstrap replicates. Default: 30",
+)
+@click.option(
+    "--conf",
+    type=float,
+    default=0.95,
+    help="Confidence level for the bootstrap confidence intervals. Default: 0.95",
+)
+@click.option(
+    "--mu",
+    type=float,
+    default=0.5,
+    help="Initial value for the mu parameter in the negative binomial distribution for the EM algorithm. Default: 0.5",
+)
+@click.option(
+    "--size",
+    type=float,
+    default=1.0,
+    help="A positive double, the initial value of the parameter size in the negative binomial distribution for the EM algorithm. Default value is 1.",
+)
+@click.option(
+    "--mt",
+    type=int,
+    default=20,
+    help="An positive integer constraining possible rational function approximations. Default is 20.",
 )
 @click.option(
     "--outdir",
@@ -60,11 +90,15 @@ def gt_estimator(covs, **kwargs):
     params_text += f"[bold]Input coverage files:[/bold] {', '.join(configs.covs)}\n"
     params_text += f"[bold]Output directory:[/bold] {configs.outdir}\n"
     params_text += f"[bold]Minimum coverage:[/bold] {configs.minimum_coverage}\n"
+    params_text += f"[bold]Compute confidence intervals:[/bold] {configs.compute_ci}\n"
+    if configs.compute_ci:
+        params_text += f"[bold]Confidence level:[/bold] {configs.conf}\n"
+        params_text += f"[bold]Number of bootstrap replicates:[/bold] {configs.bootstrap_replicates}\n"
+    params_text += f"[bold]mu parameter:[/bold] {configs.mu}\n"
+    params_text += f"[bold]size parameter:[/bold] {configs.size}\n"
+    params_text += f"[bold]mt parameter:[/bold] {configs.mt}\n"
     params_text += f"[bold]t step size:[/bold] {configs.t_step}\n"
-    params_text += f"[bold]k max:[/bold] {configs.kmax}\n"
-    params_text += (
-        f"[bold]Number of bootstrap replicates:[/bold] {configs.bootstrap_replicates}\n"
-    )
+    params_text += f"[bold]t max:[/bold] {configs.t_max}\n"
     params_text += f"[bold]Verbose:[/bold] {configs.verbose}"
     console.print(
         Panel(
