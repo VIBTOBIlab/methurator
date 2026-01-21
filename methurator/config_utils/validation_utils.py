@@ -148,6 +148,20 @@ def validate_summary_yaml(yaml_path):
         "threads",
         "keep_temporary_files",
     ]
+    required_gt_options_keys = [
+        "cov_files",
+        "outdir",
+        "minimum_coverage",
+        "t_step",
+        "t_max",
+        "mu",
+        "size",
+        "mt",
+        "compute_ci",
+        "bootstrap_replicates",
+        "conf",
+        "verbose",
+    ]
 
     with open(yaml_path) as f:
         content = yaml.safe_load(f)
@@ -169,22 +183,35 @@ def validate_summary_yaml(yaml_path):
         )
 
     options = metadata.get("options", {})
-    if not all(k in options for k in required_options_keys):
-        raise click.UsageError(
-            f"'metadata.options' must contain keys: {required_options_keys}"
-        )
+    command = metadata.get("command", "")
+    if "gt_estimator" in command:
+        if not all(k in options for k in required_gt_options_keys):
+            raise click.UsageError(
+                f"'metadata.options' must contain keys: {required_gt_options_keys}"
+            )
 
-    # Reads summary
-    reads_summary = summary.get("reads_summary")
-    if reads_summary is None:
-        raise click.UsageError("Missing 'reads_summary' section")
+        # GT summary
+        gt_summary = summary.get("gt_summary")
+        if gt_summary is None:
+            raise click.UsageError("Missing 'gt_summary' section")
 
-    # cpgs summary
-    cpgs_summary = summary.get("cpgs_summary")
-    if cpgs_summary is None:
-        raise click.UsageError("Missing 'cpgs_summary' section")
+    else:
+        if not all(k in options for k in required_options_keys):
+            raise click.UsageError(
+                f"'metadata.options' must contain keys: {required_options_keys}"
+            )
 
-    # Saturation analysis
-    saturation_analysis = summary.get("saturation_analysis")
-    if saturation_analysis is None:
-        raise click.UsageError("Missing 'saturation_analysis' section")
+        # Reads summary
+        reads_summary = summary.get("reads_summary")
+        if reads_summary is None:
+            raise click.UsageError("Missing 'reads_summary' section")
+
+        # cpgs summary
+        cpgs_summary = summary.get("cpgs_summary")
+        if cpgs_summary is None:
+            raise click.UsageError("Missing 'cpgs_summary' section")
+
+        # Saturation analysis
+        saturation_analysis = summary.get("saturation_analysis")
+        if saturation_analysis is None:
+            raise click.UsageError("Missing 'saturation_analysis' section")
