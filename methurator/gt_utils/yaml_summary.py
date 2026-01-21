@@ -78,7 +78,7 @@ def generate_yaml_summary(res_df, configs, covs):
     }
 
     # Write to YAML file with compact list formatting
-    yaml_path = os.path.join(configs.outdir, "methurator_gtest_summary.yml")
+    yaml_path = os.path.join(configs.outdir, "methurator_summary.yml")
     yaml.add_representer(list, _represent_compact_list)
     with open(yaml_path, "w") as f:
         yaml.dump(yaml_data, f, default_flow_style=False, sort_keys=False)
