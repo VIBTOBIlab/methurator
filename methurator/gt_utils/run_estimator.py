@@ -313,7 +313,6 @@ def run_estimator(configs):
                 }
             )
             df = pd.concat([df, res], ignore_index=True)
-            print(df)
 
     # Generate YAML summary
     generate_yaml_summary(df, configs, configs.covs)
