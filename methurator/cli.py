@@ -17,7 +17,7 @@ import importlib.metadata
     }
 )
 def entry_point():
-    """Estimate sequencing saturation for reduced-representation bisulfite sequencing (RRBS) data."""
+    """Estimate CpGs sequencing saturation for DNA methylation sequencing data."""
     pass
 
 

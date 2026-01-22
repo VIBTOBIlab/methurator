@@ -6,9 +6,7 @@
 [![Install with BioConda](https://img.shields.io/badge/bioconda-methurator-brightgreen.svg?logo=anaconda)](https://anaconda.org/bioconda/methurator)
 [![BioContainer](https://img.shields.io/badge/biocontainer-methurator-0A7BBB.svg?logo=docker)](https://quay.io/repository/biocontainers/methurator)
 
-**Methurator** is a Python package designed to estimate **sequencing saturation** for **reduced-representation bisulfite sequencing (RRBS)** data.
-
-Although optimized for RRBS, **methurator** can also be used for whole-genome bisulfite sequencing (**WGBS**) or other genome-wide methylation data (e.g. **EMseq**). However, this data we advise you to use [Preseq package](https://smithlabresearch.org/software/preseq/).
+**Methurator** is a Python package designed to estimate CpGs saturation for DNA methylation sequencing data.
 
 ---
 
