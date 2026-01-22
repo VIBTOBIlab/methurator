@@ -147,7 +147,7 @@ def plot_curve(configs):
             plot_gtobject.cpgs_data = [x[2] for x in data_points]
             plot_gtobject.ci_low = [x[3] for x in data_points]
             plot_gtobject.ci_high = [x[4] for x in data_points]
-        plot_gtestimator(plot_gtobject)
+            plot_gtestimator(plot_gtobject)
 
     else:
         # Convert YAML summaries to DataFrames and merge them
