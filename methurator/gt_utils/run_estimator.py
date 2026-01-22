@@ -264,7 +264,8 @@ def run_estimator(configs):
         name = Path(cov).name.split(".")[0]
 
         # Loop over the minimum coverages
-        for min_cov in configs.minimum_coverage:
+        min_covs = configs.minimum_coverage.split(",")
+        for min_cov in min_covs:
 
             # Run rSAC estimator with or without confidence intervals
             if configs.compute_ci:
