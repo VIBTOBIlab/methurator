@@ -12,7 +12,6 @@ from methurator.gt_utils.rational_function import (
     discoveryrate_ps,
 )
 from methurator.gt_utils.ztnb import preseqR_ztnb_em
-from methurator.gt_utils.yaml_summary import generate_yaml_summary
 
 
 def build_frequency_of_frequencies(cov):
@@ -315,4 +314,4 @@ def run_estimator(configs):
             df = pd.concat([df, res], ignore_index=True)
 
     # Generate YAML summary
-    generate_yaml_summary(df, configs, configs.covs)
+    return df
