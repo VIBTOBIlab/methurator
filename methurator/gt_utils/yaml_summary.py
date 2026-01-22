@@ -16,7 +16,7 @@ def _represent_compact_list(dumper, data):
     return dumper.represent_sequence("tag:yaml.org,2002:seq", data, flow_style=False)
 
 
-def generate_yaml_summary(res_df, configs, covs):
+def generate_yaml_summary(res_df, configs):
     """Generate a YAML summary file containing all results and metadata."""
     # Build the GT estimator summary data structure, grouped by sample and coverage
     # Format: [{sample_name: [{minimum_coverage: X, data: [[t, extrapolated, total_cpgs, ci_low, ci_high], ...]}, ...]}, ...]
@@ -50,7 +50,7 @@ def generate_yaml_summary(res_df, configs, covs):
 
     # Build the command and options
     command_options = {
-        "cov_files": [str(cov) for cov in covs],
+        "cov_files": [str(cov) for cov in configs.covs],
         "outdir": str(configs.outdir),
         "minimum_coverage": configs.minimum_coverage,
         "t_step": configs.t_step,
