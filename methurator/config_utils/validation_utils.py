@@ -118,6 +118,9 @@ def ensure_coordinated_sorted(bam_file, configs):
 
     vprint("🔄 BAM file is not coordinate-sorted. Sorting now...", configs.verbose)
     out = bam_file.replace(".bam", ".csorted.bam")
+    bams_dir = os.path.join(configs.outdir, "bams/")
+    os.makedirs(bams_dir, exist_ok=True)
+    out = os.path.join(bams_dir, os.path.basename(out))
     cmd = ["samtools", "sort", "-o", out, bam_file]
 
     # Run samtools
