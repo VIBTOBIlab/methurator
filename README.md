@@ -65,7 +65,7 @@ docker run quay.io/biocontainers/methurator:0.1.8--pyhdfd78af_0 methurator -h
 
 ### Option A: Good-Toulmin Estimator (best practise)
 
-The `gt-estimator` command performs **Good-Toulmin extrapolation** to estimate sequencing saturation and predict the theoretical maximum number of CpGs at infinite depth. This is the recommended approach for extrapolation analysis.
+The `gt-estimator` command performs **Good-Toulmin extrapolation** to estimate sequencing saturation and predict the theoretical number of CpGs at higher depth. This is the recommended approach for extrapolation analysis.
 
 ```bash
 methurator gt-estimator --fasta tests/data/genome.fa tests/data/Ecoli.csorted.bam
