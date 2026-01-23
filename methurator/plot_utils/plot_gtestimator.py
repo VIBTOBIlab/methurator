@@ -24,7 +24,7 @@ def fmt_list(values):
 
 def make_base_plot(
     title,
-    xaxis="Extrapolation factor (t)\n(1 means observed sequencing depth)",
+    xaxis="Extrapolation factor (t = 1 means observed sequencing depth)",
     yaxis="Number of CpGs",
 ):
     """Create a preformatted Plotly figure."""
