@@ -261,7 +261,7 @@ def run_estimator(configs):
         f = build_frequency_of_frequencies(cov)
         t_values = np.arange(0, configs.t_max + configs.t_step, configs.t_step)
         lb = ub = np.array([np.nan] * len(t_values))
-        name = Path(cov).name.split(".")[0]
+        name = Path(cov).name
 
         # Loop over the minimum coverages
         min_covs = configs.minimum_coverage.split(",")
