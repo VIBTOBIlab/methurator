@@ -12,5 +12,6 @@ from .downsample import downsample
 __all__ = [
     "plot",
     "downsample",
+    "gt-estimator",
     "__version__",
 ]
