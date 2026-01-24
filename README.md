@@ -93,7 +93,7 @@ This command generates:
 - **Reads summary** — number of reads in each downsampled BAM
 - **Summary YAML** — consolidated file with all data and run metadata
 
-### Step 3 — Plot the sequencing saturation curve
+### Plot the sequencing saturation curve
 
 Use the `plot` command to visualize the results:
 
@@ -137,6 +137,7 @@ The **Good-Toulmin estimator** fits an extrapolation model to predict sequencing
 
 | Option                              | Description                                                                                                        | Default               |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `BAM (positional)`                  | Path to a single `.bam` file or to multiple ones (e.g. `files/*.bam`).                                             | —                     |
 | `--outdir`, `-o`                    | Output directory.                                                                                                  | `./output`            |
 | `--fasta`                           | Path to the reference genome FASTA file. If not provided, it will be automatically downloaded based on `--genome`. | —                     |
 | `--genome`                          | Genome used for alignment. Available options: `hg19`, `hg38`, `GRCh37`, `GRCh38`, `mm10`, `mm39`.                  | —                     |
