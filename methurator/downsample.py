@@ -56,7 +56,7 @@ console = Console()
     "It can be either a single integer or a list of integers (e.g 1,3,5). Default: 3",
 )
 @click.option(
-    "--rrbs",
+    "--rrbs/--no-rrbs",
     is_flag=True,
     default=True,
     help="If set to True, MethylDackel extract will consider the RRBS nature of the data "

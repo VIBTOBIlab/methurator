@@ -1,6 +1,7 @@
 import rich_click as click
 from methurator.plot import plot
 from methurator.downsample import downsample
+from methurator.gt_estimator import gt_estimator
 import importlib.metadata
 
 
@@ -16,13 +17,14 @@ import importlib.metadata
     }
 )
 def entry_point():
-    """Estimate sequencing saturation for reduced-representation bisulfite sequencing (RRBS) data."""
+    """Estimate CpGs sequencing saturation for DNA methylation sequencing data."""
     pass
 
 
 # Register the 2 subcommands: downsample and plot
 entry_point.add_command(plot)
 entry_point.add_command(downsample)
+entry_point.add_command(gt_estimator)
 
 if __name__ == "__main__":
     entry_point()

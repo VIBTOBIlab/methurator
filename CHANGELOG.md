@@ -1,5 +1,32 @@
 # CHANGELOG
 
+## [v2.0.0](https://github.com/VIBTOBIlab/methurator/tree/v2.0.0) — 2026-01-24
+
+### 🎉 Major Release: Good-Toulmin Estimator
+
+#### ✨ New Features
+
+- **Added `gt-estimator` command** — New primary command for sequencing saturation estimation using the Good-Toulmin (GT) estimator. For more detailed info check the [README](https://github.com/VIBTOBIlab/methurator/blob/main/README.md).
+
+  - Implements nonparametric empirical Bayes approach based on [Chao Deng et al. (2018)](https://arxiv.org/abs/1607.02804)
+  - Built on the [preseqR](https://github.com/smithlabcode/preseqR) framework
+  - Extrapolates CpG predictions to higher sequencing depths
+  - Distinguishes between interpolated (t ≤ 1) and extrapolated (t > 1) predictions
+  - Supports confidence interval computation via bootstrap resampling (`--compute_ci` flag)
+
+- **New output format** — `methurator_summary.yml` with GT estimator results
+  - Includes extrapolation factor (t) values from 0 to t_max
+  - Boolean indicating interpolated vs extrapolated data
+  - Confidence intervals (if enabled)
+  - Model parameters and command options
+
+#### 📋 Notes
+
+- The `downsample` command remains available for backward compatibility
+- Existing `methurator_summary.yml` format unchanged for downsample workflow
+
+---
+
 ## [v0.1.8](https://github.com/VIBTOBIlab/methurator/tree/v0.1.8) — 2026-01-03
 
 - Fixed a bug in the plot title naming logic that resulted in all plots having as title the first sample name present in the summary file.

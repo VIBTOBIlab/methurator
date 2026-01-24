@@ -10,15 +10,17 @@ def bam_file(tmp_path):
     return str(bam_path)
 
 
-def test_file_not_found():
+def test_file_not_found(tmp_path):
     configs = ConfigFormatter(**{"bam": "does_not_exist.bam", "verbose": False})
+    configs.outdir = tmp_path
     with pytest.raises(Exception):
         ensure_coordinated_sorted(bam_file, configs)
 
 
-def test_unsorted_bam_triggers_sort(monkeypatch, bam_file):
+def test_unsorted_bam_triggers_sort(monkeypatch, bam_file, tmp_path):
     calls = []
     configs = ConfigFormatter(**{"bam": bam_file, "verbose": False})
+    configs.outdir = tmp_path
 
     def fake_run(*args, **kwargs):
         calls.append(args[0])

@@ -1,10 +1,10 @@
 """
-methsaturator
-Package for sequencing saturation analysis of
-sequencing methylation data.
+methurator
+Python package designed to estimate CpGs
+saturation for DNA methylation sequencing data.
 """
 
-__version__ = "0.1.8"
+__version__ = "2.0.0"
 
 from .plot import plot
 from .downsample import downsample
@@ -12,5 +12,6 @@ from .downsample import downsample
 __all__ = [
     "plot",
     "downsample",
+    "gt-estimator",
     "__version__",
 ]
