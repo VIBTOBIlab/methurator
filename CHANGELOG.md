@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [v2.0.0](https://github.com/VIBTOBIlab/methurator/tree/v2.0.0) — 2026-01-22
+## [v2.0.0](https://github.com/VIBTOBIlab/methurator/tree/v2.0.0) — 2026-01-24
 
 ### 🎉 Major Release: Good-Toulmin Estimator
 
