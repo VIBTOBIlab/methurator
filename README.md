@@ -15,7 +15,7 @@
 - [1. Dependencies and Notes](#1-dependencies-and-notes)
 - [2. Installation](#2-installation)
 - [3. Quick Start](#3-quick-start)
-  - [Option A: Good-Toulmin Estimator](#option-a-good-toulmin-estimator)
+  - [Option A: Chao Estimator](#option-a-chao-estimator)
   - [Option B: Downsample](#option-b-downsample)
   - [Step 3 — Plot the sequencing saturation curve](#step-3--plot-the-sequencing-saturation-curve)
 - [4. Command Reference](#4-command-reference)
@@ -55,17 +55,17 @@ conda activate methurator_env
 ### **Option 3: Use the BioContainer**
 
 ```bash
-docker pull quay.io/biocontainers/methurator:0.1.8--pyhdfd78af_0
-docker run quay.io/biocontainers/methurator:0.1.8--pyhdfd78af_0 methurator -h
+docker pull quay.io/biocontainers/methurator:2.0.0--pyhdfd78af_0
+docker run quay.io/biocontainers/methurator:2.0.0--pyhdfd78af_0 methurator -h
 ```
 
 ---
 
 ## 3. Quick Start
 
-### Option A: Good-Toulmin Estimator (best practise)
+### Option A: Chao Estimator (best practise)
 
-The `gt-estimator` command performs **Good-Toulmin extrapolation** to estimate sequencing saturation and predict the theoretical number of CpGs at higher depth. This is the recommended approach for extrapolation analysis.
+The `gt-estimator` command estimates CpGs sequencing saturation at higher depth than the observed one. This is the recommended approach for extrapolation analysis.
 
 ```bash
 methurator gt-estimator --fasta tests/data/genome.fa tests/data/Ecoli.csorted.bam
@@ -106,8 +106,6 @@ methurator plot --summary output/methurator_summary.yml
 ## 4. Command Reference
 
 ### `gt-estimator` command
-
-The **Good-Toulmin estimator** fits an extrapolation model to predict sequencing saturation at infinite depth.
 
 | Argument                       | Description                                                                                                        | Default               |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
@@ -164,10 +162,10 @@ The **Good-Toulmin estimator** fits an extrapolation model to predict sequencing
 
 ## 5. Example Workflow
 
-### Using Good-Toulmin Estimator (Recommended)
+### Using Chao Estimator (Recommended)
 
 ```bash
-# Run Good-Toulmin estimator on BAM file
+# Run Chao estimator on BAM file
 methurator gt-estimator --genome hg19 my_sample.bam --config_ci
 
 # Generate plots from the results
@@ -196,7 +194,7 @@ The output plots will be saved in `output/plots/` as interactive HTML files show
 
 ## 6. How do we compute the sequencing saturation?
 
-### Good-Toulmin Estimator approach (best practise)
+### Chao Estimator approach (best practise)
 
 **methurator gt-estimator** uses an approach developed in 2018 by [Chao Deng et al](https://arxiv.org/abs/1607.02804) and further implemented in [preseqR](https://github.com/smithlabcode/preseqR). This approach builds on the theoretical nonparametric empirical Bayes foundation of **Good and Toulmin (1956)**, to model sequencing saturation and extrapolate to higher sequencing depths. The model implemented in **preseqR** was mirrored here and tailored toward sequencing saturation application. The workflow consists of the following steps:
 
@@ -212,7 +210,7 @@ For a given coverage level:
 - At t = 1: prediction matches observed CpGs
 - As t increases: predictions approach the theoretical asymptote (maximum CpGs at infinite depth)
 
-### Downsample Approach
+### Downsample approach
 
 To calculate the **sequencing saturation** of an DNAm sample when using the `downsample` command, we adopt the following strategy. For each sample, we downsample it according to 4 different percentages (default: `0.1,0.2,0.4,0.6,0.8`). Then, we compute the number of **unique CpGs covered by at least 3 reads** and the **number of reads** at each downsampling percentage.
 

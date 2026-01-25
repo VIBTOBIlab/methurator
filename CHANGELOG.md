@@ -2,19 +2,19 @@
 
 ## [v2.0.0](https://github.com/VIBTOBIlab/methurator/tree/v2.0.0) — 2026-01-24
 
-### 🎉 Major Release: Good-Toulmin Estimator
+### 🎉 Major Release: Chao's Estimator
 
 #### ✨ New Features
 
-- **Added `gt-estimator` command** — New primary command for sequencing saturation estimation using the Good-Toulmin (GT) estimator. For more detailed info check the [README](https://github.com/VIBTOBIlab/methurator/blob/main/README.md).
+- **Added `gt-estimator` command** — New primary command for sequencing saturation estimation using Chao's estimator. For more detailed info check the [README](https://github.com/VIBTOBIlab/methurator/blob/main/README.md).
 
-  - Implements nonparametric empirical Bayes approach based on [Chao Deng et al. (2018)](https://arxiv.org/abs/1607.02804)
+  - Implements a CpG sequencing saturation estimator developed by [Chao Deng et al. (2018)](https://arxiv.org/abs/1607.02804)
   - Built on the [preseqR](https://github.com/smithlabcode/preseqR) framework
   - Extrapolates CpG predictions to higher sequencing depths
   - Distinguishes between interpolated (t ≤ 1) and extrapolated (t > 1) predictions
   - Supports confidence interval computation via bootstrap resampling (`--compute_ci` flag)
 
-- **New output format** — `methurator_summary.yml` with GT estimator results
+- **New output format** — `methurator_summary.yml` with Chao estimator results
   - Includes extrapolation factor (t) values from 0 to t_max
   - Boolean indicating interpolated vs extrapolated data
   - Confidence intervals (if enabled)
