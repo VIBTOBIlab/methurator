@@ -65,7 +65,7 @@ docker run quay.io/biocontainers/methurator:2.0.0--pyhdfd78af_0 methurator -h
 
 ### Option A: Chao Estimator (best practise)
 
-The `gt-estimator` command performs **Chao extrapolation** to estimate sequencing saturation and predict the theoretical number of CpGs at higher depth. This is the recommended approach for extrapolation analysis.
+The `gt-estimator` command estimates CpGs sequencing saturation at higher depth than the observed one. This is the recommended approach for extrapolation analysis.
 
 ```bash
 methurator gt-estimator --fasta tests/data/genome.fa tests/data/Ecoli.csorted.bam
@@ -106,8 +106,6 @@ methurator plot --summary output/methurator_summary.yml
 ## 4. Command Reference
 
 ### `gt-estimator` command
-
-The **Chao estimator** fits an extrapolation model to predict sequencing saturation at infinite depth.
 
 | Argument                       | Description                                                                                                        | Default               |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
@@ -212,7 +210,7 @@ For a given coverage level:
 - At t = 1: prediction matches observed CpGs
 - As t increases: predictions approach the theoretical asymptote (maximum CpGs at infinite depth)
 
-### Downsample Approach
+### Downsample approach
 
 To calculate the **sequencing saturation** of an DNAm sample when using the `downsample` command, we adopt the following strategy. For each sample, we downsample it according to 4 different percentages (default: `0.1,0.2,0.4,0.6,0.8`). Then, we compute the number of **unique CpGs covered by at least 3 reads** and the **number of reads** at each downsampling percentage.
 
