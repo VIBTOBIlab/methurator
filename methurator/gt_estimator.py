@@ -121,7 +121,7 @@ console = Console()
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 @click.version_option(importlib.metadata.version("methurator"))
 def gt_estimator(bams, **kwargs):
-    """Fit the Good-Toulmin estimator."""
+    """Fit the Chao estimator."""
 
     # Import and validate params
     configs = GTConfig(bams, **kwargs)
