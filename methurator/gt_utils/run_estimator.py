@@ -319,7 +319,7 @@ def run_estimator(configs):
                     "ci_low": lb,
                     "ci_high": ub,
                     "saturation": saturation,
-                    "asymptote": [int(asymptote) for i in saturation],
+                    "asymptote": [int(asymptote.item()) for _ in saturation],
                 }
             )
             df = pd.concat([df, res], ignore_index=True)
