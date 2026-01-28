@@ -55,7 +55,7 @@ def test_methurator_downsample_withci(tmp_path):
     assert "t_max" in options
 
     # Validate gt_summary structure
-    # Format: [{sample_name: [{minimum_coverage: X, data: [[t, extrapolated, total_cpgs, ci_low, ci_high], ...]}, ...]}, ...]
+    # Format: [{sample_name: [{minimum_coverage: X, data: [[t, saturation, total_cpgs, ci_low, ci_high], ...]}, ...]}, ...]
     assert "gt_summary" in summary
     gt_summary = summary["gt_summary"]
     assert isinstance(gt_summary, list)
@@ -83,7 +83,7 @@ def test_methurator_downsample_withci(tmp_path):
     first_data_point = data_points[0]
     assert len(first_data_point) == 5
     assert isinstance(first_data_point[0], (int, float))  # t value
-    assert isinstance(first_data_point[1], str)  # extrapolated (True/False)
+    assert isinstance(first_data_point[1], float)  # saturation
     assert isinstance(first_data_point[2], int)  # total_cpgs
 
     # Check second coverage entry if it exists (minimum_coverage == 3)
@@ -175,7 +175,7 @@ def test_methurator_downsample(tmp_path):
     first_data_point = data_points[0]
     assert len(first_data_point) == 5
     assert isinstance(first_data_point[0], (int, float))  # t value
-    assert isinstance(first_data_point[1], str)  # extrapolated (True/False)
+    assert isinstance(first_data_point[1], float)  # saturation
     assert isinstance(first_data_point[2], int)  # total_cpgs
 
     # Check second coverage entry if it exists (minimum_coverage == 3)
