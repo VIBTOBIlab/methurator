@@ -120,10 +120,10 @@ def plot_gtestimator(plot_obj):
     # Asymptote + info to hover
     fig.add_trace(
         go.Scatter(
-            x=[min(reads_all_fmt), max(reads_all_fmt)],
-            y=[plot_obj.asymptote, plot_obj.asymptote],
+            x=reads_all_fmt,
+            y=[plot_obj.asymptote] * len(reads_all_fmt),
             mode="lines",
-            customdata=[[human_readable(plot_obj.asymptote)]],
+            customdata=[[human_readable(plot_obj.asymptote)] for _ in reads_all_fmt],
             hovertemplate=(
                 "<b>Asymptote</b><br>"
                 "Number CpGs: %{customdata[0]}<br>"
