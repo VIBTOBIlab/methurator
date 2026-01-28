@@ -69,6 +69,7 @@ def plot_gtestimator(plot_obj):
         interp_y = [y_all[i] for i in interpolated_indices]
         interp_y_fmt = [y_all_fmt[i] for i in interpolated_indices]
         interp_t = [x_all[i] for i in interpolated_indices]
+        interp_saturation = [plot_obj.saturations[i] for i in interpolated_indices]
 
         fig.add_trace(
             go.Scatter(
@@ -76,11 +77,12 @@ def plot_gtestimator(plot_obj):
                 y=interp_y,
                 mode="lines+markers",
                 name="Interpolated",
-                customdata=np.column_stack((interp_y_fmt, interp_t)),
+                customdata=np.column_stack((interp_y_fmt, interp_t, interp_saturation)),
                 hovertemplate=(
                     "<b>Interpolated</b><br>"
                     "Number CpGs: %{customdata[0]}<br>"
                     "Extrapolation factor (t): %{customdata[1]}<br>"
+                    "Saturation: %{customdata[2]:.3f}<br>"
                     "<extra></extra>"
                 ),
                 line=dict(color="#1f77b4", width=2),
@@ -94,6 +96,7 @@ def plot_gtestimator(plot_obj):
         extrap_y = [y_all[i] for i in extrapolated_indices]
         extrap_y_fmt = [y_all_fmt[i] for i in extrapolated_indices]
         extrap_t = [x_all[i] for i in extrapolated_indices]
+        extrap_saturation = [plot_obj.saturations[i] for i in extrapolated_indices]
 
         fig.add_trace(
             go.Scatter(
@@ -101,17 +104,46 @@ def plot_gtestimator(plot_obj):
                 y=extrap_y,
                 mode="lines+markers",
                 name="Extrapolated",
-                customdata=np.column_stack((extrap_y_fmt, extrap_t)),
+                customdata=np.column_stack((extrap_y_fmt, extrap_t, extrap_saturation)),
                 hovertemplate=(
                     "<b>Extrapolated</b><br>"
                     "Number CpGs: %{customdata[0]}<br>"
                     "Extrapolation factor (t): %{customdata[1]}<br>"
+                    "Saturation: %{customdata[2]:.3f}<br>"
                     "<extra></extra>"
                 ),
                 line=dict(color="#ff7f0e", width=2, dash="dash"),
                 marker=dict(size=5),
             )
         )
+
+    # Asymptote + info to hover
+    fig.add_trace(
+        go.Scatter(
+            x=[min(reads_all_fmt), max(reads_all_fmt)],
+            y=[plot_obj.asymptote, plot_obj.asymptote],
+            mode="lines",
+            customdata=[[human_readable(plot_obj.asymptote)]],
+            hovertemplate=(
+                "<b>Asymptote</b><br>"
+                "Number CpGs: %{customdata[0]}<br>"
+                "Computed at t = 1000<br>"
+                "<extra></extra>"
+            ),
+            line=dict(color="grey", width=2, dash="dot"),
+            showlegend=False,
+        )
+    )
+
+    # Only use x-axis ticks where t is an integer
+    # Include both t value and reads (reads * t)
+    tickvals = [reads_all_fmt[i] for i, t in enumerate(x_all) if t.is_integer()]
+    ticktext = [
+        f"t={int(t)}<br>{human_readable(plot_obj.reads * t)} reads"
+        for t in x_all
+        if t.is_integer()
+    ]
+    fig.update_xaxes(tickvals=tickvals, ticktext=ticktext, tickangle=45)
 
     fig.write_html(plot_obj.output_path)
     print(f"✅ Plot saved to: {plot_obj.output_path}")
