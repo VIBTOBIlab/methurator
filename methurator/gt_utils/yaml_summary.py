@@ -19,12 +19,11 @@ def _represent_compact_list(dumper, data):
 def generate_yaml_summary(res_df, configs):
     """Generate a YAML summary file containing all results and metadata."""
     # Build the GT estimator summary data structure, grouped by sample and coverage
-    # Format: [{sample_name: [{minimum_coverage: X, data: [[t, extrapolated, total_cpgs, ci_low, ci_high], ...]}, ...]}, ...]
+    # Format: [{sample_name: [{minimum_coverage: X, data: [[t, saturation, total_cpgs, ci_low, ci_high], ...]}, ...]}, ...]
     gt_estimator_by_sample = {}
     for _, row in res_df.iterrows():
         sample = row["sample"]
         min_cov = int(row["min_cov"])
-
         if sample not in gt_estimator_by_sample:
             gt_estimator_by_sample[sample] = {}
         if min_cov not in gt_estimator_by_sample[sample]:
@@ -33,7 +32,8 @@ def generate_yaml_summary(res_df, configs):
         gt_estimator_by_sample[sample][min_cov].append(
             [
                 round(float(row["t"]), 2),
-                str(row["extrapolated"]),
+                int(row["asymptote"]),
+                float(row["saturation"]),
                 int(row["total_cpgs"]),
                 row["ci_low"],
                 row["ci_high"],
@@ -42,10 +42,26 @@ def generate_yaml_summary(res_df, configs):
 
     # Restructure to list of dicts with minimum_coverage and data
     gt_estimator_data = []
+    # Same observed num reads for all the rows
+    # so I take the first
+    reads = int(res_df["reads"][0])
     for sample, cov_dict in gt_estimator_by_sample.items():
         sample_data = []
         for min_cov, data_list in cov_dict.items():
-            sample_data.append({"minimum_coverage": min_cov, "data": data_list})
+            # Same asymptote for each sample, so I take the first occurence
+            asymptote = int(data_list[0][1])
+            data_list = [
+                x[:1] + x[2:] for x in data_list
+            ]  # remove asymptote from the list
+            sample_data.append(
+                {
+                    "minimum_coverage": min_cov,
+                    "reads": reads,
+                    "asymptote(1000t)": asymptote,
+                    "data": data_list,
+                }
+            )
+
         gt_estimator_data.append({sample: sample_data})
 
     # Build the command and options

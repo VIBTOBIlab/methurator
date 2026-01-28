@@ -2,7 +2,7 @@ class GTConfig:
 
     def __init__(self, bams, **kwargs):
         self.bam = bams
-        self.covs = []
+        self.covs = {}
         self.outdir = kwargs.get("outdir")
         self.minimum_coverage = kwargs.get("minimum_coverage")
         self.t_step = kwargs.get("t_step")
