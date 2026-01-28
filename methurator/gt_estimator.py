@@ -182,10 +182,10 @@ def gt_estimator(bams, **kwargs):
     csorted_bams = bam_to_list(configs)
 
     # Generate the .COV files
-    covs = []
+    covs = {}
     for bam in csorted_bams:
-        cov = run_methyldackel(bam, configs)
-        covs.append(cov)
+        cov, reads = run_methyldackel(bam, configs)
+        covs[cov] = reads
     configs.covs = covs
 
     # Run the estimator
