@@ -31,5 +31,4 @@ jobs:
         run: |
           git config user.name edogiuili
           git config user.email edoardogiuili@gmail.com
-      - name: Build Docs Website
-        run: mike deploy --push develop
+          mike deploy --push develop
