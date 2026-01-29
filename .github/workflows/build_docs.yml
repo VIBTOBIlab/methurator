@@ -46,4 +46,9 @@ jobs:
       - name: Deploy docs
         working-directory: docs/mkdocs
         run: |
-          mike deploy --push --update-aliases ${{ steps.vars.outputs.version }} ${{ steps.vars.outputs.alias }}
+          run: |
+            if [ "${{ steps.vars.outputs.version }}" = "dev" ]; then
+                mike deploy --push --update-aliases --force dev dev
+            else
+                mike deploy --push --update-aliases ${{ steps.vars.outputs.version }} latest
+            fi
