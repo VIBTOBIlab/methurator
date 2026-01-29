@@ -35,13 +35,8 @@ jobs:
         run: |
           git config user.name edogiuili
           git config user.email edoardogiuili@gmail.com
-
           if [ "${{ github.event_name }}" = "release" ]; then
-            VERSION="${{ github.event.release.tag_name }}"
-            mike deploy "$VERSION" latest --push --update-aliases
+            mike deploy "${{ github.event.release.tag_name }}" latest --push --update-aliases
           else
-            VERSION="${{ steps.version.outputs.version }}"
-            mike deploy "$VERSION" latest --push --update-aliases
+            mike deploy latest --push
           fi
-
-          mike set-default --push latest
