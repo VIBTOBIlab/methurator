@@ -53,8 +53,8 @@ def test_methurator_gtplot(tmp_path):
     ), f"Command failed:\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
 
     # Path of expected output
-    plot1 = tmp_path / "plots/Ecoli_1x_plot.html"
-    plot2 = tmp_path / "plots/Ecoli_3x_plot.html"
+    plot1 = tmp_path / "plots/Ecoli.csorted_CpG.bedGraph_1x_plot.html"
+    plot2 = tmp_path / "plots/Ecoli.csorted_CpG.bedGraph_3x_plot.html"
 
     # Assert that the plot was created
     assert plot1.exists(), f"{plot1} not found"

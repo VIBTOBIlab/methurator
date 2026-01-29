@@ -88,9 +88,11 @@ class PlotObject:
 class PlotGTEstObject:
     def __init__(self):
         self.t_data = []
+        self.saturations = []
         self.cpgs_data = []
         self.ci_low = []
         self.ci_high = []
+        self.asymptote = int
         self.min_cov = int
         self.sample_name = str
         self.output_path = str
@@ -108,6 +110,8 @@ class PlotGTEstObject:
                     cov = cov_block["minimum_coverage"]
 
                     lookup[(sample, cov)] = {
+                        "asymptote": cov_block.get("asymptote(1000t)"),
+                        "reads": cov_block.get("reads"),
                         "data": cov_block.get("data"),
                     }
 
@@ -140,10 +144,15 @@ def plot_curve(configs):
         # Iterate over samples and coverage levels
         for (sample, min_cov), info in sat_lookup.items():
             data_points = info.get("data", [])
+            asymptote = info.get("asymptote", [])
+            reads = info.get("reads", [])
             plot_gtobject.output_path = f"{plot_dir}/{sample}_{min_cov}x_plot.html"
             plot_gtobject.sample_name = sample
             plot_gtobject.min_cov = min_cov
+            plot_gtobject.asymptote = asymptote
+            plot_gtobject.reads = reads
             plot_gtobject.t_data = [x[0] for x in data_points]
+            plot_gtobject.saturations = [x[1] for x in data_points]
             plot_gtobject.cpgs_data = [x[2] for x in data_points]
             plot_gtobject.ci_low = [x[3] for x in data_points]
             plot_gtobject.ci_high = [x[4] for x in data_points]

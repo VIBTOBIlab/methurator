@@ -10,6 +10,7 @@ from methurator.gt_utils.methyldackel import run_methyldackel
 from methurator.config_utils.validation_utils import (
     validate_dependencies,
     validate_reference,
+    mincoverage_checker,
 )
 from methurator.config_utils.config_validator import available_cpus
 import shutil
@@ -40,7 +41,7 @@ console = Console()
 )
 @click.option(
     "--t-max",
-    type=float,
+    type=click.FloatRange(min=2.0, max=1000.0),
     default=10.0,
     help="Maximum value of t for prediction. Default: 10.0",
 )
@@ -52,13 +53,13 @@ console = Console()
 @click.option(
     "--bootstrap-replicates",
     "-b",
-    type=int,
+    type=click.IntRange(min=10, max=100),
     default=30,
     help="Number of bootstrap replicates. Default: 30",
 )
 @click.option(
     "--conf",
-    type=float,
+    type=click.FloatRange(min=0.1, max=0.99),
     default=0.95,
     help="Confidence level for the bootstrap confidence intervals. Default: 0.95",
 )
@@ -126,6 +127,7 @@ def gt_estimator(bams, **kwargs):
     # Import and validate params
     configs = GTConfig(bams, **kwargs)
     validate_reference(configs)
+    mincoverage_checker(configs.minimum_coverage)
     # Check that required external tools are installed
     validate_dependencies()
 
@@ -182,10 +184,10 @@ def gt_estimator(bams, **kwargs):
     csorted_bams = bam_to_list(configs)
 
     # Generate the .COV files
-    covs = []
+    covs = {}
     for bam in csorted_bams:
-        cov = run_methyldackel(bam, configs)
-        covs.append(cov)
+        cov, reads = run_methyldackel(bam, configs)
+        covs[cov] = reads
     configs.covs = covs
 
     # Run the estimator

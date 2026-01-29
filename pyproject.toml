@@ -9,7 +9,7 @@ include = ["methurator*"]
 
 [project]
 name = "methurator"
-version = "2.0.0"
+version = "2.1.0"
 description = "Python package designed to estimate CpGs saturation for DNA methylation sequencing data."
 readme = "README.md"
 keywords = [

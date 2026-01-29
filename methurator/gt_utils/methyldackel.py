@@ -13,6 +13,13 @@ def run_methyldackel(bam_path, configs):
     cov_dir = os.path.join(configs.outdir, "covs")
     os.makedirs(cov_dir, exist_ok=True)
 
+    # Compute number of reads
+    cmd = ["samtools", "view", "-c", bam_path]
+    # Run command
+    num_reads = subprocess.run(
+        cmd, capture_output=True, text=True, check=True
+    ).stdout.strip()
+
     # Use the BAM filename (without directories) as prefix
     bam_name = os.path.basename(bam_path)
     prefix = os.path.join(cov_dir, os.path.splitext(bam_name)[0])
@@ -55,4 +62,4 @@ def run_methyldackel(bam_path, configs):
     # gzip the file and return the stats
     subprocess.run(["gzip", "-f", f"{prefix}_CpG.bedGraph"])
 
-    return file + ".gz"
+    return file + ".gz", num_reads

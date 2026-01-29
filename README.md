@@ -15,7 +15,7 @@
 - [1. Dependencies and Notes](#1-dependencies-and-notes)
 - [2. Installation](#2-installation)
 - [3. Quick Start](#3-quick-start)
-  - [Option A: Chao Estimator](#option-a-chao-estimator)
+  - [Option A: Chao Estimator](#option-a-chao-estimator-best-practise)
   - [Option B: Downsample](#option-b-downsample)
   - [Step 3 — Plot the sequencing saturation curve](#step-3--plot-the-sequencing-saturation-curve)
 - [4. Command Reference](#4-command-reference)
@@ -55,8 +55,8 @@ conda activate methurator_env
 ### **Option 3: Use the BioContainer**
 
 ```bash
-docker pull quay.io/biocontainers/methurator:2.0.0--pyhdfd78af_0
-docker run quay.io/biocontainers/methurator:2.0.0--pyhdfd78af_0 methurator -h
+docker pull quay.io/biocontainers/methurator:2.1.0--pyhdfd78af_0
+docker run quay.io/biocontainers/methurator:2.1.0--pyhdfd78af_0 methurator -h
 ```
 
 ---
@@ -77,6 +77,8 @@ This command generates:
   - Extrapolation factor (t) values from 0 to `--t-max` (default: 10.0)
   - Boolean indicating interpolated (t ≤ 1) vs extrapolated (t > 1) data
   - Total CpGs predicted at each t value
+  - Theoretical asymptote (maximum CpGs, computed at t = 1000)
+  - Number of reads observed at full sequencing depth (t = 1)
   - Confidence intervals (if `--compute_ci` is enabled)
 
 ### Option B: Downsample
@@ -95,7 +97,7 @@ This command generates:
 
 ### Plot the sequencing saturation curve
 
-Use the `plot` command to visualize the results:
+Use the `plot` command to visualize the results, including the asymptote line and the number of reads at each t:
 
 ```bash
 methurator plot --summary output/methurator_summary.yml
@@ -186,7 +188,7 @@ methurator downsample --genome hg19 my_sample.bam
 methurator plot --summary output/methurator_summary.yml
 ```
 
-The output plots will be saved in `output/plots/` as interactive HTML files showing the CpG predictions with confidence intervals (if enabled).
+The output plots will be saved in `output/plots/` as interactive HTML files showing the CpG predictions, the asymptote (theoretical maximum CpGs at t = 1000), the number of reads at each t, and confidence intervals (if enabled). The asymptote is now also used to compute the saturation values.
 
 **Example plot preview** (also available as interactive html file [here](https://github.com/VIBTOBIlab/methurator/tree/main/docs/images/example.html)):
 
@@ -207,8 +209,8 @@ The extrapolation factor (t) represents the ratio of hypothetical total reads to
 
 For a given coverage level:
 
-- At t = 1: prediction matches observed CpGs
-- As t increases: predictions approach the theoretical asymptote (maximum CpGs at infinite depth)
+- At t = 1: prediction matches observed CpGs, and the number of reads at full sequencing depth is reported in the summary file
+- As t increases: predictions approach the theoretical asymptote (maximum CpGs at t = 1000, shown in the plot and used for saturation calculation)
 
 ### Downsample approach
 

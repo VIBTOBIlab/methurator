@@ -255,13 +255,14 @@ def ztnb_rSAC(n, r, size, mu):
 def run_estimator(configs):
     df = pd.DataFrame()
     # Run estimator for each coverage file
-    for cov in configs.covs:
+    for cov in configs.covs.keys():
 
         # Compute frequency-of-frequencies and total CpGs for the given minimum coverage
         f = build_frequency_of_frequencies(cov)
         t_values = np.arange(0, configs.t_max + configs.t_step, configs.t_step)
         lb = ub = np.array([np.nan] * len(t_values))
-        name = Path(cov).name
+        name = Path(cov).stem
+        num_reads = int(configs.covs[cov])
 
         # Loop over the minimum coverages
         min_covs = configs.minimum_coverage.split(",")
@@ -282,6 +283,9 @@ def run_estimator(configs):
                 # points: predicted unique CpGs
                 # lb, ub: confidence intervals
                 points = function_preseq_boot["f"](t_values)
+                # 1000x more observed seq depth seems a reasonable
+                # number to compute the asymptote
+                asymptote = function_preseq_boot["f"]([1000])
                 lb = function_preseq_boot["lb"](t_values)
                 lb = [int(x) for x in lb]
                 ub = function_preseq_boot["ub"](t_values)
@@ -296,20 +300,26 @@ def run_estimator(configs):
                     size=float(configs.size),
                     mu=float(configs.mu),
                 )
+                # 1000x more observed seq depth seems a reasonable
+                # number to compute the asymptote
+                asymptote = function_preseq([1000])
                 points = function_preseq(t_values)
 
             # Store results in DataFrame
             points = [int(x) for x in points]
-            extrapolated = [True if t > 1 else False for t in t_values]
+            saturation = points / asymptote
+            saturation = [round(x, 4) for x in saturation]
             res = pd.DataFrame(
                 {
                     "sample": name,
                     "t": t_values,
-                    "extrapolated": extrapolated,
+                    "reads": num_reads,
                     "min_cov": int(min_cov),
                     "total_cpgs": points,
                     "ci_low": lb,
                     "ci_high": ub,
+                    "saturation": saturation,
+                    "asymptote": [int(asymptote.item()) for _ in saturation],
                 }
             )
             df = pd.concat([df, res], ignore_index=True)
