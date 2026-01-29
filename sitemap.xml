@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://vibtobilab.github.io/methurator/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://vibtobilab.github.io/methurator/methodology/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://vibtobilab.github.io/methurator/quickstart/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://vibtobilab.github.io/methurator/workflow/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://vibtobilab.github.io/methurator/commands/downsample/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://vibtobilab.github.io/methurator/commands/gt_estimator/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://vibtobilab.github.io/methurator/commands/plot/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+</urlset>
