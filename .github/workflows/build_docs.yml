@@ -38,5 +38,5 @@ jobs:
           if [ "${{ github.event_name }}" = "release" ]; then
             mike deploy "${{ github.event.release.tag_name }}" latest --push --update-aliases
           else
-            mike deploy latest --push
+            mike deploy latest --push --force
           fi
