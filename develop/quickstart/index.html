@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://vibtobilab.github.io/methurator/develop/quickstart/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Quick Start - methurator</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Quick Start";
+        var mkdocs_page_input_path = "quickstart.md";
+        var mkdocs_page_url = "/methurator/develop/quickstart/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> methurator
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Quick Start</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#option-a-chao-estimator-best-practise">Option A: Chao Estimator (best practise)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#option-b-downsample">Option B: Downsample</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#plot-the-sequencing-saturation-curve">Plot the sequencing saturation curve</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../workflow/">Example Workflow</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../methodology/">Methodology</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Commands</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../commands/gt_estimator/">gt-estimator</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../commands/downsample/">downsample</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../commands/plot/">plot</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">methurator</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Quick Start</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/VIBTOBIlab/methurator/edit/master/docs/quickstart.md">Edit on VIBTOBIlab/methurator</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="quick-start">Quick Start</h1>
+<h2 id="option-a-chao-estimator-best-practise">Option A: Chao Estimator (best practise)</h2>
+<p>The <code>gt-estimator</code> command estimates CpGs sequencing saturation at higher depth than the observed one. This is the recommended approach for extrapolation analysis.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>methurator<span class="w"> </span>gt-estimator<span class="w"> </span>--fasta<span class="w"> </span>tests/data/genome.fa<span class="w"> </span>tests/data/Ecoli.csorted.bam
+</span></code></pre></div>
+<p>This command generates:</p>
+<ul>
+<li><strong>Summary YAML file</strong> (<code>methurator_summary.yml</code>) — Contains metadata, model parameters, and extrapolation results with:</li>
+<li>Extrapolation factor (t) values from 0 to <code>--t-max</code> (default: 10.0)</li>
+<li>Boolean indicating interpolated (t ≤ 1) vs extrapolated (t &gt; 1) data</li>
+<li>Total CpGs predicted at each t value</li>
+<li>Theoretical asymptote (maximum CpGs, computed at t = 1000)</li>
+<li>Number of reads observed at full sequencing depth (t = 1)</li>
+<li>Confidence intervals (if <code>--compute_ci</code> is enabled)</li>
+</ul>
+<h2 id="option-b-downsample">Option B: Downsample</h2>
+<p>The <code>downsample</code> command performs BAM downsampling according to specified percentages and coverage levels:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>methurator<span class="w"> </span>downsample<span class="w"> </span>--fasta<span class="w"> </span>tests/data/genome.fa<span class="w"> </span>tests/data/Ecoli.csorted.bam
+</span></code></pre></div>
+<p>This command generates:</p>
+<ul>
+<li><strong>CpG summary</strong> (<code>methurator_cpgs_summary.yml</code>)— number of unique CpGs detected in each downsampled BAM</li>
+<li><strong>Reads summary</strong> (<code>methurator_reads_summary.yml</code>) — number of reads in each downsampled BAM</li>
+<li><strong>Summary YAML</strong> (<code>methurator_summary.yml</code>) — consolidated file with all data and run metadata</li>
+</ul>
+<h2 id="plot-the-sequencing-saturation-curve">Plot the sequencing saturation curve</h2>
+<p>Use the <code>plot</code> command to visualize the results, including the asymptote line and the number of reads at each t:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>methurator<span class="w"> </span>plot<span class="w"> </span>--summary<span class="w"> </span>output/methurator_summary.yml
+</span></code></pre></div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../workflow/" class="btn btn-neutral float-right" title="Example Workflow">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright (c) 2025 Edoardo Giuili, TOBI lab</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/VIBTOBIlab/methurator" class="fa fa-code-fork" style="color: #fcfcfc"> VIBTOBIlab/methurator</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../workflow/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../search/main.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
