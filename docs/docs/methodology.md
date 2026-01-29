@@ -1,6 +1,6 @@
 ## How do we compute the sequencing saturation?
 
-### Chao Estimator approach (best practise)
+### 1. Chao Estimator approach (best practise)
 
 **methurator gt-estimator** uses an approach developed in 2018 by [Chao Deng et al](https://arxiv.org/abs/1607.02804) and further implemented in [preseqR](https://github.com/smithlabcode/preseqR). This approach builds on the theoretical nonparametric empirical Bayes foundation of **Good and Toulmin (1956)**, to model sequencing saturation and extrapolate to higher sequencing depths. The model implemented in **preseqR** was mirrored here and tailored toward sequencing saturation application. The workflow consists of the following steps:
 
@@ -16,7 +16,7 @@ For a given coverage level:
 - At t = 1: prediction matches observed CpGs, and the number of reads at full sequencing depth is reported in the summary file
 - As t increases: predictions approach the theoretical asymptote (maximum CpGs at t = 1000, shown in the plot and used for saturation calculation)
 
-### Downsample approach
+### 2. Downsample approach
 
 To calculate the **sequencing saturation** of an DNAm sample when using the `downsample` command, we adopt the following strategy. For each sample, we downsample it according to 4 different percentages (default: `0.1,0.2,0.4,0.6,0.8`). Then, we compute the number of **unique CpGs covered by at least 3 reads** and the **number of reads** at each downsampling percentage.
 

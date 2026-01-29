@@ -20,24 +20,26 @@ for DNA methylation sequencing data. It supports two complementary approaches:
 
 ## Installation
 
-=== "Pip"
-    !!! note "install dependencies"
-        If you install _methurator_ via pip, be sure to install its dependencies [SAMtools](https://www.htslib.org/) and [MethylDackel](https://github.com/dpryan79/MethylDackel).
+### Pip
+!!! note "Dependencies"
+    If you install _methurator_ via pip, be sure to install its dependencies
+    [SAMtools](https://www.htslib.org/) and
+    [MethylDackel](https://github.com/dpryan79/MethylDackel).
 
-    ```bash
-    pip install methurator
-    ```
+```bash
+pip install methurator
+```
 
-=== "BioConda"
+### BioConda
 
-    ```bash
-    conda create -n methurator_env conda::methurator
-    conda activate methurator_env
-    ```
+```bash
+conda create -n methurator_env conda::methurator
+conda activate methurator_env
+```
 
-=== "BioContainer"
+### BioContainer
 
-    ```bash
-    docker pull quay.io/biocontainers/methurator:2.1.0--pyhdfd78af_0
-    docker run quay.io/biocontainers/methurator:2.1.0--pyhdfd78af_0 methurator -h
-    ```
+```bash
+docker pull quay.io/biocontainers/methurator:2.1.0--pyhdfd78af_0
+docker run quay.io/biocontainers/methurator:2.1.0--pyhdfd78af_0 methurator -h
+```
