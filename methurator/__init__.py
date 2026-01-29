@@ -4,7 +4,9 @@ Python package designed to estimate CpGs
 saturation for DNA methylation sequencing data.
 """
 
-__version__ = "2.1.0"
+from importlib.metadata import version
+
+__version__ = version("methurator")
 
 from .plot import plot
 from .downsample import downsample
@@ -12,6 +14,6 @@ from .downsample import downsample
 __all__ = [
     "plot",
     "downsample",
-    "gt-estimator",
+    "gt_estimator",
     "__version__",
 ]
