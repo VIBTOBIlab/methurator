@@ -1,0 +1,48 @@
+name: Deploy versioned docs
+
+on:
+  push:
+    branches:
+      - dev # for dev docs
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # IMPORTANT for tags + mike
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material mike
+          pip install .   # optional: if your docs import your package
+
+      - name: Set version
+        id: vars
+        run: |
+          if [ "${GITHUB_EVENT_NAME}" == "release" ]; then
+              VERSION=${GITHUB_EVENT_RELEASE_TAG_NAME#v}
+              ALIAS=latest
+          else
+              VERSION=dev
+              ALIAS=dev
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "alias=$ALIAS" >> $GITHUB_OUTPUT
+
+      - name: Deploy docs
+        run: |
+          mike deploy --push --update-aliases ${{ steps.vars.outputs.version }} ${{ steps.vars.outputs.alias }}
