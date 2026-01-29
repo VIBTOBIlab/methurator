@@ -44,11 +44,10 @@ jobs:
           echo "alias=$ALIAS" >> $GITHUB_OUTPUT
 
       - name: Deploy docs
-        working-directory: docs/mkdocs
+        working-directory: docs/
         run: |
-          run: |
-            if [ "${{ steps.vars.outputs.version }}" = "dev" ]; then
-                mike deploy --push --update-aliases --force dev dev
-            else
-                mike deploy --push --update-aliases ${{ steps.vars.outputs.version }} latest
-            fi
+          if [ "${{ steps.vars.outputs.version }}" = "dev" ]; then
+              mike deploy --push --update-aliases --force dev dev
+          else
+              mike deploy --push --update-aliases ${{ steps.vars.outputs.version }} latest
+          fi
