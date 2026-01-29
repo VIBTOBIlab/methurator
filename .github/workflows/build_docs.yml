@@ -44,5 +44,6 @@ jobs:
           echo "alias=$ALIAS" >> $GITHUB_OUTPUT
 
       - name: Deploy docs
+        working-directory: docs/mkdocs
         run: |
           mike deploy --push --update-aliases ${{ steps.vars.outputs.version }} ${{ steps.vars.outputs.alias }}
