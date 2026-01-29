@@ -21,7 +21,7 @@ for DNA methylation sequencing data. It supports two complementary approaches:
 ## Installation
 
 === "Pip"
-!!! note "install dependencies"
+    !!! note "install dependencies"
 
     If you install _methurator_ via pip, be sure to install its dependencies [SAMtools](https://www.htslib.org/) and [MethylDackel](https://github.com/dpryan79/MethylDackel).
 
