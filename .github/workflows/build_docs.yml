@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repo (full history)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # IMPORTANT for tags + mike
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,11 +25,10 @@ jobs:
       - name: Install dependencies
         run: |
           pip install mkdocs-material mike
-          pip install .   # optional: if your docs import your package
+          pip install .   # optional if docs import your package
 
       - name: Deploy docs
         working-directory: docs/
         run: |
-          VERSION=${GITHUB_EVENT_RELEASE_TAG_NAME#v}
-          ALIAS=latest
-          mike deploy --push --update-aliases --update-aliases ${{ steps.vars.outputs.version }} latest
+          mike deploy "${{ github.event.release.tag_name }}" latest --push --update-aliases
+          mike set-default --push latest
