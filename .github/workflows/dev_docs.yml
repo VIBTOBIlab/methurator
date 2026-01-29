@@ -1,9 +1,9 @@
-name: Deploy versioned docs
+name: Build/Publish Develop Docs
 
 on:
-  release:
-    types: [published]
-
+  push:
+    branches:
+      - main
 permissions:
   contents: write
 
@@ -24,11 +24,12 @@ jobs:
       - name: Install dependencies
         run: |
           pip install mkdocs-material mike
-          pip install .
+          pip install .   # optional if docs import your package
 
-      - name: Deploy docs
+      - name: Setup Docs Deploy
         working-directory: docs/
         run: |
           git config user.name edogiuili
           git config user.email edoardogiuili@gmail.com
-          mike deploy --push --update-aliases ${{ github.event.release.tag_name }} latest
+      - name: Build Docs Website
+        run: mike deploy --push develop
