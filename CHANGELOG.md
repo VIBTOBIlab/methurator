@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.1.1](https://github.com/VIBTOBIlab/methurator/tree/v2.1.1) — 2026-01-29
+
+### 🐛 Bug fixes
+
+- Fixed `gt-estimator` incorrectly assigning the read count of the first sample to all samples in the summary YAML file when multiple BAM files were specified.
+
 ## [v2.1.0](https://github.com/VIBTOBIlab/methurator/tree/v2.1.0) — 2026-01-28
 
 ### ✨ Minor changes
