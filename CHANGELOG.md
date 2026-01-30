@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [v2.1.1](https://github.com/VIBTOBIlab/methurator/tree/v2.1.1) — 2026-01-29
+## [v2.1.1](https://github.com/VIBTOBIlab/methurator/tree/v2.1.1) — 2026-01-30
 
 ### 🐛 Bug fixes
 
