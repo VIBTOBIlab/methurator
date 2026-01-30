@@ -42,10 +42,10 @@ def generate_yaml_summary(res_df, configs):
 
     # Restructure to list of dicts with minimum_coverage and data
     gt_estimator_data = []
-    # Same observed num reads for all the rows
-    # so I take the first
-    reads = int(res_df["reads"][0])
     for sample, cov_dict in gt_estimator_by_sample.items():
+        # Same observed num reads for the same sample
+        # so I take the first occurrence
+        reads = int(res_df[res_df["sample"] == sample]["reads"].iloc[0])
         sample_data = []
         for min_cov, data_list in cov_dict.items():
             # Same asymptote for each sample, so I take the first occurence
