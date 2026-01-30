@@ -55,8 +55,8 @@ conda activate methurator_env
 ### **Option 3: Use the BioContainer**
 
 ```bash
-docker pull quay.io/biocontainers/methurator:2.1.0--pyhdfd78af_0
-docker run quay.io/biocontainers/methurator:2.1.0--pyhdfd78af_0 methurator -h
+docker pull quay.io/biocontainers/methurator:2.1.1--pyhdfd78af_0
+docker run quay.io/biocontainers/methurator:2.1.1--pyhdfd78af_0 methurator -h
 ```
 
 ---
