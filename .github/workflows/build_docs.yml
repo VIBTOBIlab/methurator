@@ -54,7 +54,6 @@ jobs:
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
           mike deploy --push --update-aliases dev latest
-          mike set-default --push latest
 
       - name: Deploy versioned docs (on release)
         working-directory: docs
