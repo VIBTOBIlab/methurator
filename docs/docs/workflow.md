@@ -4,7 +4,7 @@
 
 ```bash
 # Run Chao estimator on BAM file
-methurator gt-estimator --genome hg19 my_sample.bam --config_ci
+methurator gt-estimator --genome hg19 my_sample.bam --compute_ci
 
 # Generate plots from the results
 methurator plot --summary output/methurator_summary.yml
