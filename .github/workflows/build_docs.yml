@@ -1,34 +1,68 @@
-name: Deploy versioned docs
+name: Deploy Documentation
 
 on:
+  # Trigger on push to main branch (updates "dev" or "latest" docs)
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - ".github/workflows/build_docs.yml"
+
+  # Trigger on new release (creates versioned docs)
   release:
-    types: [published]
+    types:
+      - published
 
 permissions:
   contents: write
+  pages: write
 
 jobs:
   deploy-docs:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo (full history)
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Full history needed for mike
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.12"
 
       - name: Install dependencies
         run: |
-          pip install mkdocs-material mike
-          pip install .
+          pip install --upgrade pip
+          pip install mkdocs mkdocs-material mike
+          # Add any other mkdocs plugins you use:
+          # pip install mkdocs-minify-plugin mkdocstrings[python]
 
-      - name: Deploy docs
-        working-directory: docs/
+      - name: Configure Git
         run: |
-          git config user.name edogiuili
-          git config user.email edoardogiuili@gmail.com
-          mike deploy --push --update-aliases ${{ github.event.release.tag_name }} latest
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch gh-pages branch
+        run: |
+          git fetch origin gh-pages:gh-pages || echo "gh-pages branch doesn't exist yet"
+
+      - name: Deploy latest docs (on push to main)
+        working-directory: docs
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          mike deploy --push --update-aliases dev latest
+          mike set-default --push latest
+
+      - name: Deploy versioned docs (on release)
+        working-directory: docs
+        if: github.event_name == 'release'
+        run: |
+          VERSION=${{ github.event.release.tag_name }}
+          echo "Deploying version: $VERSION"
+
+          # Deploy the new version and set it as latest
+          mike deploy --push --update-aliases "$VERSION" latest
+          mike set-default --push latest
