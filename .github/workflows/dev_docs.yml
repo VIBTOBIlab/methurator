@@ -32,4 +32,3 @@ jobs:
           git config user.name edogiuili
           git config user.email edoardogiuili@gmail.com
           mike deploy --push latest
-          mike set-default --push latest
