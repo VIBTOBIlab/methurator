@@ -9,10 +9,12 @@ on:
       - "docs/**"
       - "*.md"
       - ".github/**"
+      - "paper/**"
   pull_request:
     paths-ignore:
       - "docs/**"
       - "*.md"
+      - "paper/**"
 jobs:
   unit_tests:
     name: "Python ${{ matrix.python-version }} on ${{ matrix.os }}"
