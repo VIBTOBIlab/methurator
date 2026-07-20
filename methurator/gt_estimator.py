@@ -126,10 +126,20 @@ def gt_estimator(bams, **kwargs):
 
     # Import and validate params
     configs = GTConfig(bams, **kwargs)
+    # Enforce that at least one of --fasta or --genome is provided
+    if configs.fasta is None and configs.genome is None:
+        raise click.UsageError(
+            "Error: you must provide in input either --fasta or --genome"
+        )
+    # Enforce that at least one of bam file is provided
+    if configs.bam is None or len(configs.bam) == 0:
+        raise click.UsageError("Error: you must provide at least one BAM file")
+    # Validate the reference genome and download it if necessary
     validate_reference(configs)
-    mincoverage_checker(configs.minimum_coverage)
     # Check that required external tools are installed
     validate_dependencies()
+    # Validate minimum coverage values
+    mincoverage_checker(configs.minimum_coverage)
 
     params_text = ""
 
@@ -187,7 +197,14 @@ def gt_estimator(bams, **kwargs):
     covs = {}
     for bam in csorted_bams:
         cov, reads = run_methyldackel(bam, configs)
+        if cov is None:
+            continue
         covs[cov] = reads
+    if not covs:
+        raise click.UsageError(
+            "Error: MethylDackel produced no usable data for any of the provided "
+            "BAM files. Cannot proceed with the estimator."
+        )
     configs.covs = covs
 
     # Run the estimator
