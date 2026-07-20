@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [v2.2.0](https://github.com/VIBTOBIlab/methurator/tree/v2.2.0) — 2026-01-30
+
+### 🐛 Bug fixes
+
+- `gt-estimator` now raises a clear error if neither `--genome` nor `--fasta` is provided, instead of failing later on.
+- If confidence interval computation (`--compute_ci`) fails for a sample, `gt-estimator` now warns and falls back to running the estimator without confidence intervals instead of crashing.
+
 ## [v2.1.1](https://github.com/VIBTOBIlab/methurator/tree/v2.1.1) — 2026-01-30
 
 ### 🐛 Bug fixes
