@@ -2,6 +2,17 @@ import numpy as np
 import pandas as pd
 from collections import Counter
 from pathlib import Path
+from rich.console import Console
+from rich.progress import (
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    BarColumn,
+    TaskProgressColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+    MofNCompleteColumn,
+)
 from scipy.stats import norm
 from scipy.stats import nbinom
 from methurator.gt_utils.rational_function import (
@@ -12,6 +23,8 @@ from methurator.gt_utils.rational_function import (
     discoveryrate_ps,
 )
 from methurator.gt_utils.ztnb import preseqR_ztnb_em
+
+console = Console()
 
 
 def build_frequency_of_frequencies(cov):
@@ -254,75 +267,141 @@ def ztnb_rSAC(n, r, size, mu):
 
 def run_estimator(configs):
     df = pd.DataFrame()
-    # Run estimator for each coverage file
-    for cov in configs.covs.keys():
 
-        # Compute frequency-of-frequencies and total CpGs for the given minimum coverage
-        f = build_frequency_of_frequencies(cov)
-        t_values = np.arange(0, configs.t_max + configs.t_step, configs.t_step)
-        lb = ub = np.array([np.nan] * len(t_values))
-        name = Path(cov).stem
-        num_reads = int(configs.covs[cov])
+    covs = list(configs.covs.keys())
+    total_covs = len(covs)
+    min_covs = configs.minimum_coverage.split(",")
+    total_min_covs = len(min_covs)
 
-        # Loop over the minimum coverages
-        min_covs = configs.minimum_coverage.split(",")
-        for min_cov in min_covs:
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[bold blue]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        MofNCompleteColumn(),
+        TimeElapsedColumn(),
+        TimeRemainingColumn(),
+        refresh_per_second=10,
+    ) as progress:
 
-            # Run rSAC estimator with or without confidence intervals
-            if configs.compute_ci:
-                print(f"Running rSAC estimator with confidence intervals for {cov}...")
-                function_preseq_boot = preseqR_rSAC_bootstrap(
-                    n=np.array([[k, v] for k, v in f.items()]),
-                    r=int(min_cov),
-                    mt=int(configs.mt),
-                    size=float(configs.size),
-                    mu=float(configs.mu),
-                    times=int(configs.bootstrap_replicates),
-                    conf=float(configs.conf),
-                )
-                # points: predicted unique CpGs
-                # lb, ub: confidence intervals
-                points = function_preseq_boot["f"](t_values)
-                # 1000x more observed seq depth seems a reasonable
-                # number to compute the asymptote
-                asymptote = function_preseq_boot["f"]([1000])
-                lb = function_preseq_boot["lb"](t_values)
-                lb = [int(x) for x in lb]
-                ub = function_preseq_boot["ub"](t_values)
-                ub = [int(x) for x in ub]
+        # Run estimator for each coverage file
+        for cov_idx, cov in enumerate(covs):
+            name = Path(cov).stem
 
-            else:
-                print(f"Running rSAC estimator for {cov}...")
-                function_preseq = preseqR_rSAC(
-                    n=np.array([[k, v] for k, v in f.items()]),
-                    r=int(min_cov),
-                    mt=int(configs.mt),
-                    size=float(configs.size),
-                    mu=float(configs.mu),
-                )
-                # 1000x more observed seq depth seems a reasonable
-                # number to compute the asymptote
-                asymptote = function_preseq([1000])
-                points = function_preseq(t_values)
-
-            # Store results in DataFrame
-            points = [int(x) for x in points]
-            saturation = points / asymptote
-            saturation = [round(x, 4) for x in saturation]
-            res = pd.DataFrame(
-                {
-                    "sample": name,
-                    "t": t_values,
-                    "reads": num_reads,
-                    "min_cov": int(min_cov),
-                    "total_cpgs": points,
-                    "ci_low": lb,
-                    "ci_high": ub,
-                    "saturation": saturation,
-                    "asymptote": [int(asymptote.item()) for _ in saturation],
-                }
+            # Coverage file progress task
+            cov_task = progress.add_task(
+                f"[green]Sample {cov_idx + 1}/{total_covs}: {name}",
+                total=total_min_covs,
             )
-            df = pd.concat([df, res], ignore_index=True)
+
+            # Compute frequency-of-frequencies and total CpGs for the given minimum coverage
+            f = build_frequency_of_frequencies(cov)
+            t_values = np.arange(0, configs.t_max + configs.t_step, configs.t_step)
+            num_reads = int(configs.covs[cov])
+
+            # Loop over the minimum coverages
+            for min_cov in min_covs:
+                # Reset CI bounds each iteration so a compute_ci failure never
+                # leaks stale bounds from a previous min_cov into this row
+                lb = ub = np.array([np.nan] * len(t_values))
+
+                progress.update(
+                    cov_task,
+                    description=(
+                        f"[green]Sample {cov_idx + 1}/{total_covs}: {name} "
+                        f"@ min_cov={min_cov}"
+                    ),
+                )
+
+                # Run rSAC estimator with or without confidence intervals
+                compute_ci = configs.compute_ci
+                if compute_ci:
+                    ci_task = progress.add_task(
+                        "  [yellow]Running rSAC estimator with confidence intervals...",
+                        total=None,  # Indeterminate
+                    )
+                    try:
+                        function_preseq_boot = preseqR_rSAC_bootstrap(
+                            n=np.array([[k, v] for k, v in f.items()]),
+                            r=int(min_cov),
+                            mt=int(configs.mt),
+                            size=float(configs.size),
+                            mu=float(configs.mu),
+                            times=int(configs.bootstrap_replicates),
+                            conf=float(configs.conf),
+                        )
+                        # points: predicted unique CpGs
+                        # lb, ub: confidence intervals
+                        points = function_preseq_boot["f"](t_values)
+                        # 1000x more observed seq depth seems a reasonable
+                        # number to compute the asymptote
+                        asymptote = function_preseq_boot["f"]([1000])
+                        lb = function_preseq_boot["lb"](t_values)
+                        lb = [int(x) for x in lb]
+                        ub = function_preseq_boot["ub"](t_values)
+                        ub = [int(x) for x in ub]
+                    except Exception as e:
+                        progress.console.print(
+                            f"[yellow]⚠️ Warning: compute_ci failed for {cov} "
+                            f"(min_cov={min_cov}): {e}. Falling back to rSAC "
+                            "estimator without confidence intervals.[/yellow]"
+                        )
+                        compute_ci = False
+                    finally:
+                        progress.remove_task(ci_task)
+
+                if not compute_ci:
+                    estimator_task = progress.add_task(
+                        "  [magenta]Running rSAC estimator...",
+                        total=None,  # Indeterminate
+                    )
+                    try:
+                        function_preseq = preseqR_rSAC(
+                            n=np.array([[k, v] for k, v in f.items()]),
+                            r=int(min_cov),
+                            mt=int(configs.mt),
+                            size=float(configs.size),
+                            mu=float(configs.mu),
+                        )
+                        # 1000x more observed seq depth seems a reasonable
+                        # number to compute the asymptote
+                        asymptote = function_preseq([1000])
+                        points = function_preseq(t_values)
+                    except Exception as e:
+                        progress.console.print(
+                            f"[red]⚠️ Warning: rSAC estimator could not be computed "
+                            f"for {cov} (min_cov={min_cov}): {e}. Skipping this "
+                            "sample/min_cov combination.[/red]"
+                        )
+                        progress.remove_task(estimator_task)
+                        progress.advance(cov_task)
+                        continue
+                    progress.remove_task(estimator_task)
+
+                # Store results in DataFrame
+                points = [int(x) for x in points]
+                saturation = points / asymptote
+                saturation = [round(x, 4) for x in saturation]
+                res = pd.DataFrame(
+                    {
+                        "sample": name,
+                        "t": t_values,
+                        "reads": num_reads,
+                        "min_cov": int(min_cov),
+                        "total_cpgs": points,
+                        "ci_low": lb,
+                        "ci_high": ub,
+                        "saturation": saturation,
+                        "asymptote": [int(asymptote.item()) for _ in saturation],
+                    }
+                )
+                df = pd.concat([df, res], ignore_index=True)
+
+                # Update progress
+                progress.advance(cov_task)
+
+            # Mark coverage file as complete and remove its task
+            progress.remove_task(cov_task)
 
     # Generate YAML summary
     return df

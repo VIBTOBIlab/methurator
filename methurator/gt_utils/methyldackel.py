@@ -50,14 +50,15 @@ def run_methyldackel(bam_path, configs):
         if df.empty:
             raise pd.errors.EmptyDataError("MethylDackel output file is empty")
     except pd.errors.EmptyDataError:
-        warning_message = (
-            f"[bold red]⚠ MethylDackel Error[/bold red]\n\n"
+        error_message = (
+            f"[yellow]⚠ MethylDackel Warning[/yellow]\n\n"
             f"MethylDackel produced no data for:\n"
             f"[yellow]{bam_path}[/yellow]\n\n"
             f"[dim]This may be due to chromosome mismatch with reference genome.[/dim]\n"
             f"[bold]Skipping sample: {os.path.basename(bam_path)}[/bold]"
         )
-        console.print(Panel(warning_message, border_style="red", expand=False))
+        console.print(Panel(error_message, border_style="yellow", expand=False))
+        return None, None
 
     # gzip the file and return the stats
     subprocess.run(["gzip", "-f", f"{prefix}_CpG.bedGraph"])
